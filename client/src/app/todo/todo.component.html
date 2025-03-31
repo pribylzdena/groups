@@ -8,9 +8,9 @@
   </div>
 
   <div class="task-list mt-4">
-    <div class="task-card p-3 mb-2">
+    <div *ngFor="let task of tasks" class="task-card p-3 mb-2">
       <div class="task-header d-flex align-items-center">
-        <div class="task-color yellow"></div>
+        <div class="task-card" [ngStyle]="{'background-color': task.color}" ></div>
         <h5 class="mb-0 ms-2">Task1</h5>
       </div>
       <p class="text-muted">Reminder: 18.3.2025</p>
