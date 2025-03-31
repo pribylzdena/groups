@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-notes',
+  standalone: true,
+  templateUrl: './notes.component.html',
+  styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent {
-  hardcodedNotes = [
+  notes = [
     { color: '#ff7f7f' },
     { color: '#ffaf87' },
     { color: '#c4ff87' },
