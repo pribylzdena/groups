@@ -1,5 +1,5 @@
 <body class="bg-primary">
-<header class="p-3 mb-3 border-bottom">
+<header class="p-3 mb-3 border-bottom bg-secondary">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
@@ -7,15 +7,11 @@
       </a>
 
       <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a [routerLink]="['/todo']" class="nav-link px-2 link-secondary">Todo</a></li>
-        <li><a [routerLink]="['/schedule']" class="nav-link px-2 link-body-emphasis">Schedule</a></li>
-        <li><a [routerLink]="['/notifications']" class="nav-link px-2 link-body-emphasis">Notifications</a></li>
-        <li><a [routerLink]="['/notes']" class="nav-link px-2 link-body-emphasis">Notes</a></li>
+        <li><a [routerLink]="['/todo']" [routerLinkActive]="['active']" class="nav-item px-2">Todo</a></li>
+        <li><a [routerLink]="['/schedule']" [routerLinkActive]="['active']" class="nav-item px-2">Schedule</a></li>
+        <li><a [routerLink]="['/notifications']" [routerLinkActive]="['active']" class="nav-item px-2">Notifications</a></li>
+        <li><a [routerLink]="['/notes']" [routerLinkActive]="['active']" class="nav-item px-2">Notes</a></li>
       </ul>
-
-      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-      </form>
 
       <div class="dropdown text-end">
         <a href="#" class="d-block link-body-emphasis text-decoration-none">
