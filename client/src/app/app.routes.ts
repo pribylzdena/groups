@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { TodoComponent } from './todo/todo.component';
-import { ScheduleComponent } from './schedule/schedule.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { NotesComponent } from './notes/notes.component';
+import { TodoComponent } from './pages/todo/todo.component';
+import { ScheduleComponent } from './pages/schedule/schedule.component';
+import { NotificationsComponent } from './pages/notifications/notifications.component';
+import { NotesComponent } from './pages/notes/notes.component';
 
 export const routes: Routes = [
   { path: 'todo', component: TodoComponent },
