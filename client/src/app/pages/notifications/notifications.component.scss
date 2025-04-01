@@ -1,0 +1,38 @@
+/*.container {
+  background-color: #6A82B4;
+  padding: 20px;
+  border-radius: 10px;
+}*/
+
+.toolbar {
+  background-color: #156082;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+
+  .btn {
+    color: white;
+  }
+}
+
+.notifications {
+  .card {
+    background-color: #6A82B4;
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 8px;
+
+    .card-body {
+      display: flex;
+      flex-direction: column;
+
+      strong {
+        display: block;
+      }
+
+      .btn-light {
+        align-self: flex-start;
+      }
+    }
+  }
+}
