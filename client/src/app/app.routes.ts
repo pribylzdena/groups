@@ -1,8 +1,9 @@
-import { Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { TodoComponent } from './pages/todo/todo.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
 import { NotificationsComponent } from './pages/notifications/notifications.component';
 import { NotesComponent } from './pages/notes/notes.component';
+import {NgModule} from '@angular/core';
 
 export const routes: Routes = [
   { path: 'todo', component: TodoComponent },
@@ -11,3 +12,10 @@ export const routes: Routes = [
   { path: 'notes', component: NotesComponent },
   { path: '', redirectTo: '/todo', pathMatch: 'full' }
 ];
+
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
