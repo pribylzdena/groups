@@ -1,0 +1,30 @@
+<div class="container mt-4">
+  <div class="search-bar d-flex justify-content-between align-items-center">
+    <input type="text" class="form-control w-25" placeholder="Search by...">
+    <button class="btn btn-outline-light">Filters</button>
+    <button class="btn btn-outline-light">Order by ⬇</button>
+    <app-task-sidebar></app-task-sidebar>
+  </div>
+
+  <div class="task-list mt-4">
+    <div *ngFor="let task of tasks" class="task-card p-3 mb-2">
+      <div class="task-header d-flex align-items-center">
+        <div class="task-card" [ngStyle]="{'background-color': task.color}" ></div>
+        <h5 class="mb-0 ms-2">Task1</h5>
+      </div>
+      <p class="text-muted">Reminder: 18.3.2025</p>
+      <div class="task-info d-flex justify-content-between">
+        <div>
+          <span class="badge bg-primary">High</span>
+          <span class="badge bg-warning">In progress</span>
+          <span class="text-light">📅 21.3.2025</span>
+        </div>
+        <div>
+          <span>💬 Comments</span>
+          <span>🔗 Share</span>
+          <span>🗑 Delete</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

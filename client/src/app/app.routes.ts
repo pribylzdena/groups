@@ -1,19 +1,21 @@
 import { RouterModule, Routes } from '@angular/router';
-import { TodoComponent } from './pages/todo/todo.component';
+import { TodoListComponent } from './pages/todo-list/todo-list.component';
 import { ScheduleComponent } from './pages/schedule/schedule.component';
-import { NotificationsComponent } from './pages/notifications/notifications.component';
-import { NotesComponent } from './pages/notes/notes.component';
+import { NotificationListComponent } from './pages/notification-list/notification-list.component';
+import { NoteListComponent } from './pages/note-list/note-list.component';
 import {NgModule} from '@angular/core';
 import {NotificationDetailComponent} from './pages/notification-detail/notification-detail.component';
+import {UserDetailComponent} from './pages/user-detail/user-detail.component';
 
 
 export const routes: Routes = [
-  { path: 'todo', component: TodoComponent },
+  { path: 'todo', component: TodoListComponent },
   { path: 'schedule', component: ScheduleComponent },
-  { path: 'notifications', component: NotificationsComponent },
-  { path: 'notes', component: NotesComponent },
+  { path: 'notifications', component: NotificationListComponent },
+  { path: 'notes', component: NoteListComponent },
   { path: '', redirectTo: '/todo', pathMatch: 'full' },
-  { path: 'notification-show', component: NotificationDetailComponent}
+  { path: 'notification-show', component: NotificationDetailComponent},
+  { path: 'profile', component: UserDetailComponent }
 ];
 
 

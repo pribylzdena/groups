@@ -1,0 +1,21 @@
+<button (click)="toggleSidebar()" class="btn btn-primary">+ Add new</button>
+
+<div class="sidebar" [class.open]="isOpen">
+  <button class="close-btn" (click)="toggleSidebar()">×</button>
+  <h2>Vytvořit úkol</h2>
+
+  <form>
+    <label>Název úkolu</label>
+    <input type="text" placeholder="Např. Dokončit projekt" />
+
+    <label>Popis</label>
+    <textarea placeholder="Podrobnosti úkolu..."></textarea>
+
+    <label>Termín</label>
+    <input type="date" />
+
+    <button type="submit">Uložit</button>
+  </form>
+</div>
+
+<div class="overlay" *ngIf="isOpen" (click)="toggleSidebar()"></div>
