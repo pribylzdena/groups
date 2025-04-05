@@ -1,0 +1,37 @@
+.card-body {
+  font-size: 0.95rem;
+}
+
+button {
+  min-width: 90px;
+}
+
+.container-wrapper {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.announcement-card {
+  justify-content: center;
+  width: 1400px;
+  height: 800px;
+  background-color: #e1ecf8;
+  border-radius: 1rem;
+  display: flex;
+}
+
+.announcement-body {
+  background-color: #6c8cbf;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.button-group {
+  button {
+    min-width: 90px;
+  }
+}
+
