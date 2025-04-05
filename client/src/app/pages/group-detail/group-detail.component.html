@@ -1,1 +1,24 @@
-<p>group-detail works!</p>
+<div class="dashboard-container d-flex flex-column align-items-center">
+
+  <!-- Top buttons -->
+  <div class="custom-toggle mb-4">
+    <div class="toggle-button edit active">Edit</div>
+    <div class="toggle-button select">Select</div>
+  </div>
+
+  <!-- Groups grid -->
+  <div class="group-grid row">
+    <div class="col-auto group-card" *ngFor="let group of groups">
+      <button  class="group-box">
+        <span>{{ group.name }}</span>
+        <span class="ms-3">Members:{{ group.members }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Add button -->
+  <div class="add-button-container mt-5">
+    <button class="add-button rounded-circle">+</button>
+  </div>
+
+</div>

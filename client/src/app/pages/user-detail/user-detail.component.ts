@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-detail',
-  imports: [],
+  selector: 'app-user-profile',
   templateUrl: './user-detail.component.html',
-  styleUrl: './user-detail.component.scss'
+  styleUrls: ['./user-detail.component.scss']
 })
 export class UserDetailComponent {
-
+  user = {
+    name: 'ahmed mohammad',
+    email: 'example.something@gmail.com',
+    avatar: 'https://cdn-icons-png.flaticon.com/512/5231/5231019.png'
+  };
 }

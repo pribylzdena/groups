@@ -7,6 +7,7 @@ import {NgModule} from '@angular/core';
 import {NotificationDetailComponent} from './pages/notification-detail/notification-detail.component';
 import {UserDetailComponent} from './pages/user-detail/user-detail.component';
 import {NoteDetailComponent} from './pages/note-detail/note-detail.component';
+import {GroupDetailComponent} from './pages/group-detail/group-detail.component';
 
 
 export const routes: Routes = [
@@ -17,7 +18,8 @@ export const routes: Routes = [
   { path: '', redirectTo: '/todo', pathMatch: 'full' },
   { path: 'notification-show', component: NotificationDetailComponent},
   { path: 'profile', component: UserDetailComponent },
-  { path: 'note-detail', component: NoteDetailComponent}
+  { path: 'note-detail', component: NoteDetailComponent},
+  { path: 'group-manage', component: GroupDetailComponent}
 ];
 
 

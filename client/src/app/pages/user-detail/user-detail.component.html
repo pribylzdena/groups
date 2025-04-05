@@ -1,1 +1,32 @@
-<p>user-detail works!</p>
+<div class="profile-container">
+  <!-- Back Button -->
+  <button class="back-button">
+    <i class="bi bi-arrow-left"><</i>
+  </button>
+
+  <!-- Card -->
+  <div class="profile-card mx-auto">
+
+    <!-- Avatar + Info -->
+    <div class="card-content">
+
+      <!-- Avatar -->
+      <div class="avatar-section">
+        <img [src]="user.avatar" alt="Avatar" class="avatar">
+        <a class="change-icon">Change icon</a>
+      </div>
+
+      <!-- Info -->
+      <div class="info-section">
+        <div class="name">{{ user.name }}</div>
+        <div class="email">{{ user.email }}</div>
+        <div class="password">********</div>
+      </div>
+    </div>
+
+    <!-- Bottom Button -->
+    <div class="btn-container">
+      <button class="btn">Change details</button>
+    </div>
+  </div>
+</div>

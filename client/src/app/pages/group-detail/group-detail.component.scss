@@ -1,0 +1,69 @@
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #b0bede;
+  padding: 2rem;
+}
+
+.custom-toggle {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+
+  .toggle-button {
+    padding: 0.6rem 2rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none;
+
+    &.edit {
+      background-color: #065c78;
+      color: white;
+    }
+
+    &.select {
+      background-color: #6c9bb8;
+      color: #cfd9e4;
+    }
+
+    &.active {
+      font-weight: bold;
+    }
+  }
+}
+
+.group-grid {
+  max-width: 700px;
+  margin-bottom: 2rem;
+
+  .group-box {
+    background-color: #7089c1;
+    color: white;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    display: inline-block;
+    min-width: 160px;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+}
+
+.add-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.add-button {
+  width: 60px;
+  height: 60px;
+  font-size: 2rem;
+  background-color: #d2dbe5;
+  color: black;
+  border: 2px solid black;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #c0cde0;
+  }
+}
