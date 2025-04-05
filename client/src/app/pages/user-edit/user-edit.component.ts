@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './user-edit.component.scss'
 })
 export class UserEditComponent {
-
+  user = {
+    name: 'ahmed mohammad',
+    email: 'example.something@gmail.com',
+    password: 'hesilko123',
+    avatar: 'https://github.com/mdo.png'
+  };
 }

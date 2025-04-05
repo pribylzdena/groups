@@ -8,6 +8,7 @@ import {NotificationDetailComponent} from './pages/notification-detail/notificat
 import {UserDetailComponent} from './pages/user-detail/user-detail.component';
 import {NoteDetailComponent} from './pages/note-detail/note-detail.component';
 import {GroupDetailComponent} from './pages/group-detail/group-detail.component';
+import {UserEditComponent} from './pages/user-edit/user-edit.component';
 
 
 export const routes: Routes = [
@@ -18,6 +19,7 @@ export const routes: Routes = [
   { path: '', redirectTo: '/todo', pathMatch: 'full' },
   { path: 'notification-show', component: NotificationDetailComponent},
   { path: 'profile', component: UserDetailComponent },
+  { path: 'profile-edit', component: UserEditComponent},
   { path: 'note-detail', component: NoteDetailComponent},
   { path: 'group-manage', component: GroupDetailComponent}
 ];

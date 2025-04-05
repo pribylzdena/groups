@@ -9,6 +9,7 @@ export class UserDetailComponent {
   user = {
     name: 'ahmed mohammad',
     email: 'example.something@gmail.com',
-    avatar: 'https://cdn-icons-png.flaticon.com/512/5231/5231019.png'
+    password: 'hesilko123',
+    avatar: 'https://github.com/mdo.png'
   };
 }

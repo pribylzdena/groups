@@ -1,1 +1,31 @@
-<p>user-edit works!</p>
+<div class="profile-container">
+  <!-- Back Button -->
+  <button class="back-button "><</button>
+
+  <!-- Card -->
+  <div class="profile-card mx-auto">
+
+    <!-- Avatar + Info -->
+    <div class="card-content">
+
+      <!-- Avatar -->
+      <div class="avatar-section">
+        <img [src]="user.avatar" alt="Avatar" class="avatar mt-4">
+        <a class="change-icon">Change icon</a>
+      </div>
+
+      <!-- Info - editable -->
+      <div class="info-section">
+        <input class="form-control editable-input" placeholder="{{user.name}}">
+        <input class="form-control editable-input" placeholder="{{user.email}}">
+        <input class="form-control editable-input" placeholder="{{user.password}}">
+      </div>
+    </div>
+
+    <!-- Bottom Buttons -->
+    <div class="btn-container justify-content-between">
+      <button class="btn cancel-btn">Cancel</button>
+      <button class="btn confirm-btn">Confirm changes</button>
+    </div>
+  </div>
+</div>
