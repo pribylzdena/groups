@@ -6,6 +6,6 @@
     <hr>
     <p>Ahoj,</p>
     <p>Správce skupiny přidal nové oznámení týkající se aktuálního projektu...</p>
-    <button class="btn btn-light" (click)="hideDetailsPage()">Back</button>
+    <button class="btn btn-light" [routerLink]="['/groups', groupId, 'notifications']">Back</button>
   </div>
 </div>

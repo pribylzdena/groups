@@ -16,7 +16,7 @@ export const routes: Routes = [
     path: 'groups/:groupId',
     component: GroupComponent,
     children: [
-      { path: 'todo', component: TodoListComponent },
+      { path: 'todo', component: TodoListComponent},
       { path: 'schedule', component: ScheduleComponent },
       { path: 'notifications', component: NotificationListComponent },
       { path: 'notification-show/:id', component: NotificationDetailComponent },

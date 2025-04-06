@@ -17,7 +17,6 @@
     </div>
   </div>
 
-  <!-- Notification Cards -->
   <div class="notifications mt-4">
     <div *ngFor="let notification of notifications" class="card">
       <div class="card-body">
@@ -36,8 +35,8 @@
           </div>
         </div>
         <div class="text-center mt-2">
-          <button  class="btn-light" [routerLink]="['notification-show']">Show</button>
-        </div>
+          <a  class="btn-light" [routerLink]="['/groups', groupId, 'notification-show', 1]" [routerLinkActive]="['active']">Show</a>
+        </div>s
       </div>
     </div>
   </div>
