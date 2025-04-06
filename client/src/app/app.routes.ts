@@ -7,21 +7,28 @@ import {NgModule} from '@angular/core';
 import {NotificationDetailComponent} from './pages/notification-detail/notification-detail.component';
 import {UserDetailComponent} from './pages/user-detail/user-detail.component';
 import {NoteDetailComponent} from './pages/note-detail/note-detail.component';
-import {GroupDetailComponent} from './pages/group-detail/group-detail.component';
+import {GroupManageComponent} from './pages/group-manage/group-manage.component';
 import {UserEditComponent} from './pages/user-edit/user-edit.component';
-
+import {GroupComponent} from './components/group/group.component';
 
 export const routes: Routes = [
-  { path: 'todo', component: TodoListComponent },
-  { path: 'schedule', component: ScheduleComponent },
-  { path: 'notifications', component: NotificationListComponent },
-  { path: 'notes', component: NoteListComponent },
-  { path: '', redirectTo: '/todo', pathMatch: 'full' },
-  { path: 'notification-show', component: NotificationDetailComponent},
+  {
+    path: 'groups/:groupId',
+    component: GroupComponent,
+    children: [
+      { path: 'todo', component: TodoListComponent },
+      { path: 'schedule', component: ScheduleComponent },
+      { path: 'notifications', component: NotificationListComponent },
+      { path: 'notification-show/:id', component: NotificationDetailComponent },
+      { path: 'notes', component: NoteListComponent },
+      { path: 'note-detail/:id', component: NoteDetailComponent },
+      { path: '', redirectTo: 'todo', pathMatch: 'full' }
+    ]
+  },
+  { path: 'group-manage', component: GroupManageComponent },
   { path: 'profile', component: UserDetailComponent },
-  { path: 'profile-edit', component: UserEditComponent},
-  { path: 'note-detail', component: NoteDetailComponent},
-  { path: 'group-manage', component: GroupDetailComponent}
+  { path: 'profile-edit', component: UserEditComponent },
+  { path: '', redirectTo: '/group-manage', pathMatch: 'full' },
 ];
 
 
