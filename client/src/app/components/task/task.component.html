@@ -1,1 +1,19 @@
-<p>task works!</p>
+<div class="bg-secondary task">
+  <div class="task-header d-flex align-items-center">
+    <div class="task-card" [ngStyle]="{'background-color': task.color}" ></div>
+    <h5 class="mb-0 ms-2">{{ task.name }}</h5>
+  </div>
+  <p class="text-muted">Reminder: {{ task.reminderAt | date: 'dd.MM.yyyy HH:mm' }}</p>
+  <div class="task-info d-flex justify-content-between">
+    <div>
+      <span class="badge bg-primary">{{ task.priority }}</span>
+      <span class="badge bg-warning">{{ task.status }}</span>
+      <span class="text-light"> {{ task.deadline | date: 'dd.MM.yyyy HH:mm' }} </span>
+    </div>
+    <div>
+      <span>Comments</span>
+      <span>Share</span>
+      <span>Delete</span>
+    </div>
+  </div>
+</div>
