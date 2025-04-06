@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './user-edit.component.html',
-  styleUrl: './user-edit.component.scss'
+  styleUrl: './user-edit.component.scss',
+  standalone: true
 })
 export class UserEditComponent {
   user = {

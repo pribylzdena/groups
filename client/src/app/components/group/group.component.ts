@@ -1,10 +1,18 @@
 import { Component } from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {NavbarComponent} from '../navbar/navbar.component';
 
 @Component({
-  selector: 'app-group',
-  imports: [],
-  templateUrl: './group.component.html',
-  styleUrl: './group.component.scss'
+  selector: 'app-group-layout',
+  template: `
+    <app-navbar></app-navbar>
+    <router-outlet></router-outlet>
+  `,
+  imports: [
+    RouterOutlet,
+    NavbarComponent
+  ],
+  standalone: true
 })
 export class GroupComponent {
 

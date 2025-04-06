@@ -1,6 +1,8 @@
 <div class="profile-container">
   <!-- Back Button -->
-  <button class="back-button "><</button>
+  <button class="back-button" [routerLink]="['/profile']">
+    <i class="bi bi-arrow-left"><</i>
+  </button>
 
   <!-- Card -->
   <div class="profile-card mx-auto">
@@ -24,7 +26,7 @@
 
     <!-- Bottom Buttons -->
     <div class="btn-container justify-content-between">
-      <button class="btn cancel-btn">Cancel</button>
+      <button class="btn cancel-btn" [routerLink]="['/profile']">Cancel</button>
       <button class="btn confirm-btn">Confirm changes</button>
     </div>
   </div>
