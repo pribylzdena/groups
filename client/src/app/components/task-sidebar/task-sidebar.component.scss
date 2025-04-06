@@ -1,18 +1,18 @@
 .sidebar {
   position: fixed;
-  left: -350px;
+  right: -350px;
   top: 0;
   width: 350px;
   height: 100%;
   background-color: #ffffff;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
   padding: 20px;
-  transition: left 0.3s ease-in-out;
+  transition: right 0.3s ease-in-out;
   z-index: 20;
 }
 
 .sidebar.open {
-  left: 0;
+  right: 0;
 }
 
 .close-btn {
@@ -58,6 +58,15 @@ form {
   }
 }
 
+.color-picker {
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  padding: 0;
+  border: none !important;
+  cursor: pointer;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -67,4 +76,8 @@ form {
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
   z-index: 10;
+}
+
+.priority-select {
+  margin-top: 10px;
 }

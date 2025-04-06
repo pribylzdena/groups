@@ -7,7 +7,8 @@
     "paths": {
       "@app/*": ["app/*"],
       "@models/*": ["app/models/*"],
-      "@components/*": ["app/components/*"]
+      "@components/*": ["app/components/*"],
+      "@enums/*": ["app/enums/*"]
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
@@ -19,7 +20,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022"
