@@ -1,1 +1,19 @@
-<p>schedule works!</p>
+<!-- weekly-schedule.component.html -->
+<div class="schedule-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="date-nav mx-auto">
+      <button (click)="changeWeek(-1)">&lt;</button>
+      <span>{{ getWeekLabel() }}</span>
+      <button (click)="changeWeek(1)">&gt;</button>
+    </div>
+    <button class="add-btn">+ Add new</button>
+  </div>
+
+  <!-- Schedule -->
+  <div class="schedule">
+    <table class="table table-striped-columns">
+
+    </table>
+  </div>
+</div>
