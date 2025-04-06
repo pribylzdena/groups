@@ -21,7 +21,7 @@ export class NotificationListComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.parent?.paramMap.subscribe(params => {
       this.groupId = params.get('groupId');
     });
   }
