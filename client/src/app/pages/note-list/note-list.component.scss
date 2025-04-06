@@ -9,6 +9,10 @@
   color: black;
   text-align: center;
   margin-bottom: 15px;
+
+   &:hover {
+     cursor: pointer;
+   }
 }
 
 .add-button {

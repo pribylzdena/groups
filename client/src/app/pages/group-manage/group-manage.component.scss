@@ -1,35 +1,22 @@
 .dashboard-container {
-  min-height: 100vh;
   background-color: #b0bede;
   padding: 2rem;
 }
 
 .select-toggle {
+  background-color: #156082;
+  font-weight: bold;
+  font-size: 1.5rem;
+  padding: 1.5rem;
   display: flex;
   border-radius: 10px;
-  overflow: hidden;
+  justify-content: space-between;
+  color: white;
 
-  .toggle-button {
-    padding: 0.6rem 2rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    user-select: none;
-
-    &.edit {
-      background-color: #065c78;
-      color: white;
-    }
-
-    &.select {
-      background-color: #6c9bb8;
-      color: #cfd9e4;
-    }
-
-    &.active {
-      font-weight: bold;
-    }
+  &:hover {
+    cursor: pointer ;
   }
+
 }
 
 .group-grid {

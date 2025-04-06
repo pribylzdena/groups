@@ -1,6 +1,5 @@
 .schedule-container {
   background-color: #a6b8dc;
-  min-height: 100vh;
   padding: 2rem;
 
   .header {
@@ -22,11 +21,40 @@
     }
   }
 
-  .schedule {
-    background-color: #6A82B4;
-    height: 750px;
-    border-radius: 10px;
+  .schedule-wrapper {
+    width: 100%;
+    display: flex;
+  }
 
+  .weekly-box {
+    background-color: #6A82B4;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 1rem;
 
   }
+
+  .weekly-table {
+    width: 100%;
+    color: white;
+
+    td {
+      border: 1px solid white;
+      height: 80px;
+      padding: 0 10px;
+      font-size: 1.2rem;
+    }
+  }
+
+  .label-box {
+    background-color: red;
+    height: 60px;
+    width: 70px;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+
+
 }
