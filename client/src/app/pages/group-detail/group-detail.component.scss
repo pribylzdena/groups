@@ -4,7 +4,7 @@
   padding: 2rem;
 }
 
-.custom-toggle {
+.select-toggle {
   display: flex;
   border-radius: 10px;
   overflow: hidden;
@@ -39,6 +39,7 @@
   .group-box {
     background-color: #7089c1;
     color: white;
+    border: none;
     border-radius: 8px;
     padding: 0.5rem 1rem;
     margin: 0.5rem;

@@ -1,7 +1,7 @@
 <div class="dashboard-container d-flex flex-column align-items-center">
 
   <!-- Top buttons -->
-  <div class="custom-toggle mb-4">
+  <div class="select-toggle mb-4">
     <div class="toggle-button edit active">Edit</div>
     <div class="toggle-button select">Select</div>
   </div>
@@ -9,7 +9,7 @@
   <!-- Groups grid -->
   <div class="group-grid row">
     <div class="col-auto group-card" *ngFor="let group of groups">
-      <button  class="group-box">
+      <button  class="group-box shadow-sm">
         <span>{{ group.name }}</span>
         <span class="ms-3">Members:{{ group.members }}</span>
       </button>
