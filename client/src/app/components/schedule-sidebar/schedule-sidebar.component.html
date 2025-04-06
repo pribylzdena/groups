@@ -1,0 +1,22 @@
+<button (click)="toggleSidebar()" class="add-btn btn-primary">+ Add new</button>
+
+<div class="sidebar bg-secondary" [class.open]="isOpen">
+  <button class="close-btn" (click)="toggleSidebar()">×</button>
+  <form>
+
+    <input type="color" class="bg-secondary color-picker" />
+
+    <label>Název udalosti</label>
+    <input type="text"/>
+
+    <label>Zacatek</label>
+    <input type="date" />
+
+    <label>Konec</label>
+    <input type="date" />
+
+    <button type="submit" class="bg-white text-black">Uložit</button>
+  </form>
+</div>
+
+<div class="overlay" *ngIf="isOpen" (click)="toggleSidebar()"></div>

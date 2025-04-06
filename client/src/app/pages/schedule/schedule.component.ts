@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { ScheduleSidebarComponent } from '@components/schedule-sidebar/schedule-sidebar.component';
 
 @Component({
   selector: 'app-schedule',
-  imports: [],
+  imports: [ScheduleSidebarComponent],
   templateUrl: './schedule.component.html',
-  styleUrl: './schedule.component.scss'
+  styleUrl: './schedule.component.scss',
+  standalone: true
 })
 export class ScheduleComponent {
   currentStartDate = new Date(2025, 2, 17); // March is month 2 (zero-based)
