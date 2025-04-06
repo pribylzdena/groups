@@ -1,0 +1,76 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="form-container p-4 rounded">
+        <form>
+          <div class="row mb-3">
+            <div class="col-12">
+              <input type="text" class="form-control rounded-pill" placeholder="Title">
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4 mb-2 mb-md-0">
+              <input type="text" class="form-control rounded-pill" placeholder="Subject">
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+              <div class="dropdown">
+                <button class="btn btn-light rounded-pill w-100 d-flex justify-content-between align-items-center" type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Type
+                  <i class="bi bi-chevron-down"></i>
+                </button>
+                <ul class="dropdown-menu w-100" aria-labelledby="typeDropdown">
+                  <li><a class="dropdown-item" href="#">Type 1</a></li>
+                  <li><a class="dropdown-item" href="#">Type 2</a></li>
+                  <li><a class="dropdown-item" href="#">Type 3</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="dropdown">
+                <button class="btn btn-light rounded-pill w-100 d-flex justify-content-between align-items-center" type="button" id="groupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Group
+                  <i class="bi bi-upload"></i>
+                </button>
+                <ul class="dropdown-menu w-100" aria-labelledby="groupDropdown">
+                  <li><a class="dropdown-item" href="#">Group 1</a></li>
+                  <li><a class="dropdown-item" href="#">Group 2</a></li>
+                  <li><a class="dropdown-item" href="#">Group 3</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4 mb-2 mb-md-0">
+              <button type="button" class="btn btn-light rounded-pill w-100 d-flex justify-content-between align-items-center">
+                <span>
+                  <i class="bi bi-person"></i> Send to
+                </span>
+                <i class="bi bi-person-plus"></i>
+              </button>
+            </div>
+            <div class="col-md-4 mb-2 mb-md-0">
+              <button type="button" class="btn btn-light rounded-pill w-100 d-flex justify-content-between align-items-center">
+                Cancel
+                <i class="bi bi-x-circle"></i>
+              </button>
+            </div>
+            <div class="col-md-4">
+              <button type="button" class="btn btn-light rounded-pill w-100 d-flex justify-content-between align-items-center">
+                Send
+                <i class="bi bi-send"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <textarea class="form-control rounded" rows="10" placeholder="Enter text.."></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

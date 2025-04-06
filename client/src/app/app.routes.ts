@@ -10,6 +10,7 @@ import {NoteDetailComponent} from './pages/note-detail/note-detail.component';
 import {GroupManageComponent} from './pages/group-manage/group-manage.component';
 import {UserEditComponent} from './pages/user-edit/user-edit.component';
 import {GroupComponent} from './components/group/group.component';
+import {NotificationCreateComponent} from '@app/pages/notification-create/notification-create.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,7 @@ export const routes: Routes = [
       { path: 'schedule', component: ScheduleComponent },
       { path: 'notifications', component: NotificationListComponent },
       { path: 'notification-show/:id', component: NotificationDetailComponent },
+      { path: 'notification-create', component: NotificationCreateComponent },
       { path: 'notes', component: NoteListComponent },
       { path: 'note-detail/:id', component: NoteDetailComponent },
       { path: '', redirectTo: 'todo', pathMatch: 'full' }

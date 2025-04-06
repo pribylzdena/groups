@@ -1,0 +1,27 @@
+.form-container {
+  background-color: #7383af;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+body {
+  background-color: #c8d1e3;
+  min-height: 100vh;
+}
+
+.btn-light {
+  background-color: white;
+  border: none;
+}
+
+textarea {
+  resize: none;
+}
+
+.btn i {
+  margin-left: 5px;
+}
+
+.btn i.bi-person {
+  margin-right: 5px;
+}
