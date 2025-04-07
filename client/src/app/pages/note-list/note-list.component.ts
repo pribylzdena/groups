@@ -1,14 +1,32 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {GroupService} from '@app/services/group.service';
+import {RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './note-list.component.html',
   styleUrls: ['./note-list.component.scss']
 })
 export class NoteListComponent {
+
+  groupId: string | null = null;
+  protected readonly RouterLinkActive = RouterLinkActive;
+
+  constructor(
+    private route: ActivatedRoute,
+    private groupService: GroupService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.parent?.paramMap.subscribe(params => {
+      this.groupId = params.get('groupId');
+    });
+  }
+
   notes = [
     { id: 1, color: '#ff7f7f' },
     { id: 2, color: '#ffaf87' },
@@ -26,5 +44,4 @@ export class NoteListComponent {
     { id: 14, color: '#846a29' },
     { id: 15, color: '#ffffff' }
   ];
-
 }

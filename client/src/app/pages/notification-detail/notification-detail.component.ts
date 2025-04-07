@@ -11,18 +11,6 @@ import {GroupService} from '@app/services/group.service';
   ],
   styleUrls: ['./notification-detail.component.scss']
 })
-export class NotificationDetailComponent implements OnInit{
-  groupId: string | null = null;
+export class NotificationDetailComponent {
   protected readonly RouterLinkActive = RouterLinkActive;
-
-  constructor(
-    private route: ActivatedRoute,
-    private groupService: GroupService
-  ) {}
-
-  ngOnInit(): void {
-    this.route.parent?.paramMap.subscribe(params => {
-      this.groupId = params.get('groupId');
-    });
-  }
 }

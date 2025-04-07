@@ -11,20 +11,8 @@ import {NavbarComponent} from '@components/navbar/navbar.component';
   templateUrl: './notification-list.component.html',
   styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationListComponent implements OnInit{
-  groupId: string | null = null;
+export class NotificationListComponent {
   protected readonly RouterLinkActive = RouterLinkActive;
-
-  constructor(
-    private route: ActivatedRoute,
-    private groupService: GroupService
-  ) {}
-
-  ngOnInit(): void {
-    this.route.parent?.paramMap.subscribe(params => {
-      this.groupId = params.get('groupId');
-    });
-  }
 
   notifications = [
     { sender: 'User1', subject: 'example.something@gmail.com', message: 'Group1' },

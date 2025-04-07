@@ -15,9 +15,8 @@
       <p>Pro další aktualizace sledujte sekci oznámení.</p>
     </div>
     <div class="button-group d-flex justify-content-between mt-3">
-      <button class="btn btn-light border">← Back</button>
-      <button class="btn btn-light border">📤 Share</button>
-      <button class="btn btn-primary">💾 Save</button>
+      <button class="btn btn-light border" [routerLink]="['/groups', groupId, 'notes']">← Back</button>
+      <button class="btn btn-primary" [routerLink]="['/groups', groupId, 'notes']">💾 Save</button>
     </div>
   </div>
 </div>

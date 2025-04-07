@@ -19,14 +19,14 @@ export const routes: Routes = [
     children: [
       { path: 'todo', component: TodoListComponent},
       { path: 'schedule', component: ScheduleComponent },
-      { path: 'notifications', component: NotificationListComponent },
-      { path: 'notification-show/:id', component: NotificationDetailComponent },
-      { path: 'notification-create', component: NotificationCreateComponent },
       { path: 'notes', component: NoteListComponent },
       { path: 'note-detail/:id', component: NoteDetailComponent },
       { path: '', redirectTo: 'todo', pathMatch: 'full' }
     ]
   },
+  { path: 'notifications', component: NotificationListComponent },
+  { path: 'notification-show/:id', component: NotificationDetailComponent },
+  { path: 'notification-create', component: NotificationCreateComponent },
   { path: 'group-manage', component: GroupManageComponent },
   { path: 'profile', component: UserDetailComponent },
   { path: 'profile-edit', component: UserEditComponent },

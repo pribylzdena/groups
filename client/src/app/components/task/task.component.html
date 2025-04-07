@@ -3,7 +3,7 @@
     <div class="task-card" [ngStyle]="{'background-color': task.color}" ></div>
     <h5 class="mb-0 ms-2">{{ task.name }}</h5>
   </div>
-  <p class="text-muted">Reminder: {{ task.reminderAt | date: 'dd.MM.yyyy HH:mm' }}</p>
+  <p>Reminder: {{ task.reminderAt | date: 'dd.MM.yyyy HH:mm' }}</p>
   <div class="task-info d-flex justify-content-between">
     <div>
       <span class="badge bg-primary">{{ task.priority }}</span>
