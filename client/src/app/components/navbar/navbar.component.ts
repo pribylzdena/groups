@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
-import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '@app/services/group.service';
 

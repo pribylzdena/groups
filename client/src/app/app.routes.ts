@@ -21,15 +21,15 @@ export const routes: Routes = [
       { path: 'schedule', component: ScheduleComponent },
       { path: 'notes', component: NoteListComponent },
       { path: 'note-detail/:id', component: NoteDetailComponent },
-      { path: '', redirectTo: 'todo', pathMatch: 'full' }
+      { path: '', redirectTo: 'todo', pathMatch: 'full' },
+      { path: 'notifications', component: NotificationListComponent },
+      { path: 'notification-show/:id', component: NotificationDetailComponent },
+      { path: 'notification-create', component: NotificationCreateComponent },
+      { path: 'profile', component: UserDetailComponent },
+      { path: 'profile-edit', component: UserEditComponent },
     ]
   },
-  { path: 'notifications', component: NotificationListComponent },
-  { path: 'notification-show/:id', component: NotificationDetailComponent },
-  { path: 'notification-create', component: NotificationCreateComponent },
   { path: 'group-manage', component: GroupManageComponent },
-  { path: 'profile', component: UserDetailComponent },
-  { path: 'profile-edit', component: UserEditComponent },
   { path: '', redirectTo: '/group-manage', pathMatch: 'full' },
 ];
 

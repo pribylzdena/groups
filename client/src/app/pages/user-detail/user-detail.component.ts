@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {ActivatedRoute, RouterLink, RouterLinkActive} from '@angular/router';
+import {GroupService} from '@app/services/group.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,4 +16,18 @@ export class UserDetailComponent {
     password: 'hesilko123',
     avatar: 'https://github.com/mdo.png'
   };
+
+  groupId: string | null = null;
+  protected readonly RouterLinkActive = RouterLinkActive;
+
+  constructor(
+    private route: ActivatedRoute,
+    private groupService: GroupService
+  ) {}
+
+  ngOnInit(): void {
+    this.route.parent?.paramMap.subscribe(params => {
+      this.groupId = params.get('groupId');
+    });
+  }
 }

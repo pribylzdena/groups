@@ -1,11 +1,11 @@
 import {Component, Input} from '@angular/core';
 import {Task} from '@models/task';
-import {DatePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import {DatePipe, NgStyle} from '@angular/common';
 
 
 @Component({
   selector: 'app-task',
-  imports: [NgForOf, NgIf, NgStyle, DatePipe],
+  imports: [NgStyle, DatePipe],
   templateUrl: './task.component.html',
   styleUrl: './task.component.scss',
   standalone: true

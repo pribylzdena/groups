@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {NgForOf, NgIf, NgStyle} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import { Priority } from '@app/enums/priority';
 import {of} from 'rxjs';
 
@@ -9,8 +9,7 @@ import {of} from 'rxjs';
   styleUrls: ['./task-sidebar.component.scss'],
   imports: [
     NgIf,
-    NgForOf,
-    NgStyle
+    NgForOf
   ],
   standalone: true
 })

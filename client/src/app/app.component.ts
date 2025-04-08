@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = 'client';
-  showNavbar = false;
+  showNavbar = true;
 
-  constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      this.showNavbar = this.router.url.startsWith('/groups/');
-    });
-  }
+  //constructor(private router: Router) {
+  //  this.router.events.subscribe(() => {
+  //    this.showNavbar = this.router.url.startsWith('/groups/');
+  //  });
+  //}
 }

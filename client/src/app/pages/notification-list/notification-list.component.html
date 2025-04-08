@@ -10,7 +10,7 @@
       <button class="btn btn-secondary me-2">
         Order by <i class="bi bi-arrow-down"></i>
       </button>
-      <button class="btn btn-success" [routerLink]="['/notification-create']" [routerLinkActive]="['active']">+ Add new</button>
+      <button class="btn btn-success" [routerLink]="['/groups', groupId, 'notification-create']" [routerLinkActive]="['active']">+ Add new</button>
     </div>
   </div>
 
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="text-center mt-2">
-          <a  class="btn-light" [routerLink]="['/notification-show', 1]" [routerLinkActive]="['active']">Show</a>
+          <a  class="btn-light" [routerLink]="['/groups', groupId, 'notification-show', 1]" [routerLinkActive]="['active']">Show</a>
         </div>
       </div>
     </div>
