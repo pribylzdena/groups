@@ -3,6 +3,7 @@ import { NgForOf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {Group} from '@app/models/group';
 import { GlobalNavbarComponent } from '@components/global-navbar/global-navbar.component';
+import { GroupService } from '@app/services/group.service';
 
 @Component({
   selector: 'app-group-dashboard',
@@ -16,14 +17,14 @@ import { GlobalNavbarComponent } from '@components/global-navbar/global-navbar.c
   standalone: true
 })
 export class GroupManageComponent {
-  groups: Group[] = [
-    { id: 1, name: 'Group1', members: 95 },
-    { id: 2, name: 'Group2', members: 945 },
-    { id: 3, name: 'Group3', members: 9 },
-    { id: 4, name: 'Group4', members: 5 }
-  ];
+  private groupService: GroupService
+  public groups: Group[];
+
+  constructor(groupService: GroupService) {
+    this.groupService = groupService;
+    this.groups = this.groupService.getAllGroups();
+  }
 
   createNewGroup() : void {
-
   }
 }

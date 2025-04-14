@@ -13,7 +13,7 @@ import { GroupService } from '@app/services/group.service';
   standalone: true
 })
 export class NavbarComponent {
-  groupId: string | null = null;
+  groupId: number | null = null;
   groupName: string | null = null;
   protected readonly RouterLinkActive = RouterLinkActive;
 
@@ -24,7 +24,7 @@ export class NavbarComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.groupId = params.get('groupId');
+      this.groupId = Number(params.get('groupId'));
       const group = this.groupId ? this.groupService.getGroupById(this.groupId) : null;
       this.groupName = group?.name ?? null;
     });
