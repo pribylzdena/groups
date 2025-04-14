@@ -1,0 +1,134 @@
+
+$primary-color: #34698d;
+$secondary-color: #5c8fb6;
+$background-color: #e6eef5;
+$card-bg: #ffffff;
+$text-color: #333333;
+$shadow-color: rgba(0, 0, 0, 0.1);
+
+.registration-container {
+  min-height: 100vh;
+  background: $background-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+
+  background: linear-gradient(135deg, #e6eef5 0%, #c4d7e6 100%);
+}
+
+.registration-card {
+  background-color: $card-bg;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px $shadow-color;
+  overflow: hidden;
+  padding: 2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  .brand-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $primary-color;
+    margin: 0;
+  }
+}
+
+.registration-form {
+  .form-control {
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ced4da;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+      border-color: $secondary-color;
+    }
+  }
+
+  .input-group-text {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+  }
+
+  .invalid-feedback {
+    font-size: 0.85rem;
+    color: #dc3545;
+  }
+}
+
+.register-btn {
+  background-color: $primary-color;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.login-link {
+  color: $text-color;
+  font-size: 0.9rem;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: darken($primary-color, 15%);
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.registration-card {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+  .registration-card {
+    padding: 1.5rem;
+  }
+
+  .brand-header {
+    .logo-container {
+      width: 50px;
+      height: 50px;
+    }
+
+    .brand-title {
+      font-size: 2rem;
+    }
+  }
+}

@@ -11,6 +11,8 @@ import {GroupManageComponent} from './pages/group-manage/group-manage.component'
 import {UserEditComponent} from './pages/user-edit/user-edit.component';
 import {GroupComponent} from './components/group/group.component';
 import {NotificationCreateComponent} from '@app/pages/notification-create/notification-create.component';
+import { LoginComponent } from '@app/pages/login/login.component';
+import {RegisterComponent} from '@app/pages/register/register.component';
 
 export const routes: Routes = [
   {
@@ -30,7 +32,9 @@ export const routes: Routes = [
     ]
   },
   { path: 'group-manage', component: GroupManageComponent },
-  { path: '', redirectTo: '/group-manage', pathMatch: 'full' },
+  { path: 'register', component: RegisterComponent },
+  { path: 'login', component: LoginComponent },
+  { path: '', redirectTo: '/register', pathMatch: 'full' },
 ];
 
 
