@@ -1,20 +1,38 @@
-<div class="dashboard-container d-flex flex-column align-items-center">
+<app-global-navbar></app-global-navbar>
 
-  <div class="select-toggle mb-4 gap-5">
-    <div class="edit-button d-flex">Edit</div>
-    <div class="select-button" style="opacity: 50%">Select</div>
-  </div>
+<div class="groups-container">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="groups-card">
+          <div class="groups-header">
+            <h2 class="section-title">Moje skupiny</h2>
+          </div>
 
-  <div class="group-grid row">
-    <div class="col-auto group-card" *ngFor="let group of groups">
-      <button class="group-box" [routerLink]="['/groups', group.id, 'todo']">
-        <span>{{ group.name }}</span>
-        <span class="ms-3">Members:{{ group.members }}</span>
-      </button>
+          <div class="groups-content">
+            <div class="group-grid">
+              <div class="group-item" *ngFor="let group of groups">
+                <button class="group-box" [routerLink]="['/groups', group.id, 'todo']">
+                  <div class="group-info">
+                    <h3 class="group-name">{{ group.name }}</h3>
+                    <p class="group-members">
+                      <i class="bi bi-people me-1"></i>
+                      {{ group.members }} členů
+                    </p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="groups-footer">
+            <button class="add-group-btn" (click)="createNewGroup()">
+              <i class="bi bi-plus"></i>
+              <span>Nová skupina</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="add-button-container mt-5">
-    <button class="add-button rounded-circle">+</button>
   </div>
 </div>

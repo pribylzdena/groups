@@ -1,57 +1,128 @@
-.dashboard-container {
-  background-color: #b0bede;
-  padding: 2rem;
+.groups-container {
+  background-color: #f5f7fa;
+  min-height: calc(100vh - 60px);
+  padding: 2rem 0;
 }
 
-.select-toggle {
-  background-color: #156082;
-  font-weight: bold;
-  font-size: 1.5rem;
+.groups-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.groups-header {
+  background-color: #2c3e50;
   padding: 1.5rem;
-  display: flex;
-  border-radius: 10px;
-  justify-content: space-between;
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  &:hover {
-    cursor: pointer ;
-  }
+.section-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
 
+.view-toggle {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.toggle-btn.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.toggle-btn:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.groups-content {
+  padding: 1.5rem;
 }
 
 .group-grid {
-  max-width: 700px;
-  margin-bottom: 2rem;
-
-  .group-box {
-    background-color: #7089c1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem 1rem;
-    margin: 0.5rem;
-    display: inline-block;
-    min-width: 160px;
-    text-align: left;
-    font-size: 0.95rem;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
-.add-button-container {
+.group-box {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  padding: 1.2rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.group-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  background-color: #2980b9;
+}
+
+.group-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.group-members {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.groups-footer {
+  padding: 1.5rem;
   display: flex;
   justify-content: center;
+  border-top: 1px solid #eee;
 }
 
-.add-button {
-  width: 60px;
-  height: 60px;
-  font-size: 2rem;
-  background-color: #d2dbe5;
-  color: black;
-  border: 2px solid black;
-  cursor: pointer;
+.add-group-btn {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.8rem 2rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-  &:hover {
-    background-color: #c0cde0;
-  }
+.add-group-btn:hover {
+  background-color: #1a252f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.add-group-btn i {
+  font-size: 1.2rem;
 }

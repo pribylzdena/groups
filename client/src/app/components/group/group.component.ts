@@ -5,10 +5,8 @@ import {NotificationListComponent} from '@app/pages/notification-list/notificati
 
 @Component({
   selector: 'app-group-layout',
-  template: `
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-  `,
+  templateUrl: './group.component.html',
+  styleUrl: './group.component.scss',
   imports: [
     RouterOutlet,
     NavbarComponent,
