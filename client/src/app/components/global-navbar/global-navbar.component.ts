@@ -1,16 +1,15 @@
 import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
-import { NgIf, NgClass } from '@angular/common';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-global-navbar',
-  imports: [RouterLink, RouterLinkActive, NgIf, NgClass],
+  imports: [RouterLink, RouterLinkActive, NgIf],
   templateUrl: './global-navbar.component.html',
   styleUrl: './global-navbar.component.scss',
   standalone: true
 })
-
 export class GlobalNavbarComponent {
   hasNotifications = true;
   notificationCount = 3;
@@ -20,21 +19,11 @@ export class GlobalNavbarComponent {
   userName = 'John Smith';
   userEmail = 'john.smith@example.com';
 
-  toggleDropdown(event: Event) {
-    console.log("toggle profile");
-    event.stopPropagation();
+  toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  @HostListener('document:click', ['$event'])
-  clickOutside(event: Event) {
-    const targetElement = event.target as HTMLElement;
-    if (!targetElement.closest('.profile-dropdown')) {
-      this.isDropdownOpen = false;
-    }
-  }
-
   logout() {
-    console.log('Logging out...');
+    console.log('logging out');
   }
 }

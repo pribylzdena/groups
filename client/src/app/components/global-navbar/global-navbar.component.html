@@ -19,8 +19,8 @@
           <span class="notification-badge" *ngIf="hasNotifications">{{ notificationCount }}</span>
         </button>
 
-        <div class="profile-dropdown" [class.open]="isDropdownOpen">
-          <div class="profile-trigger" (click)="toggleDropdown($event)">
+        <div class="profile-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
+          <div class="profile-trigger">
             <img [src]="profileImageUrl" alt="Profile" class="profile-image">
             <span class="profile-status" [class.online]="isUserOnline"></span>
           </div>
