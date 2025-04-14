@@ -2,6 +2,9 @@ import { Component, HostListener } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
+import {FormBuilder} from '@angular/forms';
+
 
 @Component({
   selector: 'app-global-navbar',
@@ -19,11 +22,19 @@ export class GlobalNavbarComponent {
   userName = 'John Smith';
   userEmail = 'john.smith@example.com';
 
+  constructor(private router: Router) {}
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   logout() {
+
+    setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 1000
+    )
+
     console.log('logging out');
   }
 }
