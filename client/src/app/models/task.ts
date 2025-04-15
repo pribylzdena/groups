@@ -30,7 +30,7 @@ export class Task {
     this.status = status;
     this.deadline = deadline;
     this.color = color;
-    this.priority = priority;
+    this.priority = priority;``
 
     this.description = description;
 

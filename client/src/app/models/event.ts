@@ -1,14 +1,28 @@
-import {User} from '@models/user';
+import {EventParticipant} from '@models/event-participant';
 
 export class Event {
+  id: number;
+  name: string;
+  startsAt: Date;
+  endsAt: Date;
+  status: string;
+  color: string;
+  participants: EventParticipant[]
   constructor(
-    public id: number,
-    public name: string,
-    public startsAt: Date,
-    public endsAt: Date,
-    public status: string,
-    public color: string,
-    public groupId: number,
-    public eventParticipants: User[]
-  ) {}
+     id: number,
+     name: string,
+     startsAt: Date,
+     endsAt: Date,
+     status: string,
+     color: string,
+     participants: EventParticipant[]
+  ) {
+    this.id = id;
+    this.name = name;
+    this.startsAt = startsAt;
+    this.endsAt = endsAt;
+    this.status = status;
+    this.color = color;
+    this.participants = participants;
+  }
 }
