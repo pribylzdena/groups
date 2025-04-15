@@ -428,23 +428,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\zd3n3\\.nuget\\packages\\": {},
+    "C:\\Users\\Tomas\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\AngularProject\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "C:\\AngularProject\\WebApplication1\\WebApplication1\\WebApplication1.csproj",
-      "packagesPath": "C:\\Users\\zd3n3\\.nuget\\packages\\",
-      "outputPath": "C:\\AngularProject\\WebApplication1\\WebApplication1\\obj\\",
+      "projectPath": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WebApplication1.csproj",
+      "packagesPath": "C:\\Users\\Tomas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\zd3n3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Tomas\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -471,7 +471,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net8.0": {
@@ -501,7 +502,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
