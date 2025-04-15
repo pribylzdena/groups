@@ -1,51 +1,47 @@
-# IDE soubory
-.vs/
-.idea/
-.vscode/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-*.wsuo
-*.sqlite
-DocumentLayout.json
+# Ignorovat IDE soubory
+**/.vs/
+**/.idea/
+**/.vscode/
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
+**/*.wsuo
+**/*.sqlite
+**/DocumentLayout.json
 
-# Build výstupy
-[Bb]in/
-[Oo]bj/
-[Dd]ebug/
-[Rr]elease/
-*.pdb
-*.mdb
+# Ignorovat build výstupy
+**/[Bb]in/
+**/[Oo]bj/
+**/[Dd]ebug/
+**/[Rr]elease/
+**/*.pdb
+**/*.mdb
 
-# NuGet soubory
-*.nupkg
-project.lock.json
-project.assets.json
-*.cache
+# Ignorovat NuGet soubory
+**/*.nupkg
+**/project.lock.json
+**/project.assets.json
 
-# Testovací výstupy
-TestResults/
+# Ignorovat testovací výstupy
+**/TestResults/
 
-# Systémové soubory
-.DS_Store
-Thumbs.db
+# Ignorovat systémové soubory
+**/.DS_Store
+**/Thumbs.db
 
-# Další dočasné nebo ladicí soubory
-*.log
-*.dbmdl
-*.pidb
-*.cache
-*.editorconfig
-*.csproj.AssemblyReference.cache
-*AssemblyInfoInputs.cache
-*assets.cache
+# Ignorovat další dočasné nebo ladicí soubory
+**/*.cache
+**/*.log
+**/*.dbmdl
+**/*.pidb
+**/*.editorconfig
+**/*.AssemblyReference.cache
+**/*AssemblyInfoInputs.cache
+**/*assets.cache
+**/*.GeneratedMSBuildEditorConfig.editorconfig
 
-# Soubory, které chceš zachovat (odkomentovat podle potřeby)
-#!/Controllers/
-#!/Properties/
-#!/Program.cs
-#!/WeatherForecast.cs
-#!/appsettings*.json
-#!/*.csproj
-#!/*.http
+# Specifické soubory v tvém projektu
+**/WebApplication1.csproj.AssemblyReference.cache
+**/WebApplication1.AssemblyInfoInputs.cache
+**/WebApplication1.assets.cache
