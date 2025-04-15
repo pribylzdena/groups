@@ -1,14 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\AngularProject\\WebApplication1\\",
+  "WorkspaceRootPath": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|c:\\angularproject\\webapplication1\\webapplication1\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|c:\\users\\tomas\\documents\\github\\groups\\server\\webapplication1\\webapplication1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\webapplication1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|c:\\users\\tomas\\documents\\github\\groups\\server\\webapplication1\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|c:\\angularproject\\webapplication1\\webapplication1\\webapplication1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\webapplication1.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+      "AbsoluteMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|c:\\users\\tomas\\documents\\github\\groups\\server\\webapplication1\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2D3F253-0AFA-46B7-9D6E-1BE980661FB3}|WebApplication1\\WebApplication1.csproj|solutionrelative:webapplication1\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,19 +22,52 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 8,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "WebApplication1\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WeatherForecast.cs",
+              "RelativeToolTip": "WebApplication1\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-10T14:38:49.177Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "WeatherForecastController.cs",
-              "DocumentMoniker": "C:\\AngularProject\\WebApplication1\\WebApplication1\\Controllers\\WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\Controllers\\WeatherForecastController.cs",
               "RelativeDocumentMoniker": "WebApplication1\\Controllers\\WeatherForecastController.cs",
-              "ToolTip": "C:\\AngularProject\\WebApplication1\\WebApplication1\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\Controllers\\WeatherForecastController.cs",
               "RelativeToolTip": "WebApplication1\\Controllers\\WeatherForecastController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -39,16 +76,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "WebApplication1.http",
-              "DocumentMoniker": "C:\\AngularProject\\WebApplication1\\WebApplication1\\WebApplication1.http",
+              "DocumentMoniker": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WebApplication1.http",
               "RelativeDocumentMoniker": "WebApplication1\\WebApplication1.http",
-              "ToolTip": "C:\\AngularProject\\WebApplication1\\WebApplication1\\WebApplication1.http",
+              "ToolTip": "C:\\Users\\Tomas\\Documents\\GitHub\\groups\\server\\WebApplication1\\WebApplication1.http",
               "RelativeToolTip": "WebApplication1\\WebApplication1.http",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
               "WhenOpened": "2025-03-10T14:37:14.539Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
