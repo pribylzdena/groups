@@ -1,0 +1,44 @@
+# Ignorovat IDE soubory
+.vs/
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorovat build výstupy
+bin/
+obj/
+*.pdb
+*.mdb
+
+# Ignorovat NuGet soubory
+*.nupkg
+project.lock.json
+project.assets.json
+
+# Ignorovat testovací výstupy
+TestResults/
+
+# Ignorovat systémové soubory
+.DS_Store
+Thumbs.db
+
+# Ignorovat další dočasné nebo ladicí soubory
+*.cache
+*.log
+*.dbmdl
+*.pidb
+
+# Ponechat následující složky a soubory pro vývoj:
+# - Controllers/
+# - Properties/
+# - Program.cs
+# - WeatherForecast.cs
+# - appsettings*.json
+# - *.csproj
+# - *.http
+
+# Volitelně, pokud nechceš verzovat některé konkrétní konfigurace:
+# !WebApplication1.csproj.user  <- můžeš odkomentovat, pokud jej chceš také verzovat
