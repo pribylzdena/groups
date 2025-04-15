@@ -1,5 +1,5 @@
 # Ignorovat IDE soubory
-.vs/
+.vs/*
 .idea/
 .vscode/
 *.suo
@@ -8,8 +8,8 @@
 *.sln.docstates
 
 # Ignorovat build výstupy
-bin/
-obj/
+bin/*
+obj/*
 *.pdb
 *.mdb
 
