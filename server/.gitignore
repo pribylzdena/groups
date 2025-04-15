@@ -37,3 +37,7 @@ TestResults/
 # Mac / Linux system files
 .DS_Store
 Thumbs.db
+/WebApplication1/.vs/
+/WebApplication1/bin/
+/WebApplication1/obj/
+/WebApplication1/.vs/

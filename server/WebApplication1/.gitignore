@@ -42,3 +42,5 @@ Thumbs.db
 
 # Volitelně, pokud nechceš verzovat některé konkrétní konfigurace:
 # !WebApplication1.csproj.user  <- můžeš odkomentovat, pokud jej chceš také verzovat
+/.vs/
+/bin/
