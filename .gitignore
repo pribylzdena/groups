@@ -2,3 +2,14 @@
 /server/WebApplication1/.vs/
 /server/WebApplication1/bin/
 /server/WebApplication1/obj/
+/server/WebApplication1/obj/Debug/net8.0/WebApplication1.GeneratedMSBuildEditorConfig.editorconfig
+/server/.vs/WebApplication1/v17/.suo
+/server/WebApplication1/obj/Debug/net8.0/WebApplication1.AssemblyInfo.cs
+/server/WebApplication1/obj/Debug/net8.0/WebApplication1.AssemblyInfoInputs.cache
+/server/WebApplication1/obj/Release/net8.0/WebApplication1.csproj.AssemblyReference.cache
+/server/WebApplication1/obj/project.assets.json
+/server/WebApplication1/obj/Debug/net8.0/WebApplication1.assets.cache
+/server/WebApplication1/obj/project.nuget.cache
+/server/WebApplication1/obj/WebApplication1.csproj.nuget.dgspec.json
+/server/WebApplication1/obj/WebApplication1.csproj.nuget.g.props
+/server/WebApplication1/obj/WebApplication1.csproj.nuget.g.targets
