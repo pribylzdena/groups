@@ -1,47 +1,44 @@
 # Ignorovat IDE soubory
-**/.vs/
-**/.idea/
-**/.vscode/
-**/*.suo
-**/*.user
-**/*.userosscache
-**/*.sln.docstates
-**/*.wsuo
-**/*.sqlite
-**/DocumentLayout.json
+.vs/*
+.idea/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
 # Ignorovat build výstupy
-**/[Bb]in/
-**/[Oo]bj/
-**/[Dd]ebug/
-**/[Rr]elease/
-**/*.pdb
-**/*.mdb
+bin/*
+obj/*
+*.pdb
+*.mdb
 
 # Ignorovat NuGet soubory
-**/*.nupkg
-**/project.lock.json
-**/project.assets.json
+*.nupkg
+project.lock.json
+project.assets.json
 
 # Ignorovat testovací výstupy
-**/TestResults/
+TestResults/
 
 # Ignorovat systémové soubory
-**/.DS_Store
-**/Thumbs.db
+.DS_Store
+Thumbs.db
 
 # Ignorovat další dočasné nebo ladicí soubory
-**/*.cache
-**/*.log
-**/*.dbmdl
-**/*.pidb
-**/*.editorconfig
-**/*.AssemblyReference.cache
-**/*AssemblyInfoInputs.cache
-**/*assets.cache
-**/*.GeneratedMSBuildEditorConfig.editorconfig
+*.cache
+*.log
+*.dbmdl
+*.pidb
 
-# Specifické soubory v tvém projektu
-**/WebApplication1.csproj.AssemblyReference.cache
-**/WebApplication1.AssemblyInfoInputs.cache
-**/WebApplication1.assets.cache
+# Ponechat následující složky a soubory pro vývoj:
+# - Controllers/
+# - Properties/
+# - Program.cs
+# - WeatherForecast.cs
+# - appsettings*.json
+# - *.csproj
+# - *.http
+
+# Volitelně, pokud nechceš verzovat některé konkrétní konfigurace:
+# !WebApplication1.csproj.user  <- můžeš odkomentovat, pokud jej chceš také verzovat
