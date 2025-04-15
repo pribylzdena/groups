@@ -1,0 +1,38 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# Rider
+.idea/
+
+# Dotnet artifacts
+*.dbmdl
+*.log
+*.pidb
+
+# VS Code
+.vscode/
+
+# Others
+*.cache
+*.pdb
+*.mdb
+
+# NuGet
+*.nupkg
+project.lock.json
+project.assets.json
+
+# Test results
+TestResults/
+
+# Mac / Linux system files
+.DS_Store
+Thumbs.db
