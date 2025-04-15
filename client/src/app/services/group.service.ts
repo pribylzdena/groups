@@ -1,15 +1,29 @@
 import { Injectable } from '@angular/core';
 import {Group} from '@models/group';
+import {GroupMember} from '@models/group-member';
+import {User} from '@models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
   private groups: Group[] = [
-    { id: 1, name: 'Group1', members: 95 },
-    { id: 2, name: 'Group2', members: 100 },
-    { id: 3, name: 'Group3', members: 9 },
-    { id: 4, name: 'Group4', members: 5 }
+    new Group(1, 'Developers', [
+      new GroupMember(1, 'admin', new User(1, 'Alice', 'alice@example.com', '/assets/avatars/alice.png')),
+      new GroupMember(2, 'member', new User(2, 'Bob', 'bob@example.com', '/assets/avatars/bob.png'))
+    ]),
+    new Group(2, 'Designers', [
+      new GroupMember(3, 'admin', new User(3, 'Carol', 'carol@example.com', '/assets/avatars/carol.png')),
+      new GroupMember(4, 'member', new User(4, 'Dave', 'dave@example.com', '/assets/avatars/dave.png'))
+    ]),
+    new Group(3, 'Marketing', [
+      new GroupMember(5, 'admin', new User(5, 'Eve', 'eve@example.com', '/assets/avatars/eve.png')),
+      new GroupMember(6, 'member', new User(6, 'Frank', 'frank@example.com', '/assets/avatars/frank.png')),
+      new GroupMember(7, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png'))
+    ]),
+    new Group(4, 'QA Team', [
+      new GroupMember(8, 'admin', new User(8, 'Heidi', 'heidi@example.com', '/assets/avatars/heidi.png'))
+    ])
   ];
 
   getGroupById(id: number) {
