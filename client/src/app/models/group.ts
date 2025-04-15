@@ -1,7 +1,12 @@
+import {GroupMember} from '@models/group-member';
+
 export class Group {
-  constructor(
-    public id: number,
-    public name: string,
-    public members: number
-  ) {}
+  id: number;
+  name: string;
+  members: GroupMember[];
+  constructor(  id: number, name: string, members: GroupMember[],) {
+    this.id = id;
+    this.name = name;
+    this.members = members;
+  }
 }
