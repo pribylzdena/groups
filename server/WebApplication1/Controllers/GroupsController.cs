@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApplication1.Mappers;
 using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
@@ -19,7 +18,7 @@ namespace WebApplication1.Controllers
             
             foreach(var item in this.context.groups)
             {
-                models.Add(ResponseModelMapper.MapToGroupResponseModel(item, new GroupResponseModel()));
+                models.Add(new GroupResponseModel(item));
             }
 
             return Ok(models);
