@@ -7,7 +7,7 @@ namespace WebApplication1.ResponseModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<int> members { get; set; }
+        public List<GroupMembers> members { get; set; }
 
 
         public GroupResponseModel(Group group)

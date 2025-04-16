@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class Scheduled_events
+    public class ScheduledEvents
     {
         public int id { get; set; }
         public string name { get; set; }
