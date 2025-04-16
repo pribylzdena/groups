@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
-import {Group} from '@models/group';
-import {GroupMember} from '@models/group-member';
-import {User} from '@models/user';
+import { Group } from '@models/group';
+import { GroupMember } from '@models/group-member';
+import { User } from '@models/user';
+import { environment } from '../../environments/environment.development';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
+  private http: HttpClient;
+  private data: any[] = [];
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
   private groups: Group[] = [
     new Group(1, 'Developers', [
       new GroupMember(1, 'admin', new User(1, 'Alice', 'alice@example.com', '/assets/avatars/alice.png')),
@@ -36,5 +46,15 @@ export class GroupService {
 
   getAllGroups() {
     return this.groups;
+  }
+
+  //TODO get data from `${environment.apiUrl}/groups`
+  getGroupsFromApi(): Observable<any[]> {
+    console.log('Calling ' + `${environment.apiUrl}/WeatherForecast`);
+    return this.http.get<any[]>(`${environment.apiUrl}/WeatherForecast`);
+  }
+
+  getData(): any[] {
+    return this.data;
   }
 }
