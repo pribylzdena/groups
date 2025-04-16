@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class Group_members
+    public class GroupMembers
     {
         public int user_id { get; set; }
         public int group_id { get; set; }

@@ -10,7 +10,7 @@ namespace WebApplication1.Services
 
         const string PASSWORD = "foobarbaz";
 
-        public string Create(Users model)
+        public string Create(User model)
         {
             return JwtBuilder.Create()
                       .WithAlgorithm(new HMACSHA256Algorithm())

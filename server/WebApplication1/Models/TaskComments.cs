@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class Task_comments
+    public class TaskComments
     {
         public int id { get; set; }
         public string value { get; set; }
