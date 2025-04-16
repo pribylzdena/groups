@@ -35,3 +35,5 @@
 /server/.vs/WebApplication1/v17/DocumentLayout.backup.json
 /server/.vs/WebApplication1/v17/.futdcache.v2
 /.idea/inspectionProfiles/Project_Default.xml
+/server/WebApplication1/obj/Debug/net8.0/staticwebassets.build.json
+/server/WebApplication1/obj/Debug/net8.0/staticwebassets/msbuild.build.WebApplication1.props
