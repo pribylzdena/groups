@@ -5,6 +5,7 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
+    //[Secured]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupsController : ControllerBase
