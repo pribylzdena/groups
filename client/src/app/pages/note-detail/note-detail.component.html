@@ -1,18 +1,8 @@
 <div class="container-wrapper p-1 d-flex justify-content-center">
   <div class="announcement-card card p-4 justify-content-center">
-    <h4 class="card-title text-center mb-3">Title</h4>
+    <h4 class="card-title text-center mb-3">{{ note.name }}</h4>
     <div class="card-body announcement-body">
-      <p>Ahoj,</p>
-      <p>Správce skupiny přidal nové oznámení týkající se aktuálního projektu. Byla aktualizována dokumentace a upraveny některé klíčové termíny.</p>
-      <p>Doporučujeme si tyto změny co nejdříve projít.</p>
-      <p><strong>Blíží se také několik důležitých termínů:</strong></p>
-      <ul>
-        <li>Uzávěrka prvního modulu je naplánována na 5. dubna 2024</li>
-        <li>Interní prezentace proběhne 10. dubna 2024</li>
-      </ul>
-      <p>Zároveň byly přiřazeny nové úkoly v rámci skupiny. Prosím, podívejte se do svého seznamu úkolů a podle potřeby upravte svůj postup.</p>
-      <p>V diskuzní sekci bylo otevřeno nové vlákno pro zpětnou vazbu a návrhy na zlepšení. Pokud máte jakékoli připomínky, zapojte se do diskuze.</p>
-      <p>Pro další aktualizace sledujte sekci oznámení.</p>
+      <p>{{ note.value }}</p>
     </div>
     <div class="button-group d-flex justify-content-between mt-3">
       <button class="btn btn-light border" [routerLink]="['/groups', groupId, 'notes']">← Back</button>

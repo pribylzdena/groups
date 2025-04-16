@@ -19,7 +19,11 @@ export class GroupService {
     new Group(3, 'Marketing', [
       new GroupMember(5, 'admin', new User(5, 'Eve', 'eve@example.com', '/assets/avatars/eve.png')),
       new GroupMember(6, 'member', new User(6, 'Frank', 'frank@example.com', '/assets/avatars/frank.png')),
-      new GroupMember(7, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png'))
+      new GroupMember(7, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png')),
+      new GroupMember(9, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png')),
+      new GroupMember(10, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png')),
+      new GroupMember(11, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png')),
+      new GroupMember(12, 'member', new User(7, 'Grace', 'grace@example.com', '/assets/avatars/grace.png')),
     ]),
     new Group(4, 'QA Team', [
       new GroupMember(8, 'admin', new User(8, 'Heidi', 'heidi@example.com', '/assets/avatars/heidi.png'))

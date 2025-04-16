@@ -6,12 +6,11 @@
       [ngStyle]="{ 'background-color': note.color }"
       [routerLink]="['/groups', groupId ,'note-detail', note.id]"
     >
-    <strong>Title -</strong>
-    <p>Note preview</p>
+    <strong>{{ note.name }}</strong>
+    <p>{{ note.getSubstringValue(20) }}</p>
     </a>
   </div>
   <div class="add-button">
     <button class="btn btn-light rounded-circle">+</button>
   </div>
 </div>
-

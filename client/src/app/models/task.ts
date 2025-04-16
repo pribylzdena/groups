@@ -11,7 +11,7 @@ export class Task {
   public reminderAt?: Date;
   public description?: string;
 
-  public parent?: Task;
+  public parent?: Task|null;
   public assignees?: User[];
   constructor(
     id: number,

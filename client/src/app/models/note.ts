@@ -10,4 +10,8 @@ export class Note {
     this.value = value;
     this.color = color;
   }
+
+  getSubstringValue(length: number) {
+    return this.value.length > length ? this.value.slice(0, length) + '…' : this.value;
+  }
 }
