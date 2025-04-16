@@ -10,7 +10,7 @@ namespace WebApplication1.ResponseModels
         public List<int> members { get; set; }
 
 
-        public GroupResponseModel(groups group)
+        public GroupResponseModel(Group group)
         {
             Id = group.id;
             Name = group.name;
