@@ -47,5 +47,15 @@ export class NoteListComponent {
     this.route.parent?.paramMap.subscribe(params => {
       this.groupId = params.get('groupId');
     });
+
+    this.noteService.getNotesFromApi().subscribe({
+      next: (response) => {
+        console.log(response);
+        this.notes = response;
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
   }
 }

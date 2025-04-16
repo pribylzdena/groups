@@ -1,10 +1,19 @@
 import { Injectable } from '@angular/core';
 import {Note} from '@models/note';
+import {Observable} from 'rxjs';
+import {environment} from '../../environments/environment.development';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoteService {
+  private http: HttpClient;
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
   private notes: Note[] = [
     new Note(1, 'Filmy', 'Hodne dlouha poznamka kamo jakoze vazne hooooooooooooooooooooooooooodneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', '#ff6b6b'),
     new Note(2, 'Obecne poznamky', 'Proste obecne', '#ffffff'),
@@ -38,5 +47,14 @@ export class NoteService {
 
   getAllNotes() {
     return this.notes;
+  }
+
+  getNotesFromApi(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/notes`);
+  }
+
+
+  getNoteFromApi(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/notes/{id}`);
   }
 }

@@ -1,11 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Task } from '@models/task';
 import {User} from '@models/user';
+import {Observable} from 'rxjs';
+import {environment} from '../../environments/environment.development';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
+  private http: HttpClient;
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
+
   private tasks: Task[] = [
     new Task(
       1,
@@ -88,5 +97,9 @@ export class TaskService {
 
   getAllTasks() {
     return this.tasks;
+  }
+
+  getTasksFromApi(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/tasks`);
   }
 }

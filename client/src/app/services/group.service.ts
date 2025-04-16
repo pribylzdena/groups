@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 })
 export class GroupService {
   private http: HttpClient;
-  private data: any[] = [];
 
   constructor(http: HttpClient) {
     this.http = http;
@@ -50,9 +49,5 @@ export class GroupService {
 
   getGroupsFromApi(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`);
-  }
-
-  getData(): any[] {
-    return this.data;
   }
 }

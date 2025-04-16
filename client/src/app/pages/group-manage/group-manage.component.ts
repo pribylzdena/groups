@@ -27,9 +27,6 @@ export class GroupManageComponent implements OnInit {
     this.groups = this.groupService.getAllGroups();
   }
 
-
-  // Get data from api - weatherForecasts test
-  // TODO get groups not weatherForecasts
   ngOnInit(): void {
     this.groupService.getGroupsFromApi().subscribe({
       next: (response) => {
