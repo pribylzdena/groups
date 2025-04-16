@@ -19,13 +19,11 @@ import { WeatherForecast } from '@models/weather-forecast';
   standalone: true
 })
 export class GroupManageComponent implements OnInit {
-  public weatherForecasts: WeatherForecast[];
   private groupService: GroupService;
   public groups: Group[];
 
   constructor(groupService: GroupService) {
     this.groupService = groupService;
-    this.groups = this.groupService.getAllGroups();
   }
 
 
@@ -34,7 +32,8 @@ export class GroupManageComponent implements OnInit {
   ngOnInit(): void {
     this.groupService.getGroupsFromApi().subscribe({
       next: (response) => {
-        this.weatherForecasts = response;
+        console.log(response);
+        this.groups = response;
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

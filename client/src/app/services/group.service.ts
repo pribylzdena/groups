@@ -48,10 +48,8 @@ export class GroupService {
     return this.groups;
   }
 
-  //TODO get data from `${environment.apiUrl}/groups`
   getGroupsFromApi(): Observable<any[]> {
-    console.log('Calling ' + `${environment.apiUrl}/WeatherForecast`);
-    return this.http.get<any[]>(`${environment.apiUrl}/WeatherForecast`);
+    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`);
   }
 
   getData(): any[] {
