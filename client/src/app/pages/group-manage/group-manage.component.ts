@@ -24,6 +24,7 @@ export class GroupManageComponent implements OnInit {
 
   constructor(groupService: GroupService) {
     this.groupService = groupService;
+    this.groups = this.groupService.getAllGroups();
   }
 
 

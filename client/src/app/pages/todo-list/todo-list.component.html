@@ -1,13 +1,38 @@
-<div class="container mt-4">
-  <div class="search-bar d-flex justify-content-between align-items-center task-header">
-    <input type="text" class="form-control w-25" placeholder="Search by...">
-    <button class="btn btn-outline-light">Filters</button>
-    <button class="btn btn-outline-light">Order by ⬇</button>
-    <app-task-sidebar></app-task-sidebar>
+<div class="todo-container">
+  <div class="search-controls">
+    <div class="search-wrapper">
+      <input type="text" class="search-input" placeholder="Search by...">
+      <i class="search-icon">
+        <svg viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="2"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2"></line>
+        </svg>
+      </i>
+    </div>
+    <button class="control-button filter-button">
+      <i class="button-icon">
+        <svg viewBox="0 0 24 24">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" fill="none" stroke="currentColor" stroke-width="2"></polygon>
+        </svg>
+      </i>
+      Filters
+    </button>
+    <button class="control-button sort-button">
+      <i class="button-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 6h16M4 12h10M4 18h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </i>
+      Order by
+    </button>
+    <button class="add-button">
+      <span class="add-icon">+</span>
+      Add new
+    </button>
   </div>
 
-  <div class="task-list mt-4 mx-auto">
-    <div *ngFor="let task of tasks">
+  <div class="task-list">
+    <div class="task-item" *ngFor="let task of tasks">
       <app-task [task]="task"></app-task>
     </div>
   </div>
