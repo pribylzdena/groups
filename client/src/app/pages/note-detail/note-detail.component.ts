@@ -4,13 +4,18 @@ import {GroupService} from '@app/services/group.service';
 import { RouterLinkActive } from '@angular/router';
 import {NoteService} from '@app/services/note.service';
 import {Note} from '@models/note';
+import {FormsModule} from '@angular/forms';
+import {NgClass, NgStyle} from '@angular/common';
 
 @Component({
   selector: 'app-announcement',
   templateUrl: './note-detail.component.html',
   styleUrls: ['./note-detail.component.scss'],
   imports: [
-    RouterLink
+    RouterLink,
+    FormsModule,
+    NgClass,
+    NgStyle
   ],
   standalone: true
 })

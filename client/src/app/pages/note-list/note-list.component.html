@@ -1,16 +1,19 @@
-<div class="container">
-  <div class="notes-wrapper">
-    <a
-      *ngFor="let note of notes"
-      class="note-card"
-      [ngStyle]="{ 'background-color': note.color }"
-      [routerLink]="['/groups', groupId ,'note-detail', note.id]"
-    >
-    <strong>{{ note.name }}</strong>
-    <p>{{ note.getSubstringValue(20) }}</p>
+<div class="notes-container">
+  <div class="notes-grid">
+    <a *ngFor="let note of notes"
+       class="note-card"
+       [ngStyle]="{ 'background-color': note.color }"
+       [routerLink]="['/groups', groupId ,'note-detail', note.id]">
+      <div class="note-content">
+        <h3 class="note-title">{{ note.name }}</h3>
+        <p class="note-preview">{{ note.getSubstringValue(20) }}</p>
+      </div>
     </a>
   </div>
-  <div class="add-button">
-    <button class="btn btn-light rounded-circle">+</button>
+
+  <div class="floating-action-button">
+    <button class="add-button" aria-label="Add new note" [routerLink]="['/groups', groupId ,'note-detail']">
+      <span class="icon-plus"></span>
+    </button>
   </div>
 </div>

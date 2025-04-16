@@ -5,13 +5,26 @@ import {GroupService} from '@app/services/group.service';
 import {RouterLinkActive} from '@angular/router';
 import {NoteService} from '@app/services/note.service';
 import {Note} from '@models/note';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 
 @Component({
   selector: 'app-notes',
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './note-list.component.html',
-  styleUrls: ['./note-list.component.scss']
+  styleUrls: ['./note-list.component.scss'],
+  animations: [
+    trigger('notesList', [
+      transition('* => *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          stagger(50, [
+            animate('0.5s ease', style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
+      ])
+    ])
+  ]
 })
 export class NoteListComponent {
   private route: ActivatedRoute
