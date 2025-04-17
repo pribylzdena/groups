@@ -6,7 +6,7 @@ namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ScheduledEventController : ControllerBase
+    public class ScheduledEventsController : ControllerBase
     {
         private MyContexct context = new MyContexct();
         [HttpGet]
