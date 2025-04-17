@@ -9,14 +9,14 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class NotesController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<NoteResponseModel> models = new List<NoteResponseModel>();
 
-            foreach (var item in this.context.notes)
+            foreach (var item in this.context.Notes)
             {
                 models.Add(new NoteResponseModel(item));
             }
@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Note noteEntity = this.context.notes.Find(id);
+            Note noteEntity = this.context.Notes.Find(id);
 
             if (noteEntity == null)
             {

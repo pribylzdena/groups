@@ -8,14 +8,14 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<NotificationResponseModel> models = new List<NotificationResponseModel>();
 
-            foreach (var item in this.context.notifications)
+            foreach (var item in this.context.Notifications)
             {
                 models.Add(new NotificationResponseModel(item));
             }

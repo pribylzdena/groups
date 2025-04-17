@@ -8,16 +8,16 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<TaskResponseModel> models = new List<TaskResponseModel>();
 
-            foreach (var item in this.context.tasks)
+            foreach (var item in this.context.Tasks)
             {
-                models.Add(new TaskResponseModel(item));
+                models.Add(new TaskResponseModel(item, null));
             }
 
             return Ok(models);

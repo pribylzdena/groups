@@ -95,7 +95,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  background-color: #3498db;
   border: none;
   box-shadow: 0 6px 16px rgba(106, 142, 251, 0.4);
   color: white;
@@ -113,7 +113,7 @@
 .add-button:hover {
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 8px 24px rgba(106, 142, 251, 0.5);
-  background: linear-gradient(135deg, #5d7df9, #9c68e0);
+  background-color: #2980b9;
 }
 
 .add-button:active {
@@ -150,9 +150,11 @@
 
 @keyframes fadeIn {
   from {
-    transform: translateY(20px);
+    opacity: 0;
+    transform: translateY(15px);
   }
   to {
+    opacity: 1;
     transform: translateY(0);
   }
 }

@@ -8,16 +8,16 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class TaskCommentsController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<TaskCommentResponseModel> models = new List<TaskCommentResponseModel>();
 
-            foreach (var item in this.context.task_comments)
+            foreach (var item in this.context.TaskComments)
             {
-                models.Add(new TaskCommentResponseModel(item));
+                models.Add(new TaskCommentResponseModel(item, null));
             }
 
             return Ok(models);

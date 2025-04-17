@@ -8,13 +8,13 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class ScheduledEventsController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
         [HttpGet]
         public IActionResult FindAll()
         {
             List<ScheduledEventResponseModel> models = new List<ScheduledEventResponseModel>();
 
-            foreach (var item in this.context.scheduled_events)
+            foreach (var item in this.context.ScheduledEvents)
             {
                 models.Add(new ScheduledEventResponseModel(item));
             }

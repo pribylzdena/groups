@@ -8,14 +8,14 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<UserResponseModel> models = new List<UserResponseModel>();
 
-            foreach (var item in this.context.users)
+            foreach (var item in this.context.Users)
             {
                 models.Add(new UserResponseModel(item));
             }

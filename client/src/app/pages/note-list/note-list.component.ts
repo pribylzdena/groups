@@ -51,7 +51,7 @@ export class NoteListComponent {
     this.noteService.getNotesFromApi().subscribe({
       next: (response) => {
         console.log(response);
-        this.notes = response;
+        this.notes = response.map(n => new Note(n.id, n.name, n.value, n.color));
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

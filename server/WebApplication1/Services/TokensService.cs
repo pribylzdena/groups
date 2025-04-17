@@ -16,7 +16,7 @@ namespace WebApplication1.Services
                       .WithAlgorithm(new HMACSHA256Algorithm())
                       .WithSecret(PASSWORD)
                       .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
-                      .AddClaim("user", model.name)
+                      .AddClaim("user", model.Name)
                       .Encode();
         }
 

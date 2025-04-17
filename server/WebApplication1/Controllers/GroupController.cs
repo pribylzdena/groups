@@ -11,16 +11,16 @@ namespace WebApplication1.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        private MyContexct context = new MyContexct();
+        private DB context = new DB();
 
         [HttpGet]
         public IActionResult FindAll()
         {
             List<GroupResponseModel> models = new List<GroupResponseModel>();
 
-            foreach (var item in this.context.groups)
+            foreach (var item in this.context.Groups)
             {
-                models.Add(new GroupResponseModel(item));
+                models.Add(new GroupResponseModel(item, new List<GroupMember>()));
             }
 
             return Ok(models);
@@ -29,14 +29,14 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Models.Group groupEntity = this.context.groups.Find(id);
+            Models.Group groupEntity = this.context.Groups.Find(id);
 
             if (groupEntity == null)
             {
                 return NotFound(new { message = "Group not found" });
             }
 
-            var group = new GroupResponseModel(groupEntity);
+            var group = new GroupResponseModel(groupEntity, new List<GroupMember>());
 
             return Ok(group);
         }

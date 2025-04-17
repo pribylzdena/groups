@@ -1,11 +1,9 @@
-// GroupManageComponent.ts
 import { Component, OnInit } from '@angular/core';
 import { NgForOf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Group } from '@app/models/group';
 import { GlobalNavbarComponent } from '@components/global-navbar/global-navbar.component';
 import { GroupService } from '@app/services/group.service';
-import { WeatherForecast } from '@models/weather-forecast';
 
 @Component({
   selector: 'app-group-dashboard',
