@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
         {
             List<NotificationResponseModel> models = new List<NotificationResponseModel>();
 
-            foreach (var item in this.context.Notifications)
+            foreach (var item in this.context.notifications)
             {
                 models.Add(new NotificationResponseModel(item));
             }

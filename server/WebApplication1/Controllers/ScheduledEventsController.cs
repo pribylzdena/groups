@@ -14,7 +14,7 @@ namespace WebApplication1.Controllers
         {
             List<ScheduledEventResponseModel> models = new List<ScheduledEventResponseModel>();
 
-            foreach (var item in this.context.ScheduledEvents)
+            foreach (var item in this.context.scheduled_event)
             {
                 models.Add(new ScheduledEventResponseModel(item));
             }

@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
         {
             List<GroupResponseModel> models = new List<GroupResponseModel>();
 
-            foreach (var item in this.context.Groups)
+            foreach (var item in this.context.groups)
             {
                 models.Add(new GroupResponseModel(item, new List<GroupMember>()));
             }
@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Models.Group groupEntity = this.context.Groups.Find(id);
+            Models.Group groupEntity = this.context.groups.Find(id);
 
             if (groupEntity == null)
             {

@@ -5,7 +5,7 @@ namespace WebApplication1.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private DB _db = new();
 
@@ -15,21 +15,21 @@ namespace WebApplication1.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var exists = _db.Users.FirstOrDefault(u => u.Email == req.Email) != null;
+            var exists = _db.users.FirstOrDefault(u => u.email == req.Email) != null;
             if (exists)
                 return Conflict(new { message = "Email už je registrován." });
 
             var user = new User
             {
-                Email = req.Email,
-                Name = req.Name,
-                Password = req.Password
+                email = req.Email,
+                name = req.Name,
+                password = req.Password
             };
 
-            _db.Users.Add(user);
+            _db.users.Add(user);
             _db.SaveChanges();
 
-            return CreatedAtAction(null, new { id = user.Id });
+            return CreatedAtAction(null, new { id = user.id });
         }
     }
 }

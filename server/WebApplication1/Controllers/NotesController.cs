@@ -16,7 +16,7 @@ namespace WebApplication1.Controllers
         {
             List<NoteResponseModel> models = new List<NoteResponseModel>();
 
-            foreach (var item in this.context.Notes)
+            foreach (var item in this.context.notes)
             {
                 models.Add(new NoteResponseModel(item));
             }
@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Note noteEntity = this.context.Notes.Find(id);
+            Note noteEntity = this.context.notes.Find(id);
 
             if (noteEntity == null)
             {

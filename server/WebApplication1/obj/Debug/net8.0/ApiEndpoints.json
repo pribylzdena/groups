@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "WebApplication1.Models.RegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApplication1.Controllers.GroupsController",
     "Method": "FindAll",
     "RelativePath": "api/Groups",
@@ -52,9 +68,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.NotificationController",
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
     "Method": "FindAll",
-    "RelativePath": "api/Notification",
+    "RelativePath": "api/Notifications",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -62,19 +78,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.ScheduledEventController",
+    "ContainingType": "WebApplication1.Controllers.ScheduledEventsController",
     "Method": "FindAll",
-    "RelativePath": "api/ScheduledEvent",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.TaskController",
-    "Method": "FindAll",
-    "RelativePath": "api/Task",
+    "RelativePath": "api/ScheduledEvents",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -92,9 +98,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.UserController",
+    "ContainingType": "WebApplication1.Controllers.TasksController",
     "Method": "FindAll",
-    "RelativePath": "api/User",
+    "RelativePath": "api/Tasks",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -102,9 +108,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.UsersNotificationController",
+    "ContainingType": "WebApplication1.Controllers.UsersController",
     "Method": "FindAll",
-    "RelativePath": "api/UsersNotification",
+    "RelativePath": "api/Users",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

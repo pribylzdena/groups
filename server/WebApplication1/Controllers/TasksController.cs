@@ -15,7 +15,7 @@ namespace WebApplication1.Controllers
         {
             List<TaskResponseModel> models = new List<TaskResponseModel>();
 
-            foreach (var item in this.context.Tasks)
+            foreach (var item in this.context.tasks)
             {
                 models.Add(new TaskResponseModel(item, null));
             }

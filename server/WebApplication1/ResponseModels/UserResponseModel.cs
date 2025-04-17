@@ -12,7 +12,7 @@ namespace WebApplication1.ResponseModels
 
         public UserResponseModel(User user)
         {
-            this.id = user.Id;
+            this.id = user.id;
             this.name = user.name;
             this.password = user.password;
             this.email = user.email;

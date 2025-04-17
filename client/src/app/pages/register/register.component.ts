@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthorizationService, RegisterRequest} from '@app/services/authorization.service';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 
@@ -13,13 +14,23 @@ import { Router } from '@angular/router';
   styleUrl: 'register.component.scss'
 })
 export class RegisterComponent implements OnInit {
+  private formBuilder: FormBuilder;
+  private router: Router;
+  private authService: AuthorizationService;
+
   registrationForm!: FormGroup;
   submitted = false;
   showPassword = false;
   showConfirmPassword = false;
   isLoading = false;
+  error = '';
+  successMessage = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(formBuilder: FormBuilder, router: Router, authService: AuthorizationService) {
+    this.formBuilder = formBuilder;
+    this.router = router;
+    this.authService = authService;
+  }
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group({
@@ -64,11 +75,31 @@ export class RegisterComponent implements OnInit {
 
     this.isLoading = true;
 
-    console.log('Form submitted successfully', this.registrationForm.value);
+    console.log('Form submitted successfully', this.registrationForm.value.email);
 
-    setTimeout(() => {
-        this.router.navigate(['/group-manage']);
-      }, 1000
-    )
+    const req: RegisterRequest = {
+      email: this.registrationForm.value.email,
+      name: this.registrationForm.value.email,
+      password: this.registrationForm.value.password
+    };
+
+    this.authService.register(req).subscribe({
+      next: (response) => {
+        console.log('Registration successful, server response:', response);
+        this.isLoading = false;
+        this.successMessage = 'Registrace byla úspěšná';
+
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 1000);
+      },
+      error: (err) => {
+        console.error('Registration failed:', err);
+        console.error('Error details:', err.error);
+        console.error('Status code:', err.status);
+        this.isLoading = false;
+        this.error = err.error?.message || 'Registrace se nezdařila';
+      }
+    });
   }
 }

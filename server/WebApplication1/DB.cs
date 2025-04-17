@@ -5,16 +5,16 @@ namespace WebApplication1
 {
     public class DB : DbContext
     {
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<EventParticipant> EventParticipants { get; set; }
-        public DbSet<GroupMember> GroupMembers { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
-        public DbSet<ScheduledEvent> ScheduledEvents { get; set; }
-        public DbSet<TaskComment> TaskComments { get; set; }
-        public DbSet<Models.Task> Tasks { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UsersNotification> UsersNotifications { get; set; }
+        public DbSet<Group> groups { get; set; }
+        public DbSet<Note> notes { get; set; }
+        public DbSet<EventParticipant> event_participants { get; set; }
+        public DbSet<GroupMember> group_members { get; set; }
+        public DbSet<Notification> notifications { get; set; }
+        public DbSet<ScheduledEvent> scheduled_event { get; set; }
+        public DbSet<TaskComment> task_comments { get; set; }
+        public DbSet<Models.Task> tasks { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<UsersNotification> users_notifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
