@@ -20,14 +20,14 @@ export class TodoListComponent implements OnInit {
 
   constructor(taskService: TaskService) {
     this.taskService = taskService;
-    this.tasks = this.taskService.getAllTasks();
+    //this.tasks = this.taskService.getAllTasks();
   }
 
   ngOnInit(): void {
     this.taskService.getTasksFromApi().subscribe({
       next: (response) => {
         console.log(response);
-        this.tasks = response;
+        this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, n.parent, n.assignees));
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

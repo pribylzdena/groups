@@ -3,6 +3,7 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import {AuthorizationService, LoginRequest} from '@app/services/authorization.service';
 
 
 @Component({
@@ -13,13 +14,23 @@ import { Router } from '@angular/router';
   styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  private formBuilder: FormBuilder;
+  private router: Router;
+  private authService: AuthorizationService;
+
   loginForm!: FormGroup;
   submitted = false;
   showPassword = false;
   showConfirmPassword = false;
   isLoading = false;
+  error = '';
+  successMessage = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router) {}
+  constructor(formBuilder: FormBuilder, router: Router, authService: AuthorizationService) {
+    this.formBuilder = formBuilder;
+    this.router = router;
+    this.authService = authService;
+  }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -51,9 +62,27 @@ export class LoginComponent implements OnInit {
 
     console.log('Form submitted successfully', this.loginForm.value);
 
-    setTimeout(() => {
-        this.router.navigate(['/group-manage']);
-      }, 1000
-    )
+    const req: LoginRequest = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    };
+
+    this.authService.login(req).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.successMessage = 'Přihlášení bylo úspěšné';
+
+        setTimeout(() => {
+            this.router.navigate(['/group-manage']);
+          }, 1000);
+      },
+      error: (err) => {
+        console.error('Registration failed:', err);
+        console.error('Error details:', err.error);
+        console.error('Status code:', err.status);
+        this.isLoading = false;
+        this.error = err.error?.message || 'Přihlášení se nezdařilo';
+      }
+    });
   }
 }

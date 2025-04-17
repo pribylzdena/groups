@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -8,6 +9,7 @@ namespace WebApplication1.Controllers
     public class AuthController : ControllerBase
     {
         private DB _db = new();
+        private TokenService _tokenService = new TokenService();
 
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterRequest req)
@@ -29,7 +31,23 @@ namespace WebApplication1.Controllers
             _db.users.Add(user);
             _db.SaveChanges();
 
-            return CreatedAtAction(null, new { id = user.id });
+            return CreatedAtAction(null, new { user.id });
+        }
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest req)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = _db.users
+                .FirstOrDefault(u => u.email == req.Email && u.password == req.Password);
+            if (user == null)
+                return Unauthorized(new { message = "Neplatné přihlašovací údaje." });
+
+            string jwt = _tokenService.Create(user);
+
+            return Ok(new { token = jwt });
         }
     }
 }

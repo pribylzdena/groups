@@ -29,8 +29,8 @@ export class GroupManageComponent implements OnInit {
     this.groupService.getGroupsFromApi().subscribe({
       next: (response) => {
         console.log(response);
-        this.groups = response;
-      },
+        this.groups = response.map(n => new Group(n.id, n.name, n.members ?? []));
+        },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);
       }

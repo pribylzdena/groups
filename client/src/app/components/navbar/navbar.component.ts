@@ -4,6 +4,7 @@ import { RouterLinkActive } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '@app/services/group.service';
 import {NgIf} from '@angular/common';
+import {AuthorizationService} from '@app/services/authorization.service';
 
 
 @Component({
@@ -14,6 +15,11 @@ import {NgIf} from '@angular/common';
   standalone: true
 })
 export class NavbarComponent {
+  private router: Router;
+  private route: ActivatedRoute;
+  private groupService: GroupService;
+  private authService: AuthorizationService;
+
   hasNotifications = true;
   notificationCount = 3;
   isDropdownOpen = false;
@@ -25,11 +31,12 @@ export class NavbarComponent {
   groupName: string | null = null;
   protected readonly RouterLinkActive = RouterLinkActive;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private groupService: GroupService
-  ) {}
+  constructor(router: Router, route: ActivatedRoute, groupService: GroupService, authService: AuthorizationService) {
+    this.router = router;
+    this.route = route;
+    this.groupService = groupService;
+    this.authService = authService;
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -45,6 +52,7 @@ export class NavbarComponent {
 
   logout() {
 
+    this.authService.logout();
     setTimeout(() => {
         this.router.navigate(['/login']);
       }, 1000

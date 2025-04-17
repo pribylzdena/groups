@@ -3,17 +3,20 @@ import { Group } from '@models/group';
 import { GroupMember } from '@models/group-member';
 import { User } from '@models/user';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthorizationService } from '@app/services/authorization.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
   private http: HttpClient;
+  private authService: AuthorizationService;
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, authService: AuthorizationService) {
     this.http = http;
+    this.authService = authService;
   }
 
   private groups: Group[] = [
@@ -48,6 +51,10 @@ export class GroupService {
   }
 
   getGroupsFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`);
+    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`,{
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ` + this.authService.getToken()
+      })
+    });
   }
 }

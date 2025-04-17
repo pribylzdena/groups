@@ -13,11 +13,13 @@ import {GroupComponent} from './components/group/group.component';
 import {NotificationCreateComponent} from '@app/pages/notification-create/notification-create.component';
 import { LoginComponent } from '@app/pages/login/login.component';
 import {RegisterComponent} from '@app/pages/register/register.component';
+import {AuthGuard} from '@app/auth.guard';
 
 export const routes: Routes = [
   {
     path: 'groups/:groupId',
     component: GroupComponent,
+    canActivate:[AuthGuard],
     children: [
       { path: 'todo', component: TodoListComponent},
       { path: 'schedule', component: ScheduleComponent },
@@ -26,15 +28,16 @@ export const routes: Routes = [
       { path: '', redirectTo: 'todo', pathMatch: 'full' },
     ]
   },
-  { path: 'notifications', component: NotificationListComponent },
-  { path: 'notification-show/:id', component: NotificationDetailComponent },
-  { path: 'notification-create', component: NotificationCreateComponent },
-  { path: 'profile', component: UserDetailComponent },
-  { path: 'profile-edit', component: UserEditComponent },
-  { path: 'group-manage', component: GroupManageComponent },
+  { path: 'notifications', component: NotificationListComponent, canActivate:[AuthGuard] },
+  { path: 'notification-show/:id', component: NotificationDetailComponent, canActivate:[AuthGuard] },
+  { path: 'notification-create', component: NotificationCreateComponent, canActivate:[AuthGuard] },
+  { path: 'profile', component: UserDetailComponent, canActivate:[AuthGuard] },
+  { path: 'profile-edit', component: UserEditComponent, canActivate:[AuthGuard] },
+  { path: 'group-manage', component: GroupManageComponent, canActivate:[AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: '/register', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' }
 ];
 
 

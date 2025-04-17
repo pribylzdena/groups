@@ -40,7 +40,7 @@ export class NoteListComponent {
     this.route = route;
     this.groupService = groupService;
     this.noteService = noteService;
-    this.notes = this.noteService.getAllNotes();
+    // this.notes = this.noteService.getAllNotes();
   }
 
   ngOnInit(): void {

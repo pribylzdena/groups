@@ -6,7 +6,7 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupsController : ControllerBase
@@ -16,12 +16,20 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult FindAll()
         {
-            List<GroupResponseModel> models = new List<GroupResponseModel>();
+            int id = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
-            foreach (var item in this.context.groups)
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == id);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            List<GroupResponseModel> models = new List<GroupResponseModel>();
+            foreach (var item in this.context.groups.Where(g => g.created_by == currentUser.id))
             {
                 models.Add(new GroupResponseModel(item, new List<GroupMember>()));
             }
+
 
             return Ok(models);
         }
@@ -40,7 +48,7 @@ namespace WebApplication1.Controllers
 
             return Ok(group);
         }
-
+        
 
     }
 }

@@ -1,9 +1,11 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import {FormBuilder} from '@angular/forms';
+import {GroupService} from '@app/services/group.service';
+import {AuthorizationService} from '@app/services/authorization.service';
 
 
 @Component({
@@ -14,6 +16,11 @@ import {FormBuilder} from '@angular/forms';
   standalone: true
 })
 export class GlobalNavbarComponent {
+  private router: Router;
+  private route: ActivatedRoute;
+  private groupService: GroupService;
+  private authService: AuthorizationService;
+
   hasNotifications = true;
   notificationCount = 3;
   isDropdownOpen = false;
@@ -22,7 +29,12 @@ export class GlobalNavbarComponent {
   userName = 'John Smith';
   userEmail = 'john.smith@example.com';
 
-  constructor(private router: Router) {}
+  constructor(router: Router, route: ActivatedRoute, groupService: GroupService, authService: AuthorizationService) {
+    this.router = router;
+    this.route = route;
+    this.groupService = groupService;
+    this.authService = authService;
+  }
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -30,6 +42,7 @@ export class GlobalNavbarComponent {
 
   logout() {
 
+    this.authService.logout();
     setTimeout(() => {
         this.router.navigate(['/login']);
       }, 1000
