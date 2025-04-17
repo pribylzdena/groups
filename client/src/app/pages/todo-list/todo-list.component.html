@@ -25,7 +25,7 @@
       </i>
       Order by
     </button>
-    <button class="add-button">
+    <button class="add-button" (click)="openNewTaskSidebar()">
       <span class="add-icon">+</span>
       Add new
     </button>
@@ -33,7 +33,15 @@
 
   <div class="task-list">
     <div class="task-item" *ngFor="let task of tasks">
-      <app-task [task]="task"></app-task>
+      <app-task [task]="task" (click)="openTaskSidebar(task)"></app-task>
     </div>
   </div>
+
+  <app-task-detail-sidebar
+    *ngIf="selectedTask"
+    [task]="selectedTask"
+    [isSidebarOpen]="isSidebarVisible"
+    (taskChanged)="onTaskChanged($event)"
+    (taskCreated)="onTaskCreated($event)">
+  </app-task-detail-sidebar>
 </div>

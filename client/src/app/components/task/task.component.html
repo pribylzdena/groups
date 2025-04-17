@@ -1,4 +1,4 @@
-<div class="task-card" [ngClass]="getStatusClass()">
+<div class="task-card" (click)="toggleSidebar()" [ngClass]="getStatusClass()">
   <div class="status-indicator" [ngClass]="getStatusClass()"></div>
 
   <div class="task-header">

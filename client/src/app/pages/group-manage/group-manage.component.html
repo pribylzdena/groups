@@ -26,13 +26,51 @@
           </div>
 
           <div class="groups-footer">
-            <button class="add-group-btn" (click)="createNewGroup()">
+            <button class="add-group-btn" (click)="toggleModal()">
               <i class="bi bi-plus"></i>
               <span>Nová skupina</span>
             </button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" [class.show]="showModal">
+  <div class="modal-popup">
+    <div class="modal-header">
+      <h4 class="modal-title">Vytvořit novou skupinu</h4>
+      <button type="button" class="close-button" (click)="toggleModal()">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="groupName">Název skupiny</label>
+        <input
+          type="text"
+          class="form-control"
+          id="groupName"
+          [(ngModel)]="newGroupName"
+          placeholder="Zadejte název skupiny"
+          autocomplete="off"
+        >
+        <div class="error-message" *ngIf="showValidationError">
+          Název skupiny je povinný a musí mít alespoň 3 znaky.
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel" (click)="toggleModal()">Zrušit</button>
+      <button
+        type="button"
+        class="btn-create"
+        [class.loading]="isSubmitting"
+        (click)="createGroup()">
+        <span *ngIf="!isSubmitting">Vytvořit skupinu</span>
+        <span *ngIf="isSubmitting" class="spinner"></span>
+        <span *ngIf="isSubmitting">Vytvářím...</span>
+      </button>
     </div>
   </div>
 </div>

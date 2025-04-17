@@ -57,4 +57,15 @@ export class GroupService {
       })
     });
   }
+
+  createGroup(name: string): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const body = { name };
+    return this.http.post<any>(`${environment.apiUrl}/api/Groups`, body, { headers });
+  }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using WebApplication1.Models;
+using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
@@ -48,7 +49,33 @@ namespace WebApplication1.Controllers
 
             return Ok(group);
         }
-        
 
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateGroupRequest request)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var newGroup = new Models.Group
+            {
+                name = request.Name,
+                created_by = currentUser.id,
+                updated_by = currentUser.id,
+                created_at = DateTime.UtcNow,
+                updated_at = DateTime.UtcNow,
+                deleted_at = null
+            };
+
+            this.context.groups.Add(newGroup);
+            this.context.SaveChanges();
+
+            var response = new GroupResponseModel(newGroup, new List<GroupMember>());
+            return CreatedAtAction(nameof(FindById), new { id = newGroup.id }, response);
+        }
     }
 }

@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "req",
-        "Type": "WebApplication1.Models.LoginRequest",
+        "Type": "WebApplication1.RequestModels.LoginRequest",
         "IsRequired": true
       }
     ],
@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "req",
-        "Type": "WebApplication1.Models.RegisterRequest",
+        "Type": "WebApplication1.RequestModels.RegisterRequest",
         "IsRequired": true
       }
     ],
@@ -39,6 +39,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.GroupsController",
+    "Method": "Create",
+    "RelativePath": "api/Groups",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WebApplication1.RequestModels.CreateGroupRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
