@@ -8,7 +8,7 @@ namespace WebApplication1.ResponseModels
         public string name { get; set; }
         public string value { get; set; }
         public string color { get; set; }
-        public NoteResponseModel(Notes note)
+        public NoteResponseModel(Note note)
         {
             this.id = note.id;
             this.name = note.name;

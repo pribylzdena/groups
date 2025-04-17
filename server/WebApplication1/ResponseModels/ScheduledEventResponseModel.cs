@@ -11,9 +11,9 @@ namespace WebApplication1.ResponseModels
         public DateTime endsAt { get; set; }
         public int status { get; set; }
         public string? color { get; set; }
-        public List<EventParticipants> participants { get; set; }
+        public List<EventParticipant> participants { get; set; }
 
-        public ScheduledEventResponseModel(ScheduledEvents events)
+        public ScheduledEventResponseModel(ScheduledEvent events)
         {
             this.id = events.id;
             this.name = events.name;

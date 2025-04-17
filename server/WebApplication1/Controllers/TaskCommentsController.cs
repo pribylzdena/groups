@@ -13,11 +13,11 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult FindAll()
         {
-            List<TaskCommentsResponseModel> models = new List<TaskCommentsResponseModel>();
+            List<TaskCommentResponseModel> models = new List<TaskCommentResponseModel>();
 
             foreach (var item in this.context.task_comments)
             {
-                models.Add(new TaskCommentsResponseModel(item));
+                models.Add(new TaskCommentResponseModel(item));
             }
 
             return Ok(models);

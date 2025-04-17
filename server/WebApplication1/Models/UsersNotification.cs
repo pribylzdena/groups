@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class UsersNotifications
+    public class UsersNotification
     {
         public int id { get; set; }
         public int notification_id { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace WebApplication1.Models
 {
-    public class TaskAssignees
+    public class TaskAssignee
     {
         public int id { get; set; }
         public int task_id { get; set; }

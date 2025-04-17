@@ -2,17 +2,17 @@
 
 namespace WebApplication1.ResponseModels
 {
-    public class TaskCommentsResponseModel
+    public class TaskCommentResponseModel
     {
         public int id { get; set; }
         public string value { get; set; }
-        public User user { get; set; }
+        public UserResponseModel user { get; set; }
 
-        public TaskCommentsResponseModel(TaskComments tc)
+        public TaskCommentResponseModel(TaskComment tc, User user)
         {
             id = tc.id;
             value = tc.value;
-            user = new User();
+            this.user = new UserResponseModel(user);
         }
     }
 }

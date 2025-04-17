@@ -2,7 +2,7 @@
 
 namespace WebApplication1.ResponseModels
 {
-    public class NotificationsResponseModel
+    public class NotificationResponseModel
     {
         public int id { get; set; }
         public string name { get; set; }
@@ -10,7 +10,7 @@ namespace WebApplication1.ResponseModels
         public string subject { get; set; }
         public int type { get; set; }
 
-        public NotificationsResponseModel(Notifications notifications)
+        public NotificationResponseModel(Notification notifications)
         {
             this.id = notifications.id;
             this.name = notifications.name;

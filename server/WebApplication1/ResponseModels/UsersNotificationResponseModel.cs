@@ -5,13 +5,13 @@ namespace WebApplication1.ResponseModels
     public class UsersNotificationsResponseModel
     {
         public int id { get; set; }
-        public User user { get; set; }
+        public UserResponseModel user { get; set; }
         public DateTime? readAt { get; set; }
 
-        public UsersNotificationsResponseModel(UsersNotifications notification)
+        public UsersNotificationsResponseModel(UsersNotification notification, User user)
         {
             id = notification.id;
-            user = new User();
+            this.user = new UserResponseModel(user);
             readAt = notification.read_at;
         }
     }

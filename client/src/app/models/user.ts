@@ -3,9 +3,9 @@ export class User {
   name: string;
   password?: string;
   email: string;
-  logoUrl: string;
+  logoUrl?: string;
 
-  constructor(  id: number, name: string, email: string, logoUrl: string, password?: string) {
+  constructor(  id: number, name: string, email: string, logoUrl?: string, password?: string) {
     this.id = id;
     this.name = name;
     this.email = email;

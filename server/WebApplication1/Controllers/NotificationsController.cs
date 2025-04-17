@@ -6,18 +6,18 @@ namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersNotificationController : ControllerBase
+    public class NotificationsController : ControllerBase
     {
         private MyContexct context = new MyContexct();
 
         [HttpGet]
         public IActionResult FindAll()
         {
-            List<UsersNotificationsResponseModel> models = new List<UsersNotificationsResponseModel>();
+            List<NotificationResponseModel> models = new List<NotificationResponseModel>();
 
-            foreach (var item in this.context.users_notifications)
+            foreach (var item in this.context.notifications)
             {
-                models.Add(new UsersNotificationsResponseModel(item));
+                models.Add(new NotificationResponseModel(item));
             }
 
             return Ok(models);

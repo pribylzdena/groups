@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Notes noteEntity = this.context.notes.Find(id);
+            Note noteEntity = this.context.notes.Find(id);
 
             if (noteEntity == null)
             {
