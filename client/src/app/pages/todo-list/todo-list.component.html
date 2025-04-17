@@ -38,10 +38,7 @@
   </div>
 
   <app-task-detail-sidebar
-    *ngIf="selectedTask"
     [task]="selectedTask"
-    [isSidebarOpen]="isSidebarVisible"
-    (taskChanged)="onTaskChanged($event)"
-    (taskCreated)="onTaskCreated($event)">
+    (taskChanged)="saveTask($event)">
   </app-task-detail-sidebar>
 </div>

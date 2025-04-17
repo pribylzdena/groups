@@ -1,17 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common'
-import { TaskSidebarComponent } from '@components/task-sidebar/task-sidebar.component';
 import { TaskComponent } from '@components/task/task.component';
 import { Task } from '@models/task';
-import {Priority} from '@enums/priority';
-import {TaskStatus} from '@enums/task-status';
 import {TaskService} from '@app/services/task.service';
 import {TaskDetailSidebarComponent} from '@components/task-detail-sidebar/task-detail-sidebar.component';
 
 @Component({
   selector: 'app-todo',
   standalone: true,
-  imports: [CommonModule, TaskSidebarComponent, TaskComponent, TaskDetailSidebarComponent],
+  imports: [CommonModule, TaskComponent, TaskDetailSidebarComponent],
   templateUrl: './todo-list.component.html',
   styleUrl: './todo-list.component.scss'
 })
@@ -21,7 +18,6 @@ export class TodoListComponent implements OnInit {
   public selectedTask: Task | null = null;
   @ViewChild(TaskDetailSidebarComponent, { static: true })
   taskSidebar?: TaskDetailSidebarComponent;
-  public isSidebarVisible = false;
 
   constructor(taskService: TaskService) {
     this.taskService = taskService;
@@ -41,30 +37,53 @@ export class TodoListComponent implements OnInit {
   }
 
   openNewTaskSidebar(): void {
-    this.selectedTask = undefined;
-    this.isSidebarVisible = true;
+    const newTask = new Task(
+      0,
+      '',
+      'Nepočato',
+      new Date(),
+      '#3498db',
+      'Střední',
+      '',
+      undefined,
+      undefined,
+      []
+    );
 
     if (this.taskSidebar) {
       this.taskSidebar.isCreateMode = true;
-      this.taskSidebar.resetForm();
+      this.taskSidebar.isSidebarOpen = true;
+      this.taskSidebar.task = newTask;
+
+      if (newTask.deadline) {
+        this.taskSidebar.editableDatetime = this.formatDateForInput(newTask.deadline);
+      }
+
+      if (newTask.reminderAt) {
+        this.taskSidebar.editableDatetime = this.formatDateForInput(newTask.reminderAt);
+      }
     }
+
+    this.selectedTask = newTask;
   }
+
   openTaskSidebar(task: Task): void {
     this.selectedTask = {...task};
 
-    const sidebarComponent = document.querySelector('app-task-detail-sidebar');
-    if (sidebarComponent) {
-      const componentInstance = (sidebarComponent as any)['__ngContext__'].instance;
-      if (componentInstance && typeof componentInstance.toggleSidebar === 'function') {
-        componentInstance.isSidebarOpen = true;
+    if (this.taskSidebar) {
+      this.taskSidebar.isCreateMode = false;
+      this.taskSidebar.isSidebarOpen = true;
+      this.taskSidebar.task = {...task};
 
-        if (task.deadline) {
-          componentInstance.editableDatetime = this.formatDateForInput(task.deadline);
-        }
-        if (task.reminderAt) {
-          componentInstance.editableReminderDatetime = this.formatDateForInput(task.reminderAt);
-          componentInstance.showReminderInput = true;
-        }
+      if (task.deadline) {
+        this.taskSidebar.editableDatetime = this.formatDateForInput(task.deadline);
+      }
+      if (task.reminderAt) {
+        this.taskSidebar.editableReminderDatetime = this.formatDateForInput(task.reminderAt);
+        this.taskSidebar.showReminderInput = true;
+      } else {
+        this.taskSidebar.editableReminderDatetime = '';
+        this.taskSidebar.showReminderInput = false;
       }
     }
   }
@@ -74,24 +93,35 @@ export class TodoListComponent implements OnInit {
     return d.toISOString().slice(0, 16);
   }
 
-  onTaskCreated(task: Task): void {
+  saveTask(task: Task): void {
+    console.log("Save task called, isCreateMode:", this.taskSidebar?.isCreateMode);
+
+    if (this.taskSidebar?.isCreateMode) {
+      this.onTaskCreated(task);
+    } else {
+      this.onTaskChanged(task);
+    }
+  }
+
+  private onTaskCreated(task: Task): void {
+    task.id = 0;
     this.tasks.push(task);
 
-    //this.taskService.createTask(task);
+    console.log("Vytvoreni tasku:", task);
+
+    //this.taskService.createTask(); TODO createTask api
 
     this.selectedTask = null;
   }
 
-  onTaskChanged(task: Task): void {
+  private onTaskChanged(task: Task): void {
     const index = this.tasks.findIndex(t => t.id === task.id);
     if (index !== -1) {
       this.tasks[index] = task;
     }
 
-   //this.taskService.updateTask(task);
-
+    console.log("Uprava tasku:", task);
+    //this.taskService.updateTask(task); TODO updateTask api
     this.selectedTask = null;
   }
-
-
 }

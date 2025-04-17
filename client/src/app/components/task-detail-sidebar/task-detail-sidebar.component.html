@@ -1,107 +1,125 @@
 <div class="task-sidebar-overlay" [class.active]="isSidebarOpen" (click)="toggleSidebar()"></div>
-<div class="task-sidebar" [class.active]="isSidebarOpen">
-  <div class="sidebar-header">
-    <div class="sidebar-close" (click)="toggleSidebar()">
-      <svg viewBox="0 0 24 24" width="24" height="24">
-        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="sidebar-title">
-      <div class="color-indicator large" [ngStyle]="{'background-color': task.color}"></div>
-      <input type="text" [(ngModel)]="task.name" class="task-name-input" placeholder="Název úkolu">
-    </div>
-  </div>
-
-  <div class="sidebar-content">
-    <div class="sidebar-section">
-      <h4 class="section-title">Stav</h4>
-      <select [(ngModel)]="task.status" class="form-control">
-        <option value="Nepočato">Nepočato</option>
-        <option value="Probíhá">Probíhá</option>
-        <option value="Pozastaveno">Pozastaveno</option>
-        <option value="Dokončeno">Dokončeno</option>
-      </select>
-    </div>
-
-    <div class="sidebar-section">
-      <h4 class="section-title">Priorita</h4>
-      <select [(ngModel)]="task.priority" class="form-control">
-        <option value="Nízká">Nízká</option>
-        <option value="Střední">Střední</option>
-        <option value="Vysoká">Vysoká</option>
-      </select>
-    </div>
-
-    <div class="sidebar-section">
-      <h4 class="section-title">Termín</h4>
-      <input type="datetime-local" [(ngModel)]="editableDatetime" class="form-control">
-    </div>
-
-    <div class="sidebar-section" *ngIf="task.reminderAt || showReminderInput">
-      <h4 class="section-title">Připomenutí</h4>
-      <div class="reminder-control">
-        <input type="datetime-local" [(ngModel)]="editableReminderDatetime" class="form-control">
-        <button class="btn-icon" *ngIf="task.reminderAt" (click)="removeReminder()">
-          <svg viewBox="0 0 24 24" width="20" height="20">
-            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <div class="sidebar-section" *ngIf="!task.reminderAt && !showReminderInput">
-      <button class="btn-add-reminder" (click)="showReminderInput = true">
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"></circle>
-          <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="2"></line>
-          <line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"></line>
+<ng-container *ngIf="task; else noTask">
+  <div class="task-sidebar" [class.active]="isSidebarOpen">
+      <div class="sidebar-header">
+      <div class="sidebar-close" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        Přidat připomenutí
-      </button>
-    </div>
-
-    <div class="sidebar-section">
-      <h4 class="section-title">Barva</h4>
-      <div class="color-picker">
-        <div class="color-option" *ngFor="let color of availableColors"
-             [ngStyle]="{'background-color': color}"
-             [class.selected]="task.color === color"
-             (click)="task.color = color">
-        </div>
       </div>
+        <div class="sidebar-title">
+          <div class="color-indicator large" [ngStyle]="{'background-color': task.color}"></div>
+          <input type="text" [(ngModel)]="task.name" class="task-name-input" placeholder="Název úkolu">
+        </div>
     </div>
 
-    <div class="sidebar-section">
-      <h4 class="section-title">Popis</h4>
-      <textarea [(ngModel)]="task.description" class="form-control description-input"
-                rows="5" placeholder="Přidejte popis úkolu..."></textarea>
-    </div>
-    <div class="sidebar-section">
-      <h4 class="section-title">Přiřazený k</h4>
-      <div class="assignees-list">
-        <div class="assignee-item" *ngFor="let assignee of task.assignees">
-          <div class="assignee-avatar">{{ assignee.name.substring(0, 1) }}</div>
-          <div class="assignee-name">{{ assignee.name }}</div>
-          <button class="btn-icon btn-remove-assignee" (click)="removeAssignee(assignee)">
-            <svg viewBox="0 0 24 24" width="16" height="16">
+    <div class="sidebar-content">
+      <div class="sidebar-section">
+        <h4 class="section-title">Stav</h4>
+        <select [(ngModel)]="task.status" class="form-control">
+          <option value="Nepočato">Nepočato</option>
+          <option value="Probíhá">Probíhá</option>
+          <option value="Pozastaveno">Pozastaveno</option>
+          <option value="Dokončeno">Dokončeno</option>
+        </select>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="section-title">Priorita</h4>
+        <select [(ngModel)]="task.priority" class="form-control">
+          <option value="Nízká">Nízká</option>
+          <option value="Střední">Střední</option>
+          <option value="Vysoká">Vysoká</option>
+        </select>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="section-title">Termín</h4>
+        <input type="datetime-local" [(ngModel)]="editableDatetime" class="form-control">
+      </div>
+
+      <div class="sidebar-section" *ngIf="task.reminderAt || showReminderInput">
+        <h4 class="section-title">Připomenutí</h4>
+        <div class="reminder-control">
+          <input type="datetime-local" [(ngModel)]="editableReminderDatetime" class="form-control">
+          <button class="btn-icon" *ngIf="task.reminderAt" (click)="removeReminder()">
+            <svg viewBox="0 0 24 24" width="20" height="20">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
         </div>
-        <button class="btn-add-assignee" (click)="showAssigneeSelector = true" *ngIf="!showAssigneeSelector">
+      </div>
+
+      <div class="sidebar-section" *ngIf="!task.reminderAt && !showReminderInput">
+        <button class="btn-add-reminder" (click)="showReminderInput = true">
           <svg viewBox="0 0 24 24" width="16" height="16">
             <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"></circle>
             <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="2"></line>
             <line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"></line>
           </svg>
-          Přidat uživatele
+          Přidat připomenutí
         </button>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="section-title">Barva</h4>
+        <div class="color-picker">
+          <div class="color-option" *ngFor="let color of availableColors"
+               [ngStyle]="{'background-color': color}"
+               [class.selected]="task.color === color"
+               (click)="task.color = color">
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="section-title">Popis</h4>
+        <textarea [(ngModel)]="task.description" class="form-control description-input"
+                  rows="5" placeholder="Přidejte popis úkolu..."></textarea>
+      </div>
+      <div class="sidebar-section">
+        <h4 class="section-title">Přiřazený k</h4>
+        <div class="assignees-list">
+          <div class="assignee-item" *ngFor="let assignee of task.assignees">
+            <div class="assignee-avatar">{{ assignee.name.substring(0, 1) }}</div>
+            <div class="assignee-name">{{ assignee.name }}</div>
+            <button class="btn-icon btn-remove-assignee" (click)="removeAssignee(assignee)">
+              <svg viewBox="0 0 24 24" width="16" height="16">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <button class="btn-add-assignee" (click)="showAssigneeSelector = true" *ngIf="!showAssigneeSelector">
+            <svg viewBox="0 0 24 24" width="16" height="16">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"></circle>
+              <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="2"></line>
+              <line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="2"></line>
+            </svg>
+            Přidat uživatele
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn-cancel" (click)="toggleSidebar()">Zrušit</button>
+      <button class="btn-save" (click)="saveTask()">Uložit</button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #noTask>
+  <div class="task-sidebar" [class.active]="isSidebarOpen">
+    <div class="sidebar-header">
+      <div class="sidebar-close" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="sidebar-title">
+        <div class="color-indicator large"></div>
+        <span>Loading...</span>
       </div>
     </div>
   </div>
-
-  <div class="sidebar-footer">
-    <button class="btn-cancel" (click)="toggleSidebar()">Zrušit</button>
-    <button class="btn-save" (click)="saveTask()">Uložit</button>
-  </div>
-</div>
+</ng-template>

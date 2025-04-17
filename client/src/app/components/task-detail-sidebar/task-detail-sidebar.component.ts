@@ -1,8 +1,9 @@
-import {Component, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, SimpleChanges, OnInit} from '@angular/core';
 import { Task } from '@models/task';
 import { User } from '@models/user';
 import { DatePipe, NgClass, NgIf, NgStyle, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-task-detail-sidebar',
   imports: [NgStyle, DatePipe, NgClass, NgIf, NgFor, FormsModule],
@@ -10,12 +11,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './task-detail-sidebar.component.scss',
   standalone: true
 })
-export class TaskDetailSidebarComponent {
-  @Input() task!: Task;
+export class TaskDetailSidebarComponent implements OnInit{
+  @Input() task: Task | null = null;
   @Output() taskChanged = new EventEmitter<Task>();
-  @Output() taskCreated = new EventEmitter<Task>();
 
-  @Input() isSidebarOpen!: boolean;
+  isSidebarOpen: boolean = false;
   editableDatetime: string = '';
   editableReminderDatetime: string = '';
   showReminderInput = false;
@@ -27,104 +27,49 @@ export class TaskDetailSidebarComponent {
     '#1abc9c', '#34495e', '#e67e22', '#16a085', '#d35400'
   ];
 
-
-  getStatusClass() {
-    if (this.task.status === 'Probíhá') return 'in-progress';
-    if (this.task.status === 'Nepočato') return 'not-started';
-    if (this.task.status === 'Dokončeno') return 'completed';
-    if (this.task.status === 'Pozastaveno') return 'stopped';
-    return '';
-  }
-
-  getPriorityClass() {
-    if (this.task.priority === 'Vysoká') return 'high';
-    if (this.task.priority === 'Střední') return 'medium';
-    if (this.task.priority === 'Nízká') return 'low';
-    return '';
-  }
-
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
   saveTask() {
+    if (!this.task) {
+      console.error('No task available to save');
+      return;
+    }
+
     if (this.editableDatetime) {
-      this.task!.deadline = new Date(this.editableDatetime);
+      this.task.deadline = new Date(this.editableDatetime);
     }
 
     if (this.showReminderInput && this.editableReminderDatetime) {
-      this.task!.reminderAt = new Date(this.editableReminderDatetime);
+      this.task.reminderAt = new Date(this.editableReminderDatetime);
     } else {
-      this.task!.reminderAt = undefined;
+      this.task.reminderAt = undefined;
     }
 
-    if (this.isCreateMode) {
-      this.task!.id = this.generateTemporaryId();
-      this.taskCreated.emit(this.task);
-    } else {
-      this.taskChanged.emit(this.task);
-    }
+    console.log("Emitting task, isCreateMode:", this.isCreateMode);
+    this.taskChanged.emit(this.task);
 
-    this.toggleSidebar();
+    this.isSidebarOpen = false;
   }
 
   removeReminder() {
-    this.task.reminderAt = undefined;
-    this.editableReminderDatetime = '';
-    this.showReminderInput = false;
+    if (this.task) {
+      this.task.reminderAt = undefined;
+      this.editableReminderDatetime = '';
+      this.showReminderInput = false;
+    }
   }
 
   removeAssignee(user: User) {
-    if (this.task.assignees) {
+    if (this.task && this.task.assignees) {
       this.task.assignees = this.task.assignees.filter(a => a !== user);
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['task']) {
-      if (this.task) {
-        this.isCreateMode = false;
-        this.isSidebarOpen = true;
-
-        if (this.task.deadline) {
-          this.editableDatetime = this.formatDateForInput(this.task.deadline);
-        } else {
-          this.editableDatetime = '';
-        }
-
-      }
-      else if (this.isSidebarOpen) {
-        this.isCreateMode = true;
-        this.resetForm();
-      }
+  ngOnInit(): void {
+    if (!this.task) {
+      this.task = new Task(0, '', 'Nepočato', new Date(), '#3498db', 'Střední', '', undefined, undefined, []);
     }
-  }
-
-  resetForm(): void {
-    this.task = new Task(
-      0,
-      '',
-      'Pozastaveno',
-      new Date('2025-04-22T15:00:00'),
-      '#5f27cd',
-      'Střední',
-      '',
-      new Date('2025-04-22T10:00:00'),
-      undefined,
-      []
-    );
-
-    this.editableDatetime = '';
-    this.editableReminderDatetime = '';
-    this.showReminderInput = false;
-  }
-
-  private formatDateForInput(date: Date): string {
-    const d = new Date(date);
-    return d.toISOString().slice(0, 16);
-  }
-
-  private generateTemporaryId(): number {
-    return 0;
   }
 }
