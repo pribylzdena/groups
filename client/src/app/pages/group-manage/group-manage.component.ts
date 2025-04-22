@@ -56,7 +56,6 @@ export class GroupManageComponent implements OnInit {
     }
   }
 
-
   createGroup(): void {
     if (!this.newGroupName || this.newGroupName.length < 3) {
       this.showValidationError = true;

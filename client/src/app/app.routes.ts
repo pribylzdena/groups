@@ -21,10 +21,10 @@ export const routes: Routes = [
     component: GroupComponent,
     canActivate:[AuthGuard],
     children: [
-      { path: 'todo', component: TodoListComponent},
-      { path: 'schedule', component: ScheduleComponent },
-      { path: 'notes', component: NoteListComponent },
-      { path: 'note-detail/:id', component: NoteDetailComponent },
+      { path: 'todo', component: TodoListComponent, canActivate:[AuthGuard]},
+      { path: 'schedule', component: ScheduleComponent, canActivate:[AuthGuard] },
+      { path: 'notes', component: NoteListComponent, canActivate:[AuthGuard] },
+      { path: 'note-detail/:id', component: NoteDetailComponent, canActivate:[AuthGuard] },
       { path: '', redirectTo: 'todo', pathMatch: 'full' },
     ]
   },

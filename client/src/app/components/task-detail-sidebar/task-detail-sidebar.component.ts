@@ -69,7 +69,7 @@ export class TaskDetailSidebarComponent implements OnInit{
 
   ngOnInit(): void {
     if (!this.task) {
-      this.task = new Task(0, '', 'Nepočato', new Date(), '#3498db', 'Střední', '', undefined, undefined, []);
+      this.task = new Task(0, '', 'Nepočato', new Date(), '#3498db', 'Střední', '', new Date(), undefined, []);
     }
   }
 }

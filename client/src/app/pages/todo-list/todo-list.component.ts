@@ -45,7 +45,7 @@ export class TodoListComponent implements OnInit {
       '#3498db',
       'Střední',
       '',
-      undefined,
+      new Date(),
       undefined,
       []
     );

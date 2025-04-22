@@ -50,11 +50,11 @@ export class TaskComponent {
       this.task.deadline = new Date(this.editableDatetime);
     }
 
-    if (this.showReminderInput && this.editableReminderDatetime) {
-      this.task.reminderAt = new Date(this.editableReminderDatetime);
-    } else if (!this.showReminderInput) {
-      this.task.reminderAt = undefined;
-    }
+    //if (this.showReminderInput && this.editableReminderDatetime) {
+    //  this.task.reminderAt = new Date(this.editableReminderDatetime);
+    //} else if (!this.showReminderInput) {
+    //  this.task.reminderAt = undefined;
+    //}
 
     this.taskChanged.emit(this.task);
 
