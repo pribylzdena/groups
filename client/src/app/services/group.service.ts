@@ -58,12 +58,16 @@ export class GroupService {
     });
   }
 
+  getGroupFromApi(id: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups/{groupId}`);
+  }
+
   createGroup(name: string): Observable<any> {
     const token = this.authService.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
-    });
+    }); // TODO change to intercept
 
     const body = { name };
     return this.http.post<any>(`${environment.apiUrl}/api/Groups`, body, { headers });

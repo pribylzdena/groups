@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Task } from '@models/task';
+import {Injectable} from '@angular/core';
+import {Task} from '@models/task';
 import {User} from '@models/user';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.development';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {AuthorizationService} from '@app/services/authorization.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
   private http: HttpClient;
+  private authService: AuthorizationService;
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, authService: AuthorizationService) {
     this.http = http;
+    this.authService = authService;
   }
 
   private tasks: Task[] = [
@@ -100,6 +103,20 @@ export class TaskService {
   }
 
   getTasksFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/tasks`);
+    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/{groupId}/tasks/{id}`);
+  }
+
+  getTaskFromApi(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks/{id}`)
+  }
+
+  createTask(task: Task): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }); // TODO change to intercept
+
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks`, task, { headers });
   }
 }

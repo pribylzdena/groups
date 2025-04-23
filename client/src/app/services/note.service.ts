@@ -2,16 +2,20 @@ import { Injectable } from '@angular/core';
 import {Note} from '@models/note';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.development';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Task} from '@models/task';
+import {AuthorizationService} from '@app/services/authorization.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NoteService {
   private http: HttpClient;
+  private authService: AuthorizationService;
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, authService: AuthorizationService) {
     this.http = http;
+    this.authService = authService;
   }
 
   private notes: Note[] = [
@@ -56,5 +60,15 @@ export class NoteService {
 
   getNoteFromApi(id: number): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/api/notes/{id}`);
+  }
+
+  createNote(note: Note): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }); // TODO change to intercept
+
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/{groupId}/notes`, note, { headers });
   }
 }
