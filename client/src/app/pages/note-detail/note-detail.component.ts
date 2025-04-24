@@ -26,8 +26,8 @@ export class NoteDetailComponent {
   private noteService: NoteService
   public note: Note;
 
-  groupId: string | null = null;
-  noteId: string | null = null;
+  groupId: number | null = null;
+  noteId: number | null = null;
   protected readonly RouterLinkActive = RouterLinkActive;
 
   constructor(route: ActivatedRoute, groupService: GroupService, noteService: NoteService) {
@@ -35,14 +35,37 @@ export class NoteDetailComponent {
     this.groupService = groupService;
     this.noteService = noteService;
     this.route.paramMap.subscribe(params=> {
-      this.noteId = params.get('id');
+      this.noteId = Number(params.get('id'));
     });
-    this.note = this.noteService.getNoteById(Number(this.noteId));
+  }
+
+  loadNoteFromApi() {
+    this.noteService.getNoteFromApi(this.noteId).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.note = response.map(n => new Note(n.id, n.name, n.value, n.color));
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
+  }
+
+  updateNote() {
+    console.log('Updating task');
   }
 
   ngOnInit(): void {
     this.route.parent?.paramMap.subscribe(params => {
-      this.groupId = params.get('groupId');
+      this.groupId = Number(params.get('groupId'));
     });
+
+    this.note = this.noteService.getSelectedNote();
+
+    if (!this.note) {
+      this.loadNoteFromApi();
+    }
   }
+
+
 }

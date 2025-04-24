@@ -3,7 +3,8 @@
     <a *ngFor="let note of notes"
        class="note-card"
        [ngStyle]="{ 'background-color': note.color }"
-       [routerLink]="['/groups', groupId ,'note-detail', note.id]">
+       [routerLink]="['/groups', groupId ,'note-detail', note.id]"
+       (click)="selectNote(note)">
       <div class="note-content">
         <h3 class="note-title">{{ note.name }}</h3>
         <p class="note-preview">{{ note.getSubstringValue(20) }}</p>
@@ -12,8 +13,56 @@
   </div>
 
   <div class="floating-action-button">
-    <button class="add-button" aria-label="Add new note" [routerLink]="['/groups', groupId ,'note-detail']">
+    <button class="add-button" aria-label="Add new note" (click)="toggleModal()">
       <span class="icon-plus"></span>
     </button>
+  </div>
+
+  <div class="modal-overlay" [class.show]="showModal">
+    <div class="modal-popup">
+      <div class="modal-header">
+        <h4 class="modal-title">Vytvořit novou skupinu</h4>
+        <button type="button" class="close-button" (click)="toggleModal()">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="groupName">Název poznámky</label>
+            <input
+              type="text"
+              class="form-control"
+              id="groupName"
+              [(ngModel)]="newNoteName"
+              placeholder="Zadejte název skupiny"
+              autocomplete="off"
+            >
+            <label for="noteColor">Barva</label>
+            <input type="color"
+                   id="noteColor"
+                   class="form-control form-control-color"
+                   [(ngModel)]="newNoteColor"
+                   title="Choose note color">
+            <div class="error-message" *ngIf="showValidationErrorName">
+              Název skupiny je povinný a musí mít alespoň 3 znaky.
+            </div>
+            <div class="error-message" *ngIf="showValidationErrorColor">
+              Chybně zadaná barva
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="toggleModal()">Zrušit</button>
+          <button
+            type="button"
+            class="btn-create"
+            [class.loading]="isSubmitting"
+            (click)="createNote()">
+            <span *ngIf="!isSubmitting">Vytvořit poznámku</span>
+            <span *ngIf="isSubmitting" class="spinner"></span>
+            <span *ngIf="isSubmitting">Vytvářím...</span>
+          </button>
+        </div>
+    </div>
   </div>
 </div>

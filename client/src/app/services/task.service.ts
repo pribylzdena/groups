@@ -102,21 +102,19 @@ export class TaskService {
     return this.tasks;
   }
 
-  getTasksFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/{groupId}/tasks/{id}`);
+  getTasksFromApi(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/${groupId}/tasks`);
   }
 
-  getTaskFromApi(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks/{id}`)
+  //getTaskFromApi(id: number): Observable<any> {
+  //  return this.http.get<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks/` + id)
+  //}
+
+  createTask(task: Task, groupId: number): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/tasks`, task);
   }
 
-  createTask(task: Task): Observable<any> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }); // TODO change to intercept
-
-    return this.http.post<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks`, task, { headers });
+  updateTask(task: Task, groupId: number): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/api/groups/${groupId}/tasks/${task.id}`, task);
   }
 }

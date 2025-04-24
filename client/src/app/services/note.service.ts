@@ -12,6 +12,7 @@ import {AuthorizationService} from '@app/services/authorization.service';
 export class NoteService {
   private http: HttpClient;
   private authService: AuthorizationService;
+  private selectedNote: Note | null = null;
 
   constructor(http: HttpClient, authService: AuthorizationService) {
     this.http = http;
@@ -49,6 +50,14 @@ export class NoteService {
     return note;
   }
 
+  public setSelectedNote(note: Note) {
+    this.selectedNote = note;
+  }
+
+  public getSelectedNote(): Note | null {
+    return this.selectedNote;
+  }
+
   getAllNotes() {
     return this.notes;
   }
@@ -57,18 +66,15 @@ export class NoteService {
     return this.http.get<any[]>(`${environment.apiUrl}/api/notes`);
   }
 
-
-  getNoteFromApi(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/notes/{id}`);
+  getNoteFromApi(id: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/notes/{id}`);
   }
 
-  createNote(note: Note): Observable<any> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }); // TODO change to intercept
+  createNote(note: Note, groupId: number): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/notes`, note);
+  }
 
-    return this.http.post<any>(`${environment.apiUrl}/api/groups/{groupId}/notes`, note, { headers });
+  updateNote(note: Note, groupId: number): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/api/groups/${groupId}/notes/${note.id}`, note);
   }
 }

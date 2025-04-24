@@ -4,6 +4,7 @@ import { TaskComponent } from '@components/task/task.component';
 import { Task } from '@models/task';
 import {TaskService} from '@app/services/task.service';
 import {TaskDetailSidebarComponent} from '@components/task-detail-sidebar/task-detail-sidebar.component';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-todo',
@@ -13,19 +14,27 @@ import {TaskDetailSidebarComponent} from '@components/task-detail-sidebar/task-d
   styleUrl: './todo-list.component.scss'
 })
 export class TodoListComponent implements OnInit {
+  private route: ActivatedRoute
   private taskService: TaskService
   public tasks: Task[];
   public selectedTask: Task | null = null;
   @ViewChild(TaskDetailSidebarComponent, { static: true })
   taskSidebar?: TaskDetailSidebarComponent;
 
-  constructor(taskService: TaskService) {
+  groupId: number | null = null;
+
+  constructor(taskService: TaskService, route: ActivatedRoute) {
     this.taskService = taskService;
     this.tasks = this.taskService.getAllTasks();
+    this.route = route;
   }
 
   ngOnInit(): void {
-    this.taskService.getTasksFromApi().subscribe({
+    this.route.parent?.paramMap.subscribe(params => {
+      this.groupId = Number(params.get('groupId'));
+    });
+
+    this.taskService.getTasksFromApi(this.groupId).subscribe({
       next: (response) => {
         console.log(response);
         this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, n.parent, n.assignees));
@@ -107,9 +116,7 @@ export class TodoListComponent implements OnInit {
     task.id = 0;
     this.tasks.push(task);
 
-    console.log("Vytvoreni tasku:", task);
-
-    //this.taskService.createTask(); TODO createTask api
+    this.taskService.createTask(task, this.groupId);
 
     this.selectedTask = null;
   }
@@ -120,8 +127,7 @@ export class TodoListComponent implements OnInit {
       this.tasks[index] = task;
     }
 
-    console.log("Uprava tasku:", task);
-    //this.taskService.updateTask(task); TODO updateTask api
+    this.taskService.updateTask(task, this.groupId);
     this.selectedTask = null;
   }
 }
