@@ -17,18 +17,25 @@ namespace WebApplication1.ResponseModels
         public TaskResponseModel? parent { get; set; }
         public List<User>? assignees { get; set; }
 
-        public TaskResponseModel(Models.Task task, Models.Task? parent)
+        public TaskResponseModel(Models.Task task, Models.Task? parent = null)
         {
-            this.id = task.id;
-            this.name = task.name;
-            this.status = task.status;
-            this.deadline = task.deadline;
-            this.color = task.color;
-            this.priority = task.priority;
-            this.reminderAt = task.reminder_at;
-            this.description = task.description;
-            this.parent = new TaskResponseModel(parent, null); //TODO vnoreni parent tasku
-            this.assignees = [];
+            if (task != null)
+            {
+                this.id = task.id;
+                this.name = task.name;
+                this.status = task.status;
+                this.deadline = task.deadline;
+                this.color = task.color;
+                this.priority = task.priority;
+                this.reminderAt = task.reminder_at;
+                this.description = task.description;
+                this.assignees = [];
+
+                if (parent != null)
+                {
+                    this.parent = new TaskResponseModel(parent, null); // Stop recursion with null second parameter
+                }
+            }
         }
 
     }

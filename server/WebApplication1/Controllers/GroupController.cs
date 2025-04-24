@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateGroupRequest request)
         {
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId =0/* Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
