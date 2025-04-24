@@ -1,31 +1,111 @@
-<!-- weekly-schedule.component.html -->
+<!-- schedule.component.html -->
 <div class="schedule-container">
-  <!-- Header -->
+  <!-- Header s navigací a datem -->
   <div class="header">
-    <div class="date-nav mx-auto">
-      <button (click)="changeWeek(-1)">&lt;</button>
-      <span>{{ getWeekLabel() }}</span>
-      <button (click)="changeWeek(1)">&gt;</button>
+    <div class="date-nav">
+      <button class="btn btn-icon" (click)="changeWeek(-1)">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <h2 class="week-label">{{ getWeekLabel() }}</h2>
+      <button class="btn btn-icon" (click)="changeWeek(1)">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary btn-sm" (click)="goToToday()">
+        <i class="bi bi-calendar-check"></i> Dnes
+      </button>
+      <button class="btn btn-outline-light btn-sm ms-2" (click)="toggleView()">
+        <i class="bi bi-grid-3x3-gap"></i> {{ isWeekView ? 'Měsíční pohled' : 'Týdenní pohled' }}
+      </button>
     </div>
     <app-schedule-sidebar></app-schedule-sidebar>
   </div>
 
+  <!-- Hlavní kalendář -->
   <div class="schedule-wrapper">
-    <div class="weekly-box">
-      <table class="weekly-table   ">
-        <tr>
-          <td style="width: 80px ">Monday</td>
-          <td><div class="label-box">Name</div></td>
-        </tr>
-        <tr><td>Tuesday</td><td></td></tr>
-        <tr><td>Wednesday</td><td></td></tr>
-        <tr><td>Thursday</td><td></td></tr>
-        <tr><td>Friday</td><td></td></tr>
-        <tr><td>Saturday</td><td></td></tr>
-        <tr><td>Sunday</td><td></td></tr>
-      </table>
+    <div class="calendar-container">
+      <!-- Hlavička se dny v týdnu -->
+      <div class="calendar-header">
+        <div class="time-column"></div>
+        <div *ngFor="let dayInfo of weekDays" class="day-column">
+          <div class="day-header" [class.today]="dayInfo.isToday">
+            <div class="day-name">{{ dayInfo.shortName }}</div>
+            <div class="day-number">{{ dayInfo.day }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tělo kalendáře -->
+      <div class="calendar-body">
+        <!-- Sloupec s časy -->
+        <div class="time-column">
+          <div *ngFor="let hour of hours" class="time-slot">
+            <span>{{ hour }}:00</span>
+          </div>
+        </div>
+
+        <!-- Sloupce pro jednotlivé dny -->
+        <div *ngFor="let dayInfo of weekDays" class="day-column">
+          <div class="day-events">
+            <!-- Mřížka pro časové sloty -->
+            <div *ngFor="let hour of hours" class="hour-slot"></div>
+
+            <!-- Události dne -->
+            <div *ngFor="let event of getEventsForDay(dayInfo.date)"
+                 class="event-item"
+                 [style.top.%]="calculateEventTop(event)"
+                 [style.height.%]="calculateEventHeight(event)"
+                 [style.background-color]="event.color"
+                 (click)="showEventDetail(event)">
+              <div class="event-time">{{ formatEventTime(event) }}</div>
+              <div class="event-name">{{ event.name }}</div>
+              <div class="event-participants" *ngIf="event.participants.length">
+                <span class="badge rounded-pill bg-light text-dark">
+                  <i class="bi bi-people"></i> {{ event.participants.length }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-
+  <!-- Modální okno pro detail události -->
+  <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" *ngIf="selectedEvent">
+        <div class="modal-header" [style.background-color]="selectedEvent?.color">
+          <h5 class="modal-title">{{ selectedEvent?.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="event-detail-time">
+            <i class="bi bi-clock"></i> {{ formatEventDateTime(selectedEvent?.startsAt) }} - {{ formatEventTime(selectedEvent) }}
+          </div>
+          <div class="event-detail-status mt-3">
+            <span class="badge" [ngClass]="getStatusClass(selectedEvent?.status)">
+              {{ selectedEvent?.status }}
+            </span>
+          </div>
+          <div class="event-detail-participants mt-3" *ngIf="selectedEvent?.participants.length">
+            <h6>Účastníci:</h6>
+            <ul class="list-group">
+              <li *ngFor="let participant of selectedEvent?.participants" class="list-group-item d-flex justify-content-between align-items-center">
+                {{ participant.user.name }}
+                <span class="badge" [ngClass]="participant.confirm ? 'bg-success' : 'bg-secondary'">
+                  {{ participant.confirm ? 'Potvrzeno' : 'Čeká na potvrzení' }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zavřít</button>
+          <button type="button" class="btn btn-primary" (click)="editEvent(selectedEvent)">Upravit</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

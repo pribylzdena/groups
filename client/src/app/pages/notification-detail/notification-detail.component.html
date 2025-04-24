@@ -1,11 +1,49 @@
-<div class="details-page">
-  <div class="details-container">
-    <h2>Title</h2>
-    <p><strong>Subject</strong></p>
-    <p>From: User1 example.something&#64;gmail.com <span>Type: Shared group</span></p>
-    <hr>
-    <p>Ahoj,</p>
-    <p>Správce skupiny přidal nové oznámení týkající se aktuálního projektu...</p>
-    <button class="btn btn-light" [routerLink]="['/notifications']">Back</button>
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card border-0 shadow-lg" [ngStyle]="{'border-left': '4px solid ' + getNotificationColor()}">
+        <div class="card-body p-4">
+          <h2 class="mb-4 pb-2 border-bottom fw-normal">{{notification?.name}}</h2>
+
+          <div class="d-flex justify-content-between mb-3">
+            <div>
+              <span class="text-muted">Subject:</span>
+              <span class="ms-2">{{notification?.subject}}</span>
+            </div>
+            <div>
+              <span class="text-muted">Type:</span>
+              <span class="ms-2 badge" [ngClass]="getNotificationBadgeClass()">{{notification?.type}}</span>
+            </div>
+          </div>
+
+          <div class="recipients-section mb-4 pb-3 border-bottom">
+            <h6 class="text-muted mb-2">Recipients:</h6>
+            <div class="recipient-tags">
+              <span *ngFor="let recipient of notification?.recipients" class="recipient-tag me-2 mb-2">
+                {{recipient.user.name}}
+                <span class="recipient-status ms-1" [ngClass]="{'read': recipient.readAt}">
+                  {{recipient.readAt ? '(read)' : ''}}
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="notification-content mb-4">
+            <div class="content-area p-3 rounded bg-light">
+              {{notification?.text}}
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <div class="text-muted small">
+              <span *ngIf="getReadCount() > 0">Read by {{getReadCount()}} of {{notification?.recipients.length}} recipients</span>
+            </div>
+            <button class="btn btn-outline-secondary px-4" [routerLink]="['/notifications']">
+              <i class="bi bi-arrow-left me-2"></i>Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

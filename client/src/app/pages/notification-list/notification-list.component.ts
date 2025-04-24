@@ -1,34 +1,226 @@
-import {Component} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {ActivatedRoute, RouterLink, RouterLinkActive} from '@angular/router';
-import {GroupService} from '@app/services/group.service';
+// notification-list.component.ts
+import { Component, OnInit } from '@angular/core';
+import { NotificationService } from '@app/services/notification.service';
+import { Notification } from '@models/notification';
+import {NgClass, NgForOf, NgIf, SlicePipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {GlobalNavbarComponent} from '@components/global-navbar/global-navbar.component';
 
 @Component({
-  selector: 'app-notifications',
-  standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  selector: 'app-notification-list',
   templateUrl: './notification-list.component.html',
+  standalone: true,
+  imports: [
+    NgIf,
+    NgClass,
+    NgForOf,
+    RouterLink,
+    FormsModule,
+    SlicePipe,
+    GlobalNavbarComponent
+  ],
   styleUrls: ['./notification-list.component.scss']
 })
-export class NotificationListComponent {
-  notifications = [
-    { sender: 'User1', subject: 'example.something@gmail.com', message: 'Group1' },
-    { sender: 'System', subject: 'dev@groups.cz', message: 'Warning' },
-    { sender: 'System', subject: 'dev@groups.cz', message: 'Warning' }
-  ];
+export class NotificationListComponent implements OnInit {
+  notifications: Notification[] = [];
+  filteredNotifications: Notification[] = [];
+  searchTerm: string = '';
+  currentFilter: string = 'all';
+  currentTypeFilter: string = 'all';
+  sortField: string = 'id';
+  sortDirection: string = 'desc';
+  notificationTypes: string[] = [];
+  currentUserId: number;
 
-
-  groupId: string | null = null;
-  protected readonly RouterLinkActive = RouterLinkActive;
+  // Pagination
+  itemsPerPage: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
 
   constructor(
-    private route: ActivatedRoute,
-    private groupService: GroupService
-  ) {}
+    private notificationService: NotificationService,
+  ) {
+    this.currentUserId = 0;
+  }
 
   ngOnInit(): void {
-    this.route.parent?.paramMap.subscribe(params => {
-      this.groupId = params.get('groupId');
+    this.loadNotifications();
+  }
+
+  loadNotifications(): void {
+    this.notificationService.getNotifications().subscribe(data => {
+      this.notifications = data;
+
+      // Extract unique notification types
+      this.notificationTypes = [...new Set(data.map(item => item.type))];
+
+      this.applyFilters();
     });
+  }
+
+  applyFilters(): void {
+    let result = [...this.notifications];
+
+    // Apply search
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      result = result.filter(notification =>
+        notification.name.toLowerCase().includes(term) ||
+        notification.text.toLowerCase().includes(term) ||
+        notification.subject.toLowerCase().includes(term)
+      );
+    }
+
+    // Apply read/unread filter
+    if (this.currentFilter === 'unread') {
+      result = result.filter(notification => !this.isReadByCurrentUser(notification));
+    } else if (this.currentFilter === 'read') {
+      result = result.filter(notification => this.isReadByCurrentUser(notification));
+    }
+
+    // Apply type filter
+    if (this.currentTypeFilter !== 'all') {
+      result = result.filter(notification => notification.type === this.currentTypeFilter);
+    }
+
+    // Apply sorting
+    result.sort((a, b) => {
+      let comparison = 0;
+
+      if (this.sortField === 'id') {
+        comparison = a.id - b.id;
+      } else if (this.sortField === 'name') {
+        comparison = a.name.localeCompare(b.name);
+      } else if (this.sortField === 'subject') {
+        comparison = a.subject.localeCompare(b.subject);
+      } else if (this.sortField === 'type') {
+        comparison = (a.type || '').localeCompare(b.type || '');
+      }
+
+      return this.sortDirection === 'asc' ? comparison : -comparison;
+    });
+
+    // Calculate pagination
+    this.totalPages = Math.ceil(result.length / this.itemsPerPage);
+
+    // Apply pagination
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.filteredNotifications = result.slice(startIndex, endIndex);
+  }
+
+  filterBy(filter: string): void {
+    this.currentFilter = filter;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  filterByType(type: string): void {
+    this.currentTypeFilter = type;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  sortBy(field: string, direction: string): void {
+    this.sortField = field;
+    this.sortDirection = direction;
+    this.applyFilters();
+  }
+
+  resetFilters(): void {
+    this.searchTerm = '';
+    this.currentFilter = 'all';
+    this.currentTypeFilter = 'all';
+    this.sortField = 'id';
+    this.sortDirection = 'desc';
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  isReadByCurrentUser(notification: Notification): boolean {
+    const recipient = notification.recipients.find(r => r.user.id === this.currentUserId);
+    return recipient ? !!recipient.readAt : false;
+  }
+
+  getReadRecipientsCount(notification: Notification): number {
+    return notification.recipients.filter(r => !!r.readAt).length;
+  }
+
+  markAsRead(notification: Notification): void {
+    const recipientIndex = notification.recipients.findIndex(r => r.user.id === this.currentUserId);
+
+    if (recipientIndex !== -1) {
+      const isCurrentlyRead = !!notification.recipients[recipientIndex].readAt;
+
+      if (isCurrentlyRead) {
+        // Mark as unread
+        notification.recipients[recipientIndex].readAt = undefined;
+      } else {
+        // Mark as read
+        notification.recipients[recipientIndex].readAt = new Date();
+      }
+
+      this.notificationService.updateNotificationReadStatus(
+        notification.id,
+        notification.recipients[recipientIndex].id,
+        !isCurrentlyRead
+      ).subscribe(() => {
+        // Notification updated successfully
+      });
+    }
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) {
+      return;
+    }
+    this.currentPage = page;
+    this.applyFilters();
+  }
+
+  getTypeBadgeClass(type: string): string {
+    switch (type.toLowerCase()) {
+      case 'info':
+        return 'badge-info';
+      case 'warning':
+        return 'badge-warning';
+      case 'danger':
+      case 'error':
+        return 'badge-danger';
+      case 'success':
+        return 'badge-success';
+      case 'primary':
+        return 'badge-primary';
+      default:
+        return 'badge-secondary';
+    }
+  }
+
+  getPaginationRange(): number[] {
+    const range = [];
+    const maxVisiblePages = 5;
+
+    if (this.totalPages <= maxVisiblePages) {
+      // Show all pages if there are only a few
+      for (let i = 1; i <= this.totalPages; i++) {
+        range.push(i);
+      }
+    } else {
+      // Otherwise show a window around current page
+      let start = Math.max(1, this.currentPage - 2);
+      let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
+
+      // Adjust if window is too far to the right
+      if (end === this.totalPages) {
+        start = Math.max(1, end - maxVisiblePages + 1);
+      }
+
+      for (let i = start; i <= end; i++) {
+        range.push(i);
+      }
+    }
+
+    return range;
   }
 }

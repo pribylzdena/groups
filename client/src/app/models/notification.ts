@@ -1,5 +1,4 @@
 import {NotificationRecipient} from '@models/notification-recipient';
-import {EventParticipant} from '@models/event-participant';
 
 export class Notification {
   id: number;
@@ -10,7 +9,7 @@ export class Notification {
 
   recipients: NotificationRecipient[]
 
-  constructor(id: number, name: string, text: string, subject: string, type:string, recipients: EventParticipant[]) {
+  constructor(id: number, name: string, text: string, subject: string, type:string, recipients: NotificationRecipient[]) {
     this.id = id;
     this.name = name;
     this.text = text;
