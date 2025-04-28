@@ -49,6 +49,7 @@ export class NoteListComponent {
     this.groupService = groupService;
     this.noteService = noteService;
     // this.notes = this.noteService.getAllNotes();
+    this.loadData();
   }
 
   toggleModal(): void {
@@ -88,12 +89,16 @@ export class NoteListComponent {
       },
       error: (error) => {
         this.isSubmitting = false;
-        console.error('Chyba při vytváření skupiny:', error);
+        console.error('Chyba při vytváření poznamky:', error);
       }
     });
   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
     this.route.parent?.paramMap.subscribe(params => {
       this.groupId = Number(params.get('groupId'));
     });
@@ -102,7 +107,7 @@ export class NoteListComponent {
   }
 
   loadNotes() {
-    this.noteService.getNotesFromApi().subscribe({
+    this.noteService.getNotesFromApi(this.groupId).subscribe({
       next: (response) => {
         console.log(response);
         this.notes = response.map(n => new Note(n.id, n.name, n.value, n.color));

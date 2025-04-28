@@ -51,11 +51,7 @@ export class GroupService {
   }
 
   getGroupsFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`,{
-      headers: new HttpHeaders({
-        'Authorization': `Bearer ` + this.authService.getToken()
-      })
-    });
+    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`);
   }
 
   getGroupFromApi(id: number): Observable<any[]> {

@@ -62,8 +62,8 @@ export class NoteService {
     return this.notes;
   }
 
-  getNotesFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/notes`);
+  getNotesFromApi(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/${groupId}/notes`);
   }
 
   getNoteFromApi(id: number): Observable<any> {

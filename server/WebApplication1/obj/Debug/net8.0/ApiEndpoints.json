@@ -1,53 +1,5 @@
 [
   {
-    "ContainingType": "WebApplication1.Controllers.NotesController",
-    "Method": "FindAll",
-    "RelativePath": "api",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "groupId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.NotesController",
-    "Method": "Create",
-    "RelativePath": "api",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "WebApplication1.RequestModels.NoteRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.NotesController",
-    "Method": "FindById",
-    "RelativePath": "api/{id}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "WebApplication1.Controllers.AuthController",
     "Method": "Login",
     "RelativePath": "api/auth/login",
@@ -107,6 +59,43 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.NotesController",
+    "Method": "FindAll",
+    "RelativePath": "api/groups/{groupId}/notes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.NotesController",
+    "Method": "Create",
+    "RelativePath": "api/groups/{groupId}/notes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebApplication1.RequestModels.NoteRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.NotesController",
     "Method": "Edit",
     "RelativePath": "api/groups/{groupId}/notes/{id}",
     "HttpMethod": "PUT",
@@ -114,18 +103,18 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "task",
-        "Type": "WebApplication1.Models.Task",
-        "IsRequired": true
-      },
-      {
         "Name": "groupId",
-        "Type": "",
+        "Type": "System.Int32",
         "IsRequired": true
       },
       {
         "Name": "id",
-        "Type": "",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebApplication1.RequestModels.NoteRequest",
         "IsRequired": true
       }
     ],

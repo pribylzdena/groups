@@ -15,8 +15,7 @@ export class AuthGuard implements CanActivate {
   canActivate(): boolean | UrlTree {
     const token = this.auth.getToken();
 
-    console.log(token);
-    return true;
+   // return true;
     if (token) {
       return true;
     }

@@ -7,15 +7,30 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
+    [Secured]
     [Route("api")]
     [ApiController]
     public class NotesController : ControllerBase
     {
         private DB context = new DB();
 
-        [HttpGet]
+        [HttpGet("groups/{groupId}/notes")]
         public IActionResult FindAll(int groupId)
         {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
             List<NoteResponseModel> models = new List<NoteResponseModel>();
 
             foreach (var item in this.context.notes.Where(x => x.group_id == groupId))
@@ -26,24 +41,24 @@ namespace WebApplication1.Controllers
             return Ok(models);
         }
 
-        [HttpGet("{id}")]
-        public ObjectResult FindById(int id)
-        {
-            Note noteEntity = this.context.notes.Find(id);
+        //[HttpGet("{id}")]
+        //public ObjectResult FindById(int id)
+        //{
+        //    Note noteEntity = this.context.notes.Find(id);
 
-            if (noteEntity == null)
-            {
-                return NotFound(new { message = "Group not found" });
-            }
+        //    if (noteEntity == null)
+        //    {
+        //        return NotFound(new { message = "Group not found" });
+        //    }
 
-            var group = new NoteResponseModel(noteEntity);
+        //    var group = new NoteResponseModel(noteEntity);
 
-            return Ok(group);
-        }
+        //    return Ok(group);
+        //}
 
 
-        [HttpPost]
-        public IActionResult Create([FromBody] NoteRequest request)
+        [HttpPost("groups/{groupId}/notes")]
+        public IActionResult Create(int groupId, [FromBody] NoteRequest request)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
@@ -53,11 +68,19 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
             var newNote = new Models.Note
             {
                 name = request.name,
                 name_alt = Helper.GetNameAlt(request.name),
-                value = request.value,
+                value = "",
+                color = request.color,
+                group_id = groupId,
                 created_by = currentUser.id,
                 updated_by = currentUser.id,
                 created_at = DateTime.UtcNow,
@@ -65,44 +88,50 @@ namespace WebApplication1.Controllers
                 deleted_at = null
             };
 
-
             this.context.notes.Add(newNote);
             this.context.SaveChanges();
 
             var response = new NoteResponseModel(newNote);
-            return CreatedAtAction(nameof(FindById), new { id = newNote.id }, response);
+            return CreatedAtAction(nameof(Create), response);
         }
 
 
         [HttpPut("groups/{groupId}/notes/{id}")]
-        public IActionResult Edit(int groupId, int id)
+        public IActionResult Edit(int groupId, int id, [FromBody] NoteRequest request)
         {
-            Models.Task task = this.context.tasks.Find(id);
-
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
-
-            GroupMember gm = this.context.group_members.Find(currentUser.id);
-
-
-            if (task == null)
+            if (currentUser == null)
             {
-                return BadRequest(new { message = "task not found" });
+                return NotFound(new { message = "User not found" });
             }
 
-            if (gm == null)
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
             {
-                return BadRequest(new { message = "group not found" });
+                return NotFound(new { message = "Group not found" });
             }
 
-            if (gm.group_id != task.group_id)
+            var note = this.context.notes.FirstOrDefault(n => n.id == id);
+            if (note == null)
             {
-                return Unauthorized();
+                return NotFound(new { message = "Group not found" });
             }
 
-            return Ok();
+            Console.WriteLine("Edit action called with data: group_id = " + groupId + " id = " + id + " userId = " + userId);
 
+            note.name = request.name;
+            note.name_alt = Helper.GetNameAlt(request.name);
+            note.value = request.value;
+            note.color = request.color;
+            note.group_id = groupId;
+            note.updated_by = currentUser.id;
+            note.updated_at = DateTime.UtcNow;
+            this.context.SaveChanges();
+
+            var response = new NoteResponseModel(note);
+            return Ok(response);
         }
     }
 }

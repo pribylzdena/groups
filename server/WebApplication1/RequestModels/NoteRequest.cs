@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace WebApplication1.RequestModels
 {
@@ -6,10 +7,10 @@ namespace WebApplication1.RequestModels
     {
         [Required]
         public string name { get; set; }
+        
         [Required]
+        public string color { get; set; }
+
         public string value { get; set; }
-
-
-
     }
 }

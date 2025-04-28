@@ -52,7 +52,13 @@ export class NoteDetailComponent {
   }
 
   updateNote() {
-    console.log('Updating task');
+    this.noteService.updateNote(this.note, this.groupId).subscribe({
+      next: () => {
+      },
+      error: (error) => {
+        console.error('Chyba při uprave poznamky:', error);
+      }
+    });
   }
 
   ngOnInit(): void {
