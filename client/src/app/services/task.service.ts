@@ -106,10 +106,6 @@ export class TaskService {
     return this.http.get<any[]>(`${environment.apiUrl}/api/groups/${groupId}/tasks`);
   }
 
-  //getTaskFromApi(id: number): Observable<any> {
-  //  return this.http.get<any>(`${environment.apiUrl}/api/groups/{groupId}/tasks/` + id)
-  //}
-
   createTask(task: Task, groupId: number): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/tasks`, task);
   }

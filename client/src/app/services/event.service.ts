@@ -17,21 +17,11 @@ export class EventService {
     this.authService = authService;
   }
 
-  getEventsFromApi(): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/{groupId}/events`);
+  getEventsFromApi(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/${groupId}/events`);
   }
 
-  getEventFromApi(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/{groupId}/events/{id}`);
-  }
-
-  createEvent(event: Event): Observable<any> {
-    const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }); // TODO change to intercept
-
-    return this.http.post<any>(`${environment.apiUrl}/api/groups/{groupId}/events`, event, { headers });
+  createEvent(event: Event, groupId: number): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/events`, event);
   }
 }

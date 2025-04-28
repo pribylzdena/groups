@@ -1,10 +1,12 @@
-// schedule.component.ts
 import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ScheduleSidebarComponent } from '@components/schedule-sidebar/schedule-sidebar.component';
 import { Event } from '@models/event';
+import {ActivatedRoute} from '@angular/router';
+import {GroupService} from '@app/services/group.service';
+import {Note} from '@models/note';
+import {EventService} from '@app/services/event.service';
 
-// Definice typu pro Bootstrap Modal, aby fungoval i při SSR
 declare var bootstrap: any;
 
 interface DayInfo {
@@ -22,52 +24,43 @@ interface DayInfo {
   styleUrls: ['./schedule.component.scss']
 })
 export class ScheduleComponent implements OnInit {
-  // Aktuální den a týden
+  private route: ActivatedRoute
+  private groupService: GroupService
+  private eventService: EventService
+  groupId: number | null = null;
+
   currentDate: Date = new Date();
   currentStartDate: Date;
   weekDays: DayInfo[] = [];
 
-  // Nastavení pohledu
   isWeekView: boolean = true;
   hours: number[] = Array.from({ length: 24 }, (_, i) => i);
 
-  // Data událostí
   events: Event[] = [];
   selectedEvent: Event | null = null;
-
-  // Reference na modální okno
   private eventModal: any = null;
 
-  // Indikátor zda jsme v prohlížeči nebo na serveru
-  private isBrowser: boolean;
+  constructor(groupService: GroupService, eventService: EventService, route: ActivatedRoute) {
+    this.route = route;
+    this.groupService = groupService;
+    this.eventService = eventService;
+    this.loadData();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Zjištění, zda jsme v prohlížeči
-    this.isBrowser = isPlatformBrowser(this.platformId);
-
-    // Inicializace počátečního data týdne
     this.currentStartDate = this.getStartOfWeek(this.currentDate);
     this.generateWeekDays();
   }
 
   ngOnInit(): void {
-    // Ukázkové naplnění událostmi - v produkci bychom získali data z API
-    this.loadDemoEvents();
+    this.loadData();
 
-    // Inicializace modálního okna pouze v prohlížeči
-    if (this.isBrowser) {
-      setTimeout(() => {
-        const modalElement = document.getElementById('eventDetailModal');
-        if (modalElement && typeof bootstrap !== 'undefined') {
-          this.eventModal = new bootstrap.Modal(modalElement);
-        }
-      });
-    }
+    setTimeout(() => {
+      const modalElement = document.getElementById('eventDetailModal');
+      if (modalElement && typeof bootstrap !== 'undefined') {
+        this.eventModal = new bootstrap.Modal(modalElement);
+      }
+    });
   }
 
-  /**
-   * Změna aktuálního týdne
-   */
   changeWeek(direction: number): void {
     const newDate = new Date(this.currentStartDate);
     newDate.setDate(newDate.getDate() + direction * 7);
@@ -75,38 +68,25 @@ export class ScheduleComponent implements OnInit {
     this.generateWeekDays();
   }
 
-  /**
-   * Přechod na aktuální den
-   */
   goToToday(): void {
     this.currentDate = new Date();
     this.currentStartDate = this.getStartOfWeek(this.currentDate);
     this.generateWeekDays();
   }
 
-  /**
-   * Přepínání mezi týdenním a měsíčním pohledem
-   */
   toggleView(): void {
     this.isWeekView = !this.isWeekView;
-    // Tady by byla implementace změny pohledu
   }
 
-  /**
-   * Získání prvního dne v týdnu (pondělí) pro dané datum
-   */
   getStartOfWeek(date: Date): Date {
-    const day = date.getDay(); // 0 = neděle, 1 = pondělí, ...
-    const diff = day === 0 ? 6 : day - 1; // Převod na 0 = pondělí, ...
+    const day = date.getDay();
+    const diff = day === 0 ? 6 : day - 1;
     const result = new Date(date);
     result.setDate(date.getDate() - diff);
     result.setHours(0, 0, 0, 0);
     return result;
   }
 
-  /**
-   * Vytvoření pole dnů v aktuálním týdnu
-   */
   generateWeekDays(): void {
     const daysOfWeek = ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'];
     this.weekDays = [];
@@ -129,9 +109,6 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  /**
-   * Formátování textového popisu týdne
-   */
   getWeekLabel(): string {
     const start = new Date(this.currentStartDate);
     const end = new Date(start);
@@ -148,9 +125,6 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  /**
-   * Získání událostí pro konkrétní den
-   */
   getEventsForDay(date: Date): Event[] {
     return this.events.filter(event => {
       const eventDate = new Date(event.startsAt);
@@ -160,18 +134,12 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  /**
-   * Výpočet pozice události v kalendáři (%) podle času začátku
-   */
   calculateEventTop(event: Event): number {
     const startHour = event.startsAt.getHours();
     const startMinute = event.startsAt.getMinutes();
     return (startHour + startMinute / 60) * (100 / 24);
   }
 
-  /**
-   * Výpočet výšky události v kalendáři (%) podle délky trvání
-   */
   calculateEventHeight(event: Event): number {
     const startTime = event.startsAt.getTime();
     const endTime = event.endsAt.getTime();
@@ -179,9 +147,6 @@ export class ScheduleComponent implements OnInit {
     return durationHours * (100 / 24);
   }
 
-  /**
-   * Formátování času události
-   */
   formatEventTime(event: Event): string {
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
     const start = event.startsAt.toLocaleTimeString('cs-CZ', options);
@@ -189,9 +154,6 @@ export class ScheduleComponent implements OnInit {
     return `${start} - ${end}`;
   }
 
-  /**
-   * Formátování data a času události
-   */
   formatEventDateTime(date: Date | undefined): string {
     if (!date) return '';
     const options: Intl.DateTimeFormatOptions = {
@@ -203,29 +165,18 @@ export class ScheduleComponent implements OnInit {
     return date.toLocaleDateString('cs-CZ', options);
   }
 
-  /**
-   * Zobrazení detailu události
-   */
   showEventDetail(event: Event): void {
     this.selectedEvent = event;
-    if (this.isBrowser && this.eventModal) {
+    if (this.eventModal) {
       this.eventModal.show();
     }
   }
 
-  /**
-   * Editace události
-   */
   editEvent(event: Event | null): void {
     if (!event) return;
-    // Implementace editace události
     console.log('Editing event:', event);
-    // Tady by bylo volání modálního okna pro editaci nebo přesměrování na stránku editace
   }
 
-  /**
-   * Získání CSS třídy pro stav události
-   */
   getStatusClass(status: string | undefined): string {
     if (!status) return 'bg-secondary';
 
@@ -241,64 +192,23 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  /**
-   * Načtení ukázkových dat pro demonstraci
-   */
-  private loadDemoEvents(): void {
-    // Implementace načtení událostí z API
-    // Pro ukázku vytvoříme několik událostí
+  loadData() {
+    this.route.parent?.paramMap.subscribe(params => {
+      this.groupId = Number(params.get('groupId'));
+    });
 
-    // Dnešní datum pro ukázku
-    const today = new Date();
-    const startOfWeek = this.getStartOfWeek(today);
+    this.loadEvents();
+  }
 
-    // Ukázkové události - v produkční verzi by se načítaly ze serveru
-    this.events = [
-      new Event(
-        1,
-        'Porada týmu',
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 9, 0),
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate(), 10, 30),
-        'confirmed',
-        '#4285F4',
-        []
-      ),
-      new Event(
-        2,
-        'Oběd s klientem',
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 1, 12, 0),
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 1, 13, 30),
-        'confirmed',
-        '#EA4335',
-        []
-      ),
-      new Event(
-        3,
-        'Prezentace projektu',
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 2, 14, 0),
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 2, 16, 0),
-        'pending',
-        '#FBBC05',
-        []
-      ),
-      new Event(
-        4,
-        'Školení',
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 3, 10, 0),
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 3, 17, 0),
-        'confirmed',
-        '#34A853',
-        []
-      ),
-      new Event(
-        5,
-        'Teambuilding',
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 4, 16, 0),
-        new Date(startOfWeek.getFullYear(), startOfWeek.getMonth(), startOfWeek.getDate() + 4, 22, 0),
-        'confirmed',
-        '#9C27B0',
-        []
-      )
-    ];
+  loadEvents() {
+    this.eventService.getEventsFromApi(this.groupId).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.events = response.map(e => new Event(e.id, e.name, e.startsAt, e.endsAt, e.status, e.color, e.participants));
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
   }
 }

@@ -4,17 +4,19 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    [Route("api/[controller]")]
+    [Secured]
+    [Route("api")]
     [ApiController]
     public class ScheduledEventsController : ControllerBase
     {
         private DB context = new DB();
-        [HttpGet]
-        public IActionResult FindAll()
+
+        [HttpGet("groups/{groupId}/events")]
+        public IActionResult FindAll(int groupId)
         {
             List<ScheduledEventResponseModel> models = new List<ScheduledEventResponseModel>();
 
-            foreach (var item in this.context.scheduled_event)
+            foreach (var item in this.context.scheduled_events)
             {
                 models.Add(new ScheduledEventResponseModel(item));
             }

@@ -58,6 +58,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApplication1.Controllers.ScheduledEventsController",
+    "Method": "FindAll",
+    "RelativePath": "api/groups/{groupId}/events",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApplication1.Controllers.NotesController",
     "Method": "FindAll",
     "RelativePath": "api/groups/{groupId}/notes",
@@ -140,16 +156,6 @@
     "ContainingType": "WebApplication1.Controllers.NotificationsController",
     "Method": "FindAll",
     "RelativePath": "api/Notifications",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.ScheduledEventsController",
-    "Method": "FindAll",
-    "RelativePath": "api/ScheduledEvents",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

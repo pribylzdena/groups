@@ -10,7 +10,7 @@ namespace WebApplication1
         public DbSet<EventParticipant> event_participants { get; set; }
         public DbSet<GroupMember> group_members { get; set; }
         public DbSet<Notification> notifications { get; set; }
-        public DbSet<ScheduledEvent> scheduled_event { get; set; }
+        public DbSet<ScheduledEvent> scheduled_events { get; set; }
         public DbSet<TaskComment> task_comments { get; set; }
         public DbSet<Models.Task> tasks { get; set; }
         public DbSet<User> users { get; set; }
