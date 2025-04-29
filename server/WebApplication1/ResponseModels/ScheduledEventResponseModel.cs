@@ -18,7 +18,7 @@ namespace WebApplication1.ResponseModels
             this.id = events.id;
             this.name = events.name;
             this.startsAt = events.starts_at;
-            this.endsAt = events.starts_at;
+            this.endsAt = events.ends_at;
             this.status = events.status;
             this.color = events.color;
             this.participants = [];

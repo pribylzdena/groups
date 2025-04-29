@@ -15,17 +15,12 @@
       <button class="btn btn-primary btn-sm" (click)="goToToday()">
         <i class="bi bi-calendar-check"></i> Dnes
       </button>
-      <button class="btn btn-outline-light btn-sm ms-2" (click)="toggleView()">
-        <i class="bi bi-grid-3x3-gap"></i> {{ isWeekView ? 'Měsíční pohled' : 'Týdenní pohled' }}
-      </button>
     </div>
     <app-schedule-sidebar></app-schedule-sidebar>
   </div>
 
-  <!-- Hlavní kalendář -->
   <div class="schedule-wrapper">
     <div class="calendar-container">
-      <!-- Hlavička se dny v týdnu -->
       <div class="calendar-header">
         <div class="time-column"></div>
         <div *ngFor="let dayInfo of weekDays" class="day-column">
@@ -36,22 +31,16 @@
         </div>
       </div>
 
-      <!-- Tělo kalendáře -->
       <div class="calendar-body">
-        <!-- Sloupec s časy -->
         <div class="time-column">
           <div *ngFor="let hour of hours" class="time-slot">
             <span>{{ hour }}:00</span>
           </div>
         </div>
 
-        <!-- Sloupce pro jednotlivé dny -->
         <div *ngFor="let dayInfo of weekDays" class="day-column">
           <div class="day-events">
-            <!-- Mřížka pro časové sloty -->
             <div *ngFor="let hour of hours" class="hour-slot"></div>
-
-            <!-- Události dne -->
             <div *ngFor="let event of getEventsForDay(dayInfo.date)"
                  class="event-item"
                  [style.top.%]="calculateEventTop(event)"
@@ -72,7 +61,6 @@
     </div>
   </div>
 
-  <!-- Modální okno pro detail události -->
   <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content" *ngIf="selectedEvent">

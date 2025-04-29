@@ -178,7 +178,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getStatusClass(status: string | undefined): string {
-    if (!status) return 'bg-secondary';
+    /*if (!status)*/ return 'bg-secondary';
 
     switch (status.toLowerCase()) {
       case 'confirmed':
@@ -204,7 +204,7 @@ export class ScheduleComponent implements OnInit {
     this.eventService.getEventsFromApi(this.groupId).subscribe({
       next: (response) => {
         console.log(response);
-        this.events = response.map(e => new Event(e.id, e.name, e.startsAt, e.endsAt, e.status, e.color, e.participants));
+        this.events = response.map(e => new Event(e.id, e.name, new Date(e.startsAt), new Date(e.endsAt), e.status, e.color, e.participants));
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);
