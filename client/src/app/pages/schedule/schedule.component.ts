@@ -58,7 +58,10 @@ export class ScheduleComponent implements OnInit {
       if (modalElement && typeof bootstrap !== 'undefined') {
         this.eventModal = new bootstrap.Modal(modalElement);
       }
-    });
+      else {
+        console.error('Modal element or bootstrap not found!');
+      }
+    }, 500);
   }
 
   changeWeek(direction: number): void {
@@ -72,10 +75,6 @@ export class ScheduleComponent implements OnInit {
     this.currentDate = new Date();
     this.currentStartDate = this.getStartOfWeek(this.currentDate);
     this.generateWeekDays();
-  }
-
-  toggleView(): void {
-    this.isWeekView = !this.isWeekView;
   }
 
   getStartOfWeek(date: Date): Date {
@@ -135,14 +134,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   calculateEventTop(event: Event): number {
-    const startHour = event.startsAt.getHours();
-    const startMinute = event.startsAt.getMinutes();
+    const startHour = new Date(event.startsAt).getHours();
+    const startMinute = new Date(event.startsAt).getMinutes();
     return (startHour + startMinute / 60) * (100 / 24);
   }
-
   calculateEventHeight(event: Event): number {
-    const startTime = event.startsAt.getTime();
-    const endTime = event.endsAt.getTime();
+    const startTime = new Date(event.startsAt).getTime();
+    const endTime = new Date(event.endsAt).getTime();
     const durationHours = (endTime - startTime) / (1000 * 60 * 60);
     return durationHours * (100 / 24);
   }
