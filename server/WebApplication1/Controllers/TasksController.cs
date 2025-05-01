@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers
         [HttpGet("groups/{groupId}/tasks")]
         public IActionResult FindAll(int groupId)
         {
-            int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -91,7 +91,7 @@ namespace WebApplication1.Controllers
             Console.WriteLine("Create task incialize");
 
 
-            int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -154,7 +154,7 @@ namespace WebApplication1.Controllers
         [HttpPut("groups/{groupId}/tasks/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
         {
-            int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
