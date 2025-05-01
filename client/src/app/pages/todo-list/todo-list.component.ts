@@ -37,7 +37,7 @@ export class TodoListComponent implements OnInit {
     this.taskService.getTasksFromApi(this.groupId).subscribe({
       next: (response) => {
         console.log(response);
-        this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, n.parent, n.assignees));
+        this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, null, n.assignees));
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

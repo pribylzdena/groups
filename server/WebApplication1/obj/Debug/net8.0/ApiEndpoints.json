@@ -170,7 +170,7 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.TasksController",
-    "Method": "CreateTask",
+    "Method": "Create",
     "RelativePath": "api/groups/{groupId}/tasks",
     "HttpMethod": "POST",
     "IsController": true,

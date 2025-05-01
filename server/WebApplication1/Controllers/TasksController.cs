@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using WebApplication1.Models;
@@ -67,12 +68,12 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("groups/{groupId}/tasks")]
-        public IActionResult CreateTask(int groupId, [FromBody] TaskRequest request)
+        public IActionResult Create(int groupId, [FromBody] TaskRequest request)
         {
             Console.WriteLine("Create task incialize");
 
 
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -110,6 +111,8 @@ namespace WebApplication1.Controllers
             this.context.tasks.Add(newTask);
             this.context.SaveChanges();
 
+            var response = new TaskResponseModel(newTask);
+
             foreach (var item in request.asignees)
             {
                 if (this.context.users.Contains(item))
@@ -118,13 +121,16 @@ namespace WebApplication1.Controllers
                     TaskAsignee.user_id = item.id;
                     TaskAsignee.task_id = newTask.id;
                     this.context.tasks_assignees.Add(TaskAsignee);
+
+                    //
+
+                    response.assignees.Add(item);
                 }
             }
 
-            
             this.context.SaveChanges();
 
-            return Ok();
+            return CreatedAtAction(nameof(Create), response);
         }
     }
 }
