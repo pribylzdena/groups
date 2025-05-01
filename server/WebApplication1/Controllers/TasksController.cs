@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
+using static Google.Protobuf.Reflection.UninterpretedOption.Types;
 
 namespace WebApplication1.Controllers
 {
@@ -26,7 +29,6 @@ namespace WebApplication1.Controllers
         public IActionResult FindAll(int groupId)
         {
             int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
-
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -39,13 +41,29 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
+            var tasks = this.context.tasks.Where(x => x.group_id == groupId).ToList();
+            var allAssignees = this.context.tasks_assignees.Where(t => tasks.Select(task => task.id).Contains(t.task_id)).ToList();
+            var userIds = allAssignees.Select(a => a.user_id).Distinct().ToList();
+            var users = this.context.users.Where(u => userIds.Contains(u.id)).ToList();
 
             List<TaskResponseModel> models = new List<TaskResponseModel>();
-
-            foreach (var item in this.context.tasks.Where(x => x.group_id == groupId))
+            foreach (var item in tasks)
             {
-                
-                models.Add(new TaskResponseModel(item, GetParent(item.id)));
+                var model = new TaskResponseModel(item, GetParent(item.id));
+                models.Add(model);
+            }
+
+            foreach (var item in models)
+            {
+                var taskAssignees = allAssignees.Where(a => a.task_id == item.id).ToList();
+                foreach (var assignee in taskAssignees)
+                {
+                    var user = users.FirstOrDefault(u => u.id == assignee.user_id);
+                    if (user != null)
+                    {
+                        item.assignees.Add(user);
+                    }
+                }
             }
 
             return Ok(models);
@@ -131,6 +149,53 @@ namespace WebApplication1.Controllers
             this.context.SaveChanges();
 
             return CreatedAtAction(nameof(Create), response);
+        }
+
+        [HttpPut("groups/{groupId}/tasks/{id}")]
+        public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
+        {
+            int userId = 1/*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+            var task = this.context.tasks.FirstOrDefault(n => n.id == id);
+            if (task == null)
+            {
+                return NotFound(new { message = "Note not found" });
+            }
+
+            Console.WriteLine("Edit action called with data: group_id = " + groupId + " id = " + id + " userId = " + userId);
+
+            task.name = request.name;
+            task.name_alt = Helper.GetNameAlt(request.name);
+            task.description = "";
+            task.status = request.status;
+            task.deadline = request.deadline;
+            task.priority = request.priority;
+            task.color = request.color;
+            task.group_id = groupId;
+            task.created_by = currentUser.id;
+            task.updated_by = currentUser.id;
+            task.created_at = DateTime.UtcNow;
+            task.updated_at = DateTime.UtcNow;
+            task.reminder_at = request.reminder_at;
+            task.parent_id = request.parent_id;
+            task.deleted_at = null;
+            this.context.SaveChanges();
+
+            var response = new TaskResponseModel(task);
+            response.assignees = request.asignees;
+            return Ok(response);
         }
     }
 }
