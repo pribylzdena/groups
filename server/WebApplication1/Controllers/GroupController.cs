@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateGroupRequest request)
         {
-            int userId =0/* Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -75,7 +75,7 @@ namespace WebApplication1.Controllers
             this.context.SaveChanges();
 
             var response = new GroupResponseModel(newGroup, new List<GroupMember>());
-            return CreatedAtAction(nameof(FindById), new { id = newGroup.id }, response);
+            return CreatedAtAction(nameof(Create), response);
         }
     }
 }

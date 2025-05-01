@@ -15,6 +15,7 @@ namespace WebApplication1
         public DbSet<Models.Task> tasks { get; set; }
         public DbSet<User> users { get; set; }
         public DbSet<UsersNotification> users_notifications { get; set; }
+        public DbSet<TaskAssignee> tasks_assignees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

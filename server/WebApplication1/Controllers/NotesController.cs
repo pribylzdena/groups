@@ -116,7 +116,7 @@ namespace WebApplication1.Controllers
             var note = this.context.notes.FirstOrDefault(n => n.id == id);
             if (note == null)
             {
-                return NotFound(new { message = "Group not found" });
+                return NotFound(new { message = "Note not found" });
             }
 
             Console.WriteLine("Edit action called with data: group_id = " + groupId + " id = " + id + " userId = " + userId);

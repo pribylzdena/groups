@@ -33,7 +33,7 @@ namespace WebApplication1.ResponseModels
 
                 if (parent != null)
                 {
-                    this.parent = new TaskResponseModel(parent, null); // Stop recursion with null second parameter
+                    this.parent = new TaskResponseModel(parent, null);
                 }
             }
         }
