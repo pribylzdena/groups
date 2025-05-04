@@ -4,6 +4,7 @@ import {NavbarComponent} from '../navbar/navbar.component';
 import {NotificationListComponent} from '@app/pages/notification-list/notification-list.component';
 import {Group} from '@models/group';
 import {GroupService} from '@app/services/group.service';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-group-layout',
@@ -12,7 +13,8 @@ import {GroupService} from '@app/services/group.service';
   imports: [
     RouterOutlet,
     NavbarComponent,
-    NotificationListComponent
+    NotificationListComponent,
+    NgIf
   ],
   standalone: true
 })
@@ -22,6 +24,8 @@ export class GroupComponent implements OnInit {
 
   groupId: number | null = null;
   group: Group;
+  isLoading: boolean = true;
+
   constructor(route: ActivatedRoute, groupService: GroupService) {
     this.route = route;
     this.groupService = groupService;
@@ -29,6 +33,8 @@ export class GroupComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
+
     this.loadData();
   }
 
@@ -43,11 +49,12 @@ export class GroupComponent implements OnInit {
   loadGroup() {
     this.groupService.getGroupFromApi(this.groupId).subscribe({
       next: (response) => {
-        this.group = response.map(n => new Group(n.id, n.name, n.members ?? []));
-        console.log(this.group);
+        this.group = response;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);
+        this.isLoading = false;
       }
     });
   }
