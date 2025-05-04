@@ -1,20 +1,19 @@
-﻿using WebApplication1.Controllers;
-using WebApplication1.Models;
+﻿using WebApplication1.Models;
 
 namespace WebApplication1.ResponseModels
 {
     public class GroupResponseModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public List<GroupMemberResponseModel> members { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public List<GroupMemberResponseModel> groupMembers { get; set; }
 
 
-        public GroupResponseModel(Group group, List<GroupMember> members)
+        public GroupResponseModel(Group group)
         {
-            Id = group.id;
-            Name = group.name;
-            members = [];
+            id = group.id;
+            name = group.name;
+            groupMembers = [];
         }
 
         
