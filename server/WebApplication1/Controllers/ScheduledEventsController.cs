@@ -30,7 +30,6 @@ namespace WebApplication1.Controllers
         [HttpPost("groups/{groupId}/events")]
         public IActionResult Create(int groupId, [FromBody] ScheduledEventRequest request)
         {
-            Console.WriteLine("ahojky");
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -45,13 +44,16 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
+            Console.WriteLine(request.startsAt);
+            Console.WriteLine(request.endsAt);
+
             var newEvent = new Models.ScheduledEvent
             {
                 name = request.name,
                 color = request.color,
-                starts_at = request.starts_at,
+                starts_at = DateTime.Parse(request.startsAt),
                 status = request.status,
-                ends_at = request.ends_at,
+                ends_at = DateTime.Parse(request.endsAt),
                 group_id = groupId,
                 created_by = currentUser.id,
                 updated_by = currentUser.id,
@@ -94,9 +96,9 @@ namespace WebApplication1.Controllers
 
             scheduled_event.name = request.name;
             scheduled_event.color = request.color;
-            scheduled_event.starts_at = request.starts_at;
+            scheduled_event.starts_at = DateTime.Parse(request.startsAt);
             scheduled_event.status = request.status;
-            scheduled_event.ends_at = request.ends_at;
+            scheduled_event.ends_at = DateTime.Parse(request.endsAt);
             scheduled_event.group_id = groupId;
             scheduled_event.created_by = currentUser.id;
             scheduled_event.updated_by = currentUser.id;

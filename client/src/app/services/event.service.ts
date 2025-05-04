@@ -4,6 +4,7 @@ import {environment} from '../../environments/environment.development';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Note} from '@models/note';
 import {AuthorizationService} from '@app/services/authorization.service';
+import { Event } from '@models/event';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class EventService {
 
   createEvent(event: Event, groupId: number): Observable<any> {
     console.log('Calling: ' + `${environment.apiUrl}/api/groups/${groupId}/events`);
-    return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/events`, event);
+    console.log(event);
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/events`, event.format());
   }
 }

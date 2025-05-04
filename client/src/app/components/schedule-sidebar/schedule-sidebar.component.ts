@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EventService } from '@app/services/event.service';
-import {Task} from '@models/task';
+import { Event } from '@models/event';
 
 
 @Component({
@@ -39,7 +39,6 @@ export class ScheduleSidebarComponent {
       eventStart: ['', Validators.required],
       eventEnd: ['', Validators.required],
       eventDescription: [''],
-      eventPriority: ['medium', Validators.required]
     });
   }
 
@@ -52,9 +51,7 @@ export class ScheduleSidebarComponent {
     }
   }
 
-  createSchedule(event: Event) {
-    event.preventDefault();
-
+  createSchedule() {
     if (this.eventForm.invalid) {
       Object.keys(this.eventForm.controls).forEach(key => {
         const control = this.eventForm.get(key);
@@ -68,14 +65,7 @@ export class ScheduleSidebarComponent {
       return;
     }
 
-    console.log('Creating new schedule event');
-    console.log('Color selected:', this.eventColor);
-    console.log('Form submitted');
-    console.log(event);
-
-    console.log(this.groupId);
-
-    this.eventService.createEvent(event, this.groupId).subscribe({
+    this.eventService.createEvent(new Event(0, this.eventForm.get('eventName')?.value, this.eventForm.get('eventStart')?.value, this.eventForm.get('eventEnd')?.value, 1, this.eventForm.get('eventColor')?.value, []), this.groupId).subscribe({
       next: (response) => {
         console.log(response);
       },

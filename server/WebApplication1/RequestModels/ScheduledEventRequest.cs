@@ -7,9 +7,9 @@ namespace WebApplication1.RequestModels
         [Required]
         public string name { get; set; }
         [Required]
-        public DateTime starts_at { get; set; }
+        public string startsAt { get; set; }
         [Required]
-        public DateTime ends_at { get; set; }
+        public string endsAt { get; set; }
         [Required]
         public int status { get; set; }
         [Required]

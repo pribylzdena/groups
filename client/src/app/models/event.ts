@@ -5,7 +5,7 @@ export class Event {
   name: string;
   startsAt: Date;
   endsAt: Date;
-  status: string;
+  status: number;
   color: string;
   participants: EventParticipant[]
   constructor(
@@ -13,7 +13,7 @@ export class Event {
      name: string,
      startsAt: Date,
      endsAt: Date,
-     status: string,
+     status: number,
      color: string,
      participants: EventParticipant[]
   ) {
@@ -24,5 +24,16 @@ export class Event {
     this.status = status;
     this.color = color;
     this.participants = participants;
+  }
+
+  format() {
+    return {
+      name: this.name,
+      startsAt: this.startsAt.toString(),
+      endsAt: this.endsAt.toString(),
+      status: this.status,
+      color: this.color,
+      participants: this.participants
+    };
   }
 }
