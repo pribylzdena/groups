@@ -1,0 +1,126 @@
+<div class="group-edit-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Upravit skupinu</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Načítání...</span>
+        </div>
+        <p class="mt-2">Načítání dat skupiny...</p>
+      </div>
+
+      <form [formGroup]="groupForm" (ngSubmit)="saveGroup()" *ngIf="!isLoading">
+        <div class="mb-4">
+          <label for="groupName" class="form-label">Název skupiny</label>
+          <input
+            type="text"
+            id="groupName"
+            formControlName="name"
+            class="form-control"
+            [ngClass]="{'is-invalid': groupForm.get('name')?.invalid && groupForm.get('name')?.touched}"
+            placeholder="Zadejte název skupiny"
+          >
+          <div class="invalid-feedback" *ngIf="groupForm.get('name')?.errors?.['required'] && groupForm.get('name')?.touched">
+            Název skupiny je povinný.
+          </div>
+          <div class="invalid-feedback" *ngIf="groupForm.get('name')?.errors?.['minlength'] && groupForm.get('name')?.touched">
+            Název musí obsahovat alespoň 3 znaky.
+          </div>
+          <div class="invalid-feedback" *ngIf="groupForm.get('name')?.errors?.['maxlength'] && groupForm.get('name')?.touched">
+            Název nesmí být delší než 50 znaků.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label">Členové skupiny</label>
+
+          <div class="search-container mb-3">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Vyhledat uživatele..."
+                [(ngModel)]="searchQuery"
+                [ngModelOptions]="{standalone: true}"
+                (input)="onSearch()"
+                (focus)="showDropdown = true"
+              >
+              <button class="btn btn-outline-secondary" type="button" (click)="onSearch()">
+                <i class="bi bi-search"></i> Hledat
+              </button>
+            </div>
+
+            <div class="search-results" *ngIf="showDropdown && filteredUsers.length > 0">
+              <ul class="list-group">
+                <li
+                  *ngFor="let user of filteredUsers"
+                  class="list-group-item list-group-item-action"
+                  (click)="addUserToGroup(user)"
+                >
+                  <div class="d-flex align-items-center">
+                    <div class="user-avatar">
+                      <div class="avatar-circle" *ngIf="!user.logoUrl">
+                        {{ user.name.charAt(0) || '?' }}
+                      </div>
+                      <img *ngIf="user.logoUrl" [src]="user.logoUrl" class="user-logo" alt="{{ user.name }}" />
+                    </div>
+                    <div class="ms-3">
+                      <strong>{{ user.name }}</strong>
+                      <div class="text-muted small">{{ user.email }}</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="search-results" *ngIf="showDropdown && searchQuery && filteredUsers.length === 0">
+              <div class="list-group">
+                <div class="list-group-item text-center">
+                  Žádní uživatelé nenalezeni
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="members-list">
+            <div class="alert alert-info" *ngIf="group.members.length === 0">
+              <i class="bi bi-info-circle me-2"></i> Tato skupina zatím nemá žádné členy.
+            </div>
+
+            <div class="member-cards">
+              <div class="member-card" *ngFor="let member of group.members">
+                <div class="member-info">
+                  <div class="member-avatar">
+                    <div class="avatar-circle" *ngIf="!member.user.logoUrl">
+                      {{ member.user.name.charAt(0) || '?' }}
+                    </div>
+                    <img *ngIf="member.user.logoUrl" [src]="member.user.logoUrl" class="user-logo" alt="{{ member.user.name }}" />
+                  </div>
+                  <div class="member-details">
+                    <div class="member-name">{{ member.user.name }}</div>
+                    <div class="member-role">{{ member.role }}</div>
+                  </div>
+                </div>
+                <button type="button" class="btn-remove" (click)="removeUserFromGroup(member)" title="Odebrat uživatele">
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+            Zrušit
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+            <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Uložit změny
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

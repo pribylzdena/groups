@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthorizationService } from '@app/services/authorization.service';
+import {Note} from '@models/note';
 
 @Injectable({
   providedIn: 'root'
@@ -67,5 +68,9 @@ export class GroupService {
 
     const body = { name };
     return this.http.post<any>(`${environment.apiUrl}/api/Groups`, body, { headers });
+  }
+
+  updateGroup(group: Group): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/api/groups/${group.id}`, group);
   }
 }

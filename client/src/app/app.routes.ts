@@ -14,6 +14,7 @@ import {NotificationCreateComponent} from '@app/pages/notification-create/notifi
 import { LoginComponent } from '@app/pages/login/login.component';
 import {RegisterComponent} from '@app/pages/register/register.component';
 import {AuthGuard} from '@app/auth.guard';
+import {GroupEditComponent} from '@app/pages/group-edit/group-edit.component';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'todo', pathMatch: 'full' },
     ]
   },
+  { path: 'group-edit/:groupId', component: GroupEditComponent, canActivate:[AuthGuard] },
   { path: 'notifications', component: NotificationListComponent, canActivate:[AuthGuard] },
   { path: 'notification-show/:id', component: NotificationDetailComponent, canActivate:[AuthGuard] },
   { path: 'notification-create', component: NotificationCreateComponent, canActivate:[AuthGuard] },
