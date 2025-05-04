@@ -7,7 +7,7 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api")]
     [ApiController]
     public class ScheduledEventsController : ControllerBase
@@ -27,9 +27,10 @@ namespace WebApplication1.Controllers
             return Ok(models);
         }
 
-        [HttpPost("groups/{groupId}/schedule")]
+        [HttpPost("groups/{groupId}/events")]
         public IActionResult Create(int groupId, [FromBody] ScheduledEventRequest request)
         {
+            Console.WriteLine("ahojky");
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -44,7 +45,7 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
-            var newNote = new Models.ScheduledEvent
+            var newEvent = new Models.ScheduledEvent
             {
                 name = request.name,
                 color = request.color,
@@ -59,14 +60,14 @@ namespace WebApplication1.Controllers
                 deleted_at = null
             };
 
-            this.context.scheduled_events.Add(newNote);
+            this.context.scheduled_events.Add(newEvent);
             this.context.SaveChanges();
 
-            var response = new ScheduledEventResponseModel(newNote);
+            var response = new ScheduledEventResponseModel(newEvent);
             return CreatedAtAction(nameof(Create), response);
         }
 
-        [HttpPut("groups/{groupId}/schedule/{id}")]
+        [HttpPut("groups/{groupId}/events/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] ScheduledEventRequest request)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
