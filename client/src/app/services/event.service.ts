@@ -22,6 +22,7 @@ export class EventService {
   }
 
   createEvent(event: Event, groupId: number): Observable<any> {
+    console.log('Calling: ' + `${environment.apiUrl}/api/groups/${groupId}/events`);
     return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/events`, event);
   }
 }
