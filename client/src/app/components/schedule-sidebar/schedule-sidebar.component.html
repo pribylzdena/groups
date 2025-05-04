@@ -30,30 +30,23 @@
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label for="event-start">Začátek</label>
-        <input type="datetime-local" id="event-start" formControlName="eventStart" (change)="validateDates()" />
-        <div class="error" *ngIf="eventForm.get('eventStart')?.invalid && eventForm.get('eventStart')?.dirty">
-          Zadejte datum a čas začátku
-        </div>
+    <div class="form-group">
+      <label for="event-start">Začátek</label>
+      <input type="datetime-local" id="event-start" formControlName="eventStart" (change)="validateDates()" />
+      <div class="error" *ngIf="eventForm.get('eventStart')?.invalid && eventForm.get('eventStart')?.dirty">
+        Zadejte datum a čas začátku
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="event-end">Konec</label>
-        <input type="datetime-local" id="event-end" formControlName="eventEnd" (change)="validateDates()" />
-        <div class="error" *ngIf="eventForm.get('eventEnd')?.invalid && eventForm.get('eventEnd')?.dirty">
-          Zadejte datum a čas konce
-        </div>
+    <div class="form-group">
+      <label for="event-end">Konec</label>
+      <input type="datetime-local" id="event-end" formControlName="eventEnd" (change)="validateDates()" />
+      <div class="error" *ngIf="eventForm.get('eventEnd')?.invalid && eventForm.get('eventEnd')?.dirty">
+        Zadejte datum a čas konce
       </div>
     </div>
 
     <div class="error date-error" *ngIf="dateError">{{ dateError }}</div>
-
-    <div class="form-group">
-      <label for="event-description">Popis</label>
-      <textarea id="event-description" formControlName="eventDescription" rows="3" placeholder="Popis události"></textarea>
-    </div>
 
     <div class="form-group">
       <label for="event-priority">Priorita</label>

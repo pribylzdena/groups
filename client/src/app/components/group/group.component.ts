@@ -25,9 +25,14 @@ export class GroupComponent implements OnInit {
   constructor(route: ActivatedRoute, groupService: GroupService) {
     this.route = route;
     this.groupService = groupService;
+    this.loadData();
   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData() {
     this.route.paramMap.subscribe((params) => {
       this.groupId = Number(params.get('groupId'));
     });
