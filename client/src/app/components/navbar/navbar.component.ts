@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '@app/services/group.service';
 import {NgIf} from '@angular/common';
 import {AuthorizationService} from '@app/services/authorization.service';
+import {Group} from '@models/group';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class NavbarComponent {
   private route: ActivatedRoute;
   private groupService: GroupService;
   private authService: AuthorizationService;
+  @Input() public group: Group;
 
   hasNotifications = true;
   notificationCount = 3;
@@ -28,22 +30,12 @@ export class NavbarComponent {
   userName = 'John Smith';
   userEmail = 'john.smith@example.com';
   groupId: number | null = null;
-  groupName: string | null = null;
   protected readonly RouterLinkActive = RouterLinkActive;
 
-  constructor(router: Router, route: ActivatedRoute, groupService: GroupService, authService: AuthorizationService) {
+  constructor(router: Router, route: ActivatedRoute, authService: AuthorizationService) {
     this.router = router;
     this.route = route;
-    this.groupService = groupService;
     this.authService = authService;
-  }
-
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.groupId = Number(params.get('groupId'));
-      const group = this.groupId ? this.groupService.getGroupById(this.groupId) : null;
-      this.groupName = group?.name ?? null;
-    });
   }
 
   toggleDropdown() {

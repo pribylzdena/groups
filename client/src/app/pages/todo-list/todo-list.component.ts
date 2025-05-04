@@ -25,7 +25,7 @@ export class TodoListComponent implements OnInit {
 
   constructor(taskService: TaskService, route: ActivatedRoute) {
     this.taskService = taskService;
-    this.tasks = this.taskService.getAllTasks();
+    //this.tasks = this.taskService.getAllTasks();
     this.route = route;
   }
 
@@ -34,6 +34,10 @@ export class TodoListComponent implements OnInit {
       this.groupId = Number(params.get('groupId'));
     });
 
+    this.loadTasks();
+  }
+
+  loadTasks() {
     this.taskService.getTasksFromApi(this.groupId).subscribe({
       next: (response) => {
         console.log(response);
@@ -116,7 +120,14 @@ export class TodoListComponent implements OnInit {
     task.id = 0;
     this.tasks.push(task);
 
-    this.taskService.createTask(task, this.groupId);
+    this.taskService.createTask(task, this.groupId).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
 
     this.selectedTask = null;
   }
@@ -127,7 +138,15 @@ export class TodoListComponent implements OnInit {
       this.tasks[index] = task;
     }
 
-    this.taskService.updateTask(task, this.groupId);
+    this.taskService.updateTask(task, this.groupId).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
+
     this.selectedTask = null;
   }
 }

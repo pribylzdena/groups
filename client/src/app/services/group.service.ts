@@ -54,8 +54,8 @@ export class GroupService {
     return this.http.get<any[]>(`${environment.apiUrl}/api/Groups`);
   }
 
-  getGroupFromApi(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/Groups/{groupId}`);
+  getGroupFromApi(id: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/Groups/${id}`);
   }
 
   createGroup(name: string): Observable<any> {

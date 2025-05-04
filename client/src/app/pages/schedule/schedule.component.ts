@@ -1,13 +1,10 @@
-import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ScheduleSidebarComponent } from '@components/schedule-sidebar/schedule-sidebar.component';
 import { Event } from '@models/event';
-import {ActivatedRoute} from '@angular/router';
-import {GroupService} from '@app/services/group.service';
-import {Note} from '@models/note';
-import {EventService} from '@app/services/event.service';
-
-declare var bootstrap: any;
+import { ActivatedRoute } from '@angular/router';
+import { GroupService } from '@app/services/group.service';
+import { EventService } from '@app/services/event.service';
 
 interface DayInfo {
   date: Date;
@@ -38,13 +35,12 @@ export class ScheduleComponent implements OnInit {
 
   events: Event[] = [];
   selectedEvent: Event | null = null;
-  private eventModal: any = null;
+  showEventDetails: boolean = false;
 
   constructor(groupService: GroupService, eventService: EventService, route: ActivatedRoute) {
     this.route = route;
     this.groupService = groupService;
     this.eventService = eventService;
-    this.loadData();
 
     this.currentStartDate = this.getStartOfWeek(this.currentDate);
     this.generateWeekDays();
@@ -52,16 +48,6 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
-
-    setTimeout(() => {
-      const modalElement = document.getElementById('eventDetailModal');
-      if (modalElement && typeof bootstrap !== 'undefined') {
-        this.eventModal = new bootstrap.Modal(modalElement);
-      }
-      else {
-        console.error('Modal element or bootstrap not found!');
-      }
-    }, 500);
   }
 
   changeWeek(direction: number): void {
@@ -138,6 +124,7 @@ export class ScheduleComponent implements OnInit {
     const startMinute = new Date(event.startsAt).getMinutes();
     return (startHour + startMinute / 60) * (100 / 24);
   }
+
   calculateEventHeight(event: Event): number {
     const startTime = new Date(event.startsAt).getTime();
     const endTime = new Date(event.endsAt).getTime();
@@ -146,9 +133,11 @@ export class ScheduleComponent implements OnInit {
   }
 
   formatEventTime(event: Event): string {
+    if (!event || !event.startsAt || !event.endsAt) return '';
+
     const options: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
-    const start = event.startsAt.toLocaleTimeString('cs-CZ', options);
-    const end = event.endsAt.toLocaleTimeString('cs-CZ', options);
+    const start = new Date(event.startsAt).toLocaleTimeString('cs-CZ', options);
+    const end = new Date(event.endsAt).toLocaleTimeString('cs-CZ', options);
     return `${start} - ${end}`;
   }
 
@@ -160,14 +149,16 @@ export class ScheduleComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     };
-    return date.toLocaleDateString('cs-CZ', options);
+    return new Date(date).toLocaleDateString('cs-CZ', options);
   }
 
   showEventDetail(event: Event): void {
     this.selectedEvent = event;
-    if (this.eventModal) {
-      this.eventModal.show();
-    }
+    this.showEventDetails = true;
+  }
+
+  closeEventDetail(): void {
+    this.showEventDetails = false;
   }
 
   editEvent(event: Event | null): void {
@@ -193,15 +184,19 @@ export class ScheduleComponent implements OnInit {
   loadData() {
     this.route.parent?.paramMap.subscribe(params => {
       this.groupId = Number(params.get('groupId'));
+      this.loadEvents();
     });
-
-    this.loadEvents();
   }
 
   loadEvents() {
+    if (this.groupId === null) {
+      console.error('GroupId is null, cannot load events');
+      return;
+    }
+
     this.eventService.getEventsFromApi(this.groupId).subscribe({
       next: (response) => {
-        console.log(response);
+        console.log('Loaded events:', response);
         this.events = response.map(e => new Event(e.id, e.name, new Date(e.startsAt), new Date(e.endsAt), e.status, e.color, e.participants));
       },
       error: (error) => {

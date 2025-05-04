@@ -14,6 +14,7 @@ namespace WebApplication1.Controllers
     {
         private DB context = new DB();
 
+
         [HttpGet]
         public IActionResult FindAll()
         {
@@ -38,8 +39,15 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
         {
-            Models.Group groupEntity = this.context.groups.Find(id);
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
 
+
+            Models.Group groupEntity = this.context.groups.Find(id);
             if (groupEntity == null)
             {
                 return NotFound(new { message = "Group not found" });

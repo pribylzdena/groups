@@ -11,6 +11,7 @@ using static Google.Protobuf.Reflection.UninterpretedOption.Types;
 
 namespace WebApplication1.Controllers
 {
+    [Secured]
     [Route("api")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -29,15 +30,17 @@ namespace WebApplication1.Controllers
         public IActionResult FindAll(int groupId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
-            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
+                Console.WriteLine($"User with id: {userId} not found");
                 return NotFound(new { message = "User not found" });
             }
 
             var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
             if (group == null)
             {
+                Console.WriteLine("Group not found");
                 return NotFound(new { message = "Group not found" });
             }
 
@@ -131,18 +134,21 @@ namespace WebApplication1.Controllers
 
             var response = new TaskResponseModel(newTask);
 
-            foreach (var item in request.asignees)
+            if (request.asignees != null)
             {
-                if (this.context.users.Contains(item))
+                foreach (var item in request.asignees)
                 {
-                    var TaskAsignee = new TaskAssignee();
-                    TaskAsignee.user_id = item.id;
-                    TaskAsignee.task_id = newTask.id;
-                    this.context.tasks_assignees.Add(TaskAsignee);
+                    if (this.context.users.Contains(item))
+                    {
+                        var TaskAsignee = new TaskAssignee();
+                        TaskAsignee.user_id = item.id;
+                        TaskAsignee.task_id = newTask.id;
+                        this.context.tasks_assignees.Add(TaskAsignee);
 
-                    //
+                        //
 
-                    response.assignees.Add(item);
+                        response.assignees.Add(item);
+                    }
                 }
             }
 

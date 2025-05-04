@@ -1,21 +1,76 @@
-<button (click)="toggleSidebar()" class="add-btn btn-primary">+ Add new</button>
+<button (click)="toggleSidebar()" class="add-btn">
+  <span class="btn-icon">+</span>
+  <span class="btn-text">Přidat událost</span>
+</button>
 
-<div class="sidebar bg-secondary" [class.open]="isOpen">
-  <button class="close-btn" (click)="toggleSidebar()">×</button>
-  <form>
+<div class="sidebar" [class.open]="isOpen">
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Nová událost</h2>
+    <button class="close-btn" (click)="toggleSidebar()" aria-label="Zavřít">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
 
-    <input type="color" class="bg-secondary color-picker" />
+  <form [formGroup]="eventForm" (ngSubmit)="createSchedule($event)">
+    <div class="form-group">
+      <label for="event-color">Barva události</label>
+      <input type="color" id="event-color" class="color-picker" formControlName="eventColor" />
+      <div class="error" *ngIf="eventForm.get('eventColor')?.invalid && eventForm.get('eventColor')?.dirty">
+        Vyberte barvu události
+      </div>
+    </div>
 
-    <label>Název udalosti</label>
-    <input type="text"/>
+    <div class="form-group">
+      <label for="event-name">Název události</label>
+      <input type="text" id="event-name" formControlName="eventName" placeholder="Zadejte název události" />
+      <div class="error" *ngIf="eventForm.get('eventName')?.invalid && eventForm.get('eventName')?.dirty">
+        Název události je povinný
+      </div>
+    </div>
 
-    <label>Zacatek</label>
-    <input type="date" />
+    <div class="form-row">
+      <div class="form-group">
+        <label for="event-start">Začátek</label>
+        <input type="datetime-local" id="event-start" formControlName="eventStart" (change)="validateDates()" />
+        <div class="error" *ngIf="eventForm.get('eventStart')?.invalid && eventForm.get('eventStart')?.dirty">
+          Zadejte datum a čas začátku
+        </div>
+      </div>
 
-    <label>Konec</label>
-    <input type="date" />
+      <div class="form-group">
+        <label for="event-end">Konec</label>
+        <input type="datetime-local" id="event-end" formControlName="eventEnd" (change)="validateDates()" />
+        <div class="error" *ngIf="eventForm.get('eventEnd')?.invalid && eventForm.get('eventEnd')?.dirty">
+          Zadejte datum a čas konce
+        </div>
+      </div>
+    </div>
 
-    <button type="submit" class="bg-white text-black">Uložit</button>
+    <div class="error date-error" *ngIf="dateError">{{ dateError }}</div>
+
+    <div class="form-group">
+      <label for="event-description">Popis</label>
+      <textarea id="event-description" formControlName="eventDescription" rows="3" placeholder="Popis události"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="event-priority">Priorita</label>
+      <select id="event-priority" class="priority-select" formControlName="eventPriority">
+        <option value="low">Nízká</option>
+        <option value="medium">Střední</option>
+        <option value="high">Vysoká</option>
+      </select>
+      <div class="error" *ngIf="eventForm.get('eventPriority')?.invalid && eventForm.get('eventPriority')?.dirty">
+        Vyberte prioritu
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="toggleSidebar()">Zrušit</button>
+      <button type="submit" class="btn-save" [disabled]="eventForm.invalid">Uložit</button>
+    </div>
   </form>
 </div>
 
