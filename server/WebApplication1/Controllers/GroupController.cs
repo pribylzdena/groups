@@ -16,7 +16,6 @@ namespace WebApplication1.Controllers
     {
         private DB context = new DB();
 
-
         [HttpGet]
         public IActionResult FindAll()
         {
@@ -27,9 +26,19 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            var groups = this.context.groups.Where(g => g.created_by == currentUser.id).ToList();
-
             var allGroupMembers = this.context.group_members.ToList();
+
+
+            var userGroupIds = allGroupMembers
+                .Where(gm => gm.user_id == currentUser.id)
+                .Select(gm => gm.group_id)
+                .Distinct()
+                .ToList();
+
+            var groups = this.context.groups
+                .Where(g => userGroupIds.Contains(g.id))
+                .ToList();
+
 
             List<GroupResponseModel> models = new List<GroupResponseModel>();
             foreach (var group in groups)
