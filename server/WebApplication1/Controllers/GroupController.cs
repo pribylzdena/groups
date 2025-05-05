@@ -166,19 +166,13 @@ namespace WebApplication1.Controllers
                 .Where(u => u.group_id == group.id && !newMemberIds.Contains(u.user_id))
                 .ToList();
 
-            foreach (var member in membersForDelete)
-            {
-                this.context.group_members.Remove(member);
-            }
-
-            foreach (var member in membersToAdd)
-            {
-                this.context.group_members.Add(member);
-            }
+            this.context.group_members.RemoveRange(membersForDelete);
+            this.context.group_members.AddRange(membersToAdd);
 
             this.context.SaveChanges();
 
             return Ok();
         }
+        
     }
 }
