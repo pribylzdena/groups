@@ -5,7 +5,6 @@ namespace WebApplication1.RequestModels
 {
     public class TaskRequest
     {
-        [Required]
         public string name { get; set; }
         public string? description { get; set; }
         public int? group_id { get; set; }
