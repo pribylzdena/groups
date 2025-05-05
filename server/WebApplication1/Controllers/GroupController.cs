@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
@@ -8,7 +9,7 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api/[controller]")]
     [ApiController]
     public class GroupsController : ControllerBase
@@ -19,7 +20,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public IActionResult FindAll()
         {
-            int id = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int id = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User? currentUser = this.context.users.FirstOrDefault(u => u.id == id);
             if (currentUser == null)
             {
@@ -73,7 +74,7 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CreateGroupRequest request)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -111,7 +112,10 @@ namespace WebApplication1.Controllers
         [HttpPut("{groupId}")]
         public IActionResult Edit(int groupId, [FromBody] EditGroupRequest request)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            Console.WriteLine("Edit group action started");
+            Console.WriteLine(JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
+
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -126,26 +130,39 @@ namespace WebApplication1.Controllers
             }
 
             group.name = request.name;
-            this.context.group_members.RemoveRange(this.context.group_members.Where(gm => gm.group_id == groupId));
 
-            this.context.SaveChanges();
+            var actualMembers = request.members;
 
-            var response = new GroupResponseModel(group);
-
-
-            foreach (var item in request.groupMembers)
+            List<GroupMember> membersToAdd = new List<GroupMember>();
+            List<int> newMemberIds = new List<int>();
+            foreach (var item in request.members)
             {
-                Console.WriteLine(item.user_id);
-                User? user = this.context.users.Find(item.user_id);
-                if (user != null)
-                {
-                    response.groupMembers.Add(new GroupMemberResponseModel(item, user));
-                    this.context.group_members.Add(item);
-                }
+                newMemberIds.Add(item.user.id);
+
+                GroupMember member = new GroupMember();
+                member.group_id = group.id;
+                member.user_id = item.user.id;
+                member.role = item.role;
+                membersToAdd.Add(member);
+            }
+
+            List<GroupMember> membersForDelete = this.context.group_members
+                .Where(u => u.group_id == group.id && !newMemberIds.Contains(u.user_id))
+                .ToList();
+
+            foreach (var member in membersForDelete)
+            {
+                this.context.group_members.Remove(member);
+            }
+
+            foreach (var member in membersToAdd)
+            {
+                this.context.group_members.Add(member);
             }
 
             this.context.SaveChanges();
-            return Ok(response);
+
+            return Ok();
         }
     }
 }

@@ -166,19 +166,8 @@ export class ScheduleComponent implements OnInit {
     console.log('Editing event:', event);
   }
 
-  getStatusClass(status: string | undefined): string {
+  getStatusClass(status: number | undefined): string {
     /*if (!status)*/ return 'bg-secondary';
-
-    switch (status.toLowerCase()) {
-      case 'confirmed':
-        return 'bg-success';
-      case 'pending':
-        return 'bg-warning';
-      case 'cancelled':
-        return 'bg-danger';
-      default:
-        return 'bg-secondary';
-    }
   }
 
   loadData() {

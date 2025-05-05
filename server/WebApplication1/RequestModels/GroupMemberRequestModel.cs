@@ -1,15 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebApplication1.Models;
 using WebApplication1.ResponseModels;
 
 namespace WebApplication1.RequestModels
 {
-    public class EditGroupRequest
+    public class GroupMemberRequestModel
     {
         [Required]
-        public string name { get; set; }
+        public string role { get; set; }
         [Required]
-        public List<GroupMemberRequestModel> members { get; set; }
-
+        public UserRequestModel user { get; set; }
     }
 }

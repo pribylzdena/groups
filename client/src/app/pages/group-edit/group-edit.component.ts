@@ -33,8 +33,8 @@ export class GroupEditComponent implements OnInit {
   private notificationService: NotificationService;
   groupId: number | null = null;
 
-  groupForm!: FormGroup; // Using non-null assertion to fix initialization error
-  group!: Group; // Using non-null assertion
+  groupForm!: FormGroup;
+  group!: Group;
   allUsers: User[] = [];
   filteredUsers: User[] = [];
 
@@ -58,7 +58,6 @@ export class GroupEditComponent implements OnInit {
     this.userService = userService;
     this.notificationService = notificationService;
 
-    // Initialize the form here
     this.groupForm = this.createForm();
   }
 
@@ -73,10 +72,12 @@ export class GroupEditComponent implements OnInit {
   }
 
   loadData() {
-    this.isLoading = true; // Set loading state
+    this.isLoading = true;
 
     this.route.paramMap.subscribe((params) => {
       this.groupId = Number(params.get('groupId'));
+
+      console.log(this.groupId);
 
       if (this.groupId) {
         this.loadGroup();
@@ -92,7 +93,11 @@ export class GroupEditComponent implements OnInit {
     this.groupService.getGroupFromApi(this.groupId).subscribe({
       next: (response) => {
         this.group = response;
-        // Update form with group data
+
+        if (!this.group.members) {
+          this.group.members = [];
+        }
+
         this.groupForm.patchValue({
           name: this.group.name
         });
