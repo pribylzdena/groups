@@ -30,7 +30,6 @@ export class ScheduleComponent implements OnInit {
   currentStartDate: Date;
   weekDays: DayInfo[] = [];
 
-  isWeekView: boolean = true;
   hours: number[] = Array.from({ length: 24 }, (_, i) => i);
 
   events: Event[] = [];
