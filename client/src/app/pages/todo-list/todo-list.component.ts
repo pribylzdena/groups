@@ -109,6 +109,7 @@ export class TodoListComponent implements OnInit {
   saveTask(task: Task): void {
     console.log("Save task called, isCreateMode:", this.taskSidebar?.isCreateMode);
 
+
     if (this.taskSidebar?.isCreateMode) {
       this.onTaskCreated(task);
     } else {
