@@ -45,12 +45,12 @@ namespace WebApplication1.Controllers
             {
                 var model = new GroupResponseModel(group);
 
-                model.groupMembers = new List<GroupMemberResponseModel>();
+                model.members = new List<GroupMemberResponseModel>();
 
                 foreach (var item in allGroupMembers.Where(gm => gm.group_id == group.id))
                 {
                     var user = this.context.users.Find(item.user_id);
-                    model.groupMembers.Add(new GroupMemberResponseModel(item, user));
+                    model.members.Add(new GroupMemberResponseModel(item, user));
                 }
 
                 models.Add(model);
@@ -74,10 +74,17 @@ namespace WebApplication1.Controllers
             {
                 return NotFound(new { message = "Group not found" });
             }
+            var allGroupMembers = this.context.group_members.ToList();
+            var response = new GroupResponseModel(groupEntity);
 
-            var group = new GroupResponseModel(groupEntity);
+            foreach (var item in allGroupMembers.Where(gm => gm.group_id == groupEntity.id))
+            {
+                var user = this.context.users.Find(item.user_id);
+                response.members.Add(new GroupMemberResponseModel(item, user));
+            }
 
-            return Ok(group);
+
+            return Ok(response);
         }
 
         [HttpPost]

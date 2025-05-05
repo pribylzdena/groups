@@ -6,14 +6,14 @@ namespace WebApplication1.ResponseModels
     {
         public int id { get; set; }
         public string name { get; set; }
-        public List<GroupMemberResponseModel> groupMembers { get; set; }
+        public List<GroupMemberResponseModel> members { get; set; }
 
 
         public GroupResponseModel(Group group)
         {
             id = group.id;
             name = group.name;
-            groupMembers = [];
+            members = [];
         }
 
         
