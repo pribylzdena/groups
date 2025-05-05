@@ -150,11 +150,8 @@ namespace WebApplication1.Controllers
             var actualMembers = request.members;
 
             List<GroupMember> membersToAdd = new List<GroupMember>();
-            List<int> newMemberIds = new List<int>();
             foreach (var item in request.members)
             {
-                newMemberIds.Add(item.user.id);
-
                 GroupMember member = new GroupMember();
                 member.group_id = group.id;
                 member.user_id = item.user.id;
@@ -163,7 +160,7 @@ namespace WebApplication1.Controllers
             }
 
             List<GroupMember> membersForDelete = this.context.group_members
-                .Where(u => u.group_id == group.id && !newMemberIds.Contains(u.user_id))
+                .Where(u => u.group_id == group.id)
                 .ToList();
 
             this.context.group_members.RemoveRange(membersForDelete);
