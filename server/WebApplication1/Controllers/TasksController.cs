@@ -219,31 +219,36 @@ namespace WebApplication1.Controllers
             
             var assigneesToAdd = new List<User>();
             var taskAssignees = new List<TaskAssignee>();
-            foreach (var item in request.assignees)
+
+            if (request.assignees != null)
             {
-                var member = new User();
-                member.email = item.email;
-                member.name = item.name;
-                member.password = item.password;
-                member.created_at = item.created_at;
-                member.logo = item.logo;
-                member.updated_at = DateTime.UtcNow;
-                assigneesToAdd.Add(member);
 
-                //
+                foreach (var item in request.assignees)
+                {
+                    var member = new User();
+                    member.email = item.email;
+                    member.name = item.name;
+                    member.password = item.password;
+                    member.created_at = item.created_at;
+                    member.logo = item.logo;
+                    member.updated_at = DateTime.UtcNow;
+                    assigneesToAdd.Add(member);
 
-                var assignee = new TaskAssignee();
-                assignee.task_id = task.id;
-                assignee.user_id = currentUser.id;
-                taskAssignees.Add(assignee);
+                    //
+
+                    var assignee = new TaskAssignee();
+                    assignee.task_id = task.id;
+                    assignee.user_id = currentUser.id;
+                    taskAssignees.Add(assignee);
+                }
+
+                var assigneesForDelete = this.context.tasks_assignees
+                    .Where(u => u.task_id == task.id)
+                    .ToList();
+
+                this.context.tasks_assignees.RemoveRange(assigneesForDelete);
+                this.context.tasks_assignees.AddRange(taskAssignees);
             }
-
-            var assigneesForDelete = this.context.tasks_assignees
-                .Where(u => u.task_id == task.id)
-                .ToList();
-
-            this.context.tasks_assignees.RemoveRange(assigneesForDelete);
-            this.context.tasks_assignees.AddRange(taskAssignees);
 
             this.context.SaveChanges();
 
