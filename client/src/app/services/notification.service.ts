@@ -5,6 +5,8 @@ import { Observable, of } from 'rxjs';
 import { Notification } from '@models/notification';
 import { User } from '@models/user';
 import { NotificationRecipient } from '@models/notification-recipient';
+import {environment} from '../../environments/environment.development';
+import {Task} from '@models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -19,40 +21,16 @@ export class NotificationService {
     return of(this.getMockNotifications());
   }
 
-  getNotification(id: number): Observable<Notification> {
-    // V reálné aplikaci byste použili:
-    // return this.http.get<Notification>(`${this.apiUrl}/${id}`);
-    const notification = this.getMockNotifications().find(n => n.id === id);
-    return of(notification as Notification);
+  getNotificationsFromApi(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/notifications`);
   }
 
-  createNotification(notification: Notification): Observable<Notification> {
-    // V reálné aplikaci byste použili:
-    // return this.http.post<Notification>(this.apiUrl, notification);
-    return of({...notification, id: Math.floor(Math.random() * 1000)});
+  createNotification(notification: Notification): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/notifications`, notification);
   }
 
-  updateNotification(notification: Notification): Observable<any> {
-    // V reálné aplikaci byste použili:
-    // return this.http.put(`${this.apiUrl}/${notification.id}`, notification);
-    return of({success: true});
-  }
-
-  updateNotificationReadStatus(notificationId: number, recipientId: number, isRead: boolean): Observable<any> {
-    // V reálné aplikaci byste použili:
-    // const url = `${this.apiUrl}/${notificationId}/recipients/${recipientId}/read`;
-    // if (isRead) {
-    //   return this.http.post(url, {});
-    // } else {
-    //   return this.http.delete(url);
-    // }
-    return of({success: true});
-  }
-
-  deleteNotification(id: number): Observable<any> {
-    // V reálné aplikaci byste použili:
-    // return this.http.delete(`${this.apiUrl}/${id}`);
-    return of({success: true});
+  readNotification(notification: Notification) {
+    return this.http.put<any[]>(`${environment.apiUrl}/api/notifications/${notification.id}`, notification);
   }
 
   private getMockNotifications(): Notification[] {
