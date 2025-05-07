@@ -9,6 +9,8 @@ namespace WebApplication1.ResponseModels
         public string text { get; set; }
         public string subject { get; set; }
         public int type { get; set; }
+        
+        public List<RecipientResponseModel> recipients { get; set; }
 
         public NotificationResponseModel(Notification notifications)
         {
@@ -17,6 +19,7 @@ namespace WebApplication1.ResponseModels
             this.text = notifications.text;
             this.subject = notifications.subject;
             this.type = notifications.type;
+            this.recipients = [];
         }
     }
 }
