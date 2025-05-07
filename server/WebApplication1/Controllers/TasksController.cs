@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
         [HttpGet("groups/{groupId}/tasks")]
         public IActionResult FindAll(int groupId)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -174,7 +174,7 @@ namespace WebApplication1.Controllers
         [HttpPut("groups/{groupId}/tasks/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
