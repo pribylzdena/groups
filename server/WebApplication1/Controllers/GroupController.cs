@@ -35,9 +35,7 @@ namespace WebApplication1.Controllers
                 .Distinct()
                 .ToList();
 
-            var groups = this.context.groups
-                .Where(g => userGroupIds.Contains(g.id))
-                .ToList();
+            var groups = this.context.groups.Where(g => userGroupIds.Contains(g.id)).ToList();
 
 
             List<GroupResponseModel> models = new List<GroupResponseModel>();

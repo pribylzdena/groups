@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPut("user/{id}/edit")]
-        public IActionResult Edit(int id, UserRequestModel request)
+        public IActionResult Edit(int id, [FromBody]UserRequestModel request)
         {
             Models.User? user = this.context.users.FirstOrDefault(x => x.id == id);
 

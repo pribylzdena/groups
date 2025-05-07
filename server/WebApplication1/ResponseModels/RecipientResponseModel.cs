@@ -9,6 +9,7 @@ namespace WebApplication1.ResponseModels
         public DateTime? readAt { get; set; }
         public UserResponseModel user { get; set; }
 
+
         public RecipientResponseModel(UsersNotification data, User user)
         {
             this.id = data.id;
