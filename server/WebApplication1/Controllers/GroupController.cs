@@ -147,7 +147,7 @@ namespace WebApplication1.Controllers
 
             group.name = request.name;
 
-            var actualMembers = request.members;
+            //var actualMembers = request.members;
 
             List<GroupMember> membersToAdd = new List<GroupMember>();
             foreach (var item in request.members)

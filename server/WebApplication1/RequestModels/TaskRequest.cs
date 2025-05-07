@@ -21,6 +21,6 @@ namespace WebApplication1.RequestModels
         public DateTime? deleted_at { get; set; }
         public int? parent_id { get; set; }
         public DateTime? reminder_at { get; set; }
-        public List<User>? asignees { get; set; }
+        public List<User>? assignees { get; set; }
     }
 }

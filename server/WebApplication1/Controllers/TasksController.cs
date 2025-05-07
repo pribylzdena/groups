@@ -11,7 +11,7 @@ using static Google.Protobuf.Reflection.UninterpretedOption.Types;
 
 namespace WebApplication1.Controllers
 {
-    [Secured]
+    //[Secured]
     [Route("api")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -29,7 +29,7 @@ namespace WebApplication1.Controllers
         [HttpGet("groups/{groupId}/tasks")]
         public IActionResult FindAll(int groupId)
         {
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -83,7 +83,21 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
+
+            var taskAssignees = this.context.tasks_assignees.Where(x => x.task_id == id).ToList();
+            var taskUsers = new List<User>();
+            //taskUsers.AddRange(this.context.users.Contains(id == taskAssignees.ForEach()));
+
+            foreach (var item in taskAssignees)
+            {
+                var user = this.context.users.FirstOrDefault(u => u.id == item.user_id);
+                if (user != null)
+                {
+                    taskUsers.Add(user);
+                }
+            }
             var task = new TaskResponseModel(taskEntity, GetParent(taskEntity.id));
+            task.assignees = taskUsers;
 
             return Ok(task);
         }
@@ -134,9 +148,9 @@ namespace WebApplication1.Controllers
 
             var response = new TaskResponseModel(newTask);
 
-            if (request.asignees != null)
+            if (request.assignees != null)
             {
-                foreach (var item in request.asignees)
+                foreach (var item in request.assignees)
                 {
                     if (this.context.users.Contains(item))
                     {
@@ -160,7 +174,7 @@ namespace WebApplication1.Controllers
         [HttpPut("groups/{groupId}/tasks/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
         {
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -200,7 +214,39 @@ namespace WebApplication1.Controllers
             this.context.SaveChanges();
 
             var response = new TaskResponseModel(task);
-            response.assignees = request.asignees;
+            response.assignees = request.assignees;
+
+            
+            var assigneesToAdd = new List<User>();
+            var taskAssignees = new List<TaskAssignee>();
+            foreach (var item in request.assignees)
+            {
+                var member = new User();
+                member.email = item.email;
+                member.name = item.name;
+                member.password = item.password;
+                member.created_at = item.created_at;
+                member.logo = item.logo;
+                member.updated_at = DateTime.UtcNow;
+                assigneesToAdd.Add(member);
+
+                //
+
+                var assignee = new TaskAssignee();
+                assignee.task_id = task.id;
+                assignee.user_id = currentUser.id;
+                taskAssignees.Add(assignee);
+            }
+
+            var assigneesForDelete = this.context.tasks_assignees
+                .Where(u => u.task_id == task.id)
+                .ToList();
+
+            this.context.tasks_assignees.RemoveRange(assigneesForDelete);
+            this.context.tasks_assignees.AddRange(taskAssignees);
+
+            this.context.SaveChanges();
+
             return Ok(response);
         }
     }
