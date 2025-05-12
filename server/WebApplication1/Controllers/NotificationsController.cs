@@ -106,8 +106,6 @@ namespace WebApplication1.Controllers
 
             UserNtf.user_id = userId;
             UserNtf.notification_id = newNtf.id;
-            //this.context.users_notifications.Add(UserNtf);
-            //this.context.SaveChanges();
 
             var response = new NotificationResponseModel(newNtf);
 
@@ -116,6 +114,7 @@ namespace WebApplication1.Controllers
                 response.recipients.Add(new RecipientResponseModel(UserNtf, this.context.users.Find(UserNtf.user_id)));
                 this.context.users_notifications.Add(UserNtf);
                 this.context.SaveChanges();
+                return Ok(response);
             }
 
             foreach (var item in request.recipients!)
@@ -126,7 +125,7 @@ namespace WebApplication1.Controllers
 
                 var newUser = new User();
                 newUser = this.context.users.Find(item.user.id);
-                //if (newUser == null) continue;
+                if (newUser == null) continue;
 
                 response.recipients.Add(new RecipientResponseModel(newUserNtf, newUser));
                 this.context.users_notifications.Add(newUserNtf);
