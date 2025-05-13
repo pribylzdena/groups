@@ -77,7 +77,7 @@ namespace WebApplication1.Controllers
         public IActionResult FindById(int id)
         {
             Models.Task? taskEntity = this.context.tasks.Find(id);
-            Models.Task? parentTaskEntity = this.context.tasks.Find(taskEntity.parent_id); 
+            //Models.Task? parentTaskEntity = this.context.tasks.Find(taskEntity.parent_id); 
 
             if (taskEntity == null)
             {

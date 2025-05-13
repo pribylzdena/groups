@@ -112,7 +112,7 @@ namespace WebApplication1.Controllers
                 response.recipients.Add(new RecipientResponseModel(UserNtf, this.context.users.Find(UserNtf.user_id)));
                 this.context.users_notifications.Add(UserNtf);
                 this.context.SaveChanges();
-                return Ok(response);
+                return CreatedAtAction(nameof(Create), response);
             }
 
             foreach (var item in request.recipients!)

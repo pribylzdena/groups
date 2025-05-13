@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using WebApplication1.Models;
@@ -10,7 +11,7 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api")]
     [ApiController]
     public class ScheduledEventsController : ControllerBase
@@ -20,7 +21,7 @@ namespace WebApplication1.Controllers
         [HttpGet("groups/{groupId}/events")]
         public IActionResult FindAll(int groupId)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -67,15 +68,58 @@ namespace WebApplication1.Controllers
                 }
             }
 
+            return Ok(response);
+        }
 
+
+
+        [HttpGet("groups/{groupId}/{id}")]
+        public IActionResult FindById(int id, int groupId)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+
+
+            ScheduledEvent? _event = this.context.scheduled_events.Find(id);
+            if (_event == null)
+            {
+                return NotFound(new { message = "notification not found" });
+            }
+
+            var response = new ScheduledEventResponseModel(_event);
+
+            List<EventParticipant>? recipients = this.context.event_participants.Where(x => x.event_id == _event.id).ToList();
+            if (recipients == null)
+            {
+                return Ok(response);
+            }
+
+            foreach (var item in recipients)
+            {
+                var user = this.context.users.FirstOrDefault(u => u.id == item.user_id);
+                response.participants.Add(new EventParticipantResponseModel(item, user));
+            }
 
             return Ok(response);
+
         }
 
         [HttpPost("groups/{groupId}/events")]
         public IActionResult Create(int groupId, [FromBody] ScheduledEventRequest request)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -145,7 +189,7 @@ namespace WebApplication1.Controllers
         [HttpPut("groups/{groupId}/events/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] ScheduledEventRequest request)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -183,7 +227,6 @@ namespace WebApplication1.Controllers
             var response = new ScheduledEventResponseModel(scheduled_event);
 
             var particpants = new List<EventParticipantResponseModel>();
-            //var eventParticipants = this.context.event_participants.Where(e => e.event_id == scheduled_event.id).ToList();
 
             foreach (var item in request.participants)
             {
