@@ -14,5 +14,7 @@ namespace WebApplication1.RequestModels
         public int status { get; set; }
         [Required]
         public string? color { get; set; }
+
+        public List<EventParticipantRequest>? participants { get; set; }
     }
 }

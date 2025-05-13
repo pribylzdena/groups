@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -11,7 +12,7 @@ using static Google.Protobuf.Reflection.UninterpretedOption.Types;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api")]
     [ApiController]
     public class TasksController : ControllerBase
@@ -222,7 +223,6 @@ namespace WebApplication1.Controllers
 
             if (request.assignees != null)
             {
-
                 foreach (var item in request.assignees)
                 {
                     var member = new User();
@@ -238,7 +238,7 @@ namespace WebApplication1.Controllers
 
                     var assignee = new TaskAssignee();
                     assignee.task_id = task.id;
-                    assignee.user_id = currentUser.id;
+                    assignee.user_id = item.id;
                     taskAssignees.Add(assignee);
                 }
 

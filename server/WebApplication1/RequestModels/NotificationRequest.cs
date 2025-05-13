@@ -10,7 +10,6 @@ namespace WebApplication1.RequestModels
         public string text { get; set; }
         public string subject { get; set; }
         public int type { get; set; }
-        //[Required]
         public List<RecipientRequest>? recipients { get; set; }
     }
 }

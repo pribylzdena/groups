@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    [Secured]
+    //[Secured]
     [Route("api")]
     [ApiController]
     public class ScheduledEventsController : ControllerBase
@@ -17,20 +20,62 @@ namespace WebApplication1.Controllers
         [HttpGet("groups/{groupId}/events")]
         public IActionResult FindAll(int groupId)
         {
-            List<ScheduledEventResponseModel> models = new List<ScheduledEventResponseModel>();
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
 
-            foreach (var item in this.context.scheduled_events)
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
             {
-                models.Add(new ScheduledEventResponseModel(item));
+                return NotFound(new { message = "User not found" });
             }
 
-            return Ok(models);
+            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            if (group == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+
+            var allEvents = this.context.scheduled_events;
+            var allParticipants = this.context.event_participants.ToList();
+            var currUserParticipants = this.context.event_participants.Where(x => x.user_id == userId).ToList();
+            var currUserEvents = new List<ScheduledEvent>();
+
+            foreach (var item in currUserParticipants)
+            {
+                ScheduledEvent? events = new ScheduledEvent();
+
+                events = allEvents.Find(item.event_id);
+                if (events != null) currUserEvents.Add(events);
+            }
+            var response = new List<ScheduledEventResponseModel>();
+
+            foreach (var item in currUserEvents)
+            {
+                response.Add(new ScheduledEventResponseModel(item));
+            }
+
+            foreach (var _event in response)
+            {
+                foreach (var recip in allParticipants)
+                {
+                    if (recip.event_id == _event.id)
+                    {
+                        var user = this.context.users.Find(recip.user_id);
+
+                        _event.participants.Add(new EventParticipantResponseModel(recip, user));
+                    }
+                }
+            }
+
+
+
+            return Ok(response);
         }
 
         [HttpPost("groups/{groupId}/events")]
         public IActionResult Create(int groupId, [FromBody] ScheduledEventRequest request)
         {
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -65,14 +110,42 @@ namespace WebApplication1.Controllers
             this.context.scheduled_events.Add(newEvent);
             this.context.SaveChanges();
 
+            var participant = new EventParticipant();
+            participant.event_id = newEvent.id;
+            participant.user_id = userId;
+
             var response = new ScheduledEventResponseModel(newEvent);
+
+            if (request.participants == null || request.participants.Count == 0)
+            {
+                response.participants.Add(new EventParticipantResponseModel(participant, this.context.users.Find(participant.user_id)));
+                this.context.event_participants.Add(participant);
+                this.context.SaveChanges();
+                return Ok(response);
+            }
+
+            foreach (var item in request.participants!)
+            {
+                var newParticipant = new EventParticipant();
+                newParticipant.user_id = item.user.id;
+                newParticipant.event_id = newEvent.id;
+
+                var newUser = new User();
+                newUser = this.context.users.Find(item.user.id);
+                if (newUser == null) continue;
+
+                response.participants.Add(new EventParticipantResponseModel(newParticipant, newUser));
+                this.context.event_participants.Add(newParticipant);
+                this.context.SaveChanges();
+            }
+
             return CreatedAtAction(nameof(Create), response);
         }
 
         [HttpPut("groups/{groupId}/events/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] ScheduledEventRequest request)
         {
-            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -108,6 +181,57 @@ namespace WebApplication1.Controllers
             this.context.SaveChanges();
 
             var response = new ScheduledEventResponseModel(scheduled_event);
+
+            var particps = new List<EventParticipantResponseModel>();
+            //var eventParticipants = this.context.event_participants.Where(e => e.event_id == scheduled_event.id).ToList();
+
+            foreach (var item in request.participants)
+            {
+                
+                var participant = new EventParticipant();
+                participant.event_id = scheduled_event.id;
+                participant.confirm = item.confirm;
+                participant.user_id = item.user.id;
+
+                var user = this.context.users.Find(item.user.id);
+
+                var model = new EventParticipantResponseModel(participant, user);
+                particps.Add(model);
+            }
+
+            //response.participants = particps;
+            var assigneesForDelete = this.context.event_participants
+                   .Where(u => u.event_id == scheduled_event.id)
+                   .ToList();
+            this.context.event_participants.RemoveRange(assigneesForDelete);
+
+            var participantsToAdd = new List<EventParticipant>();
+            var eventParticipants = new List<EventParticipant>();
+
+            if (request.participants != null)
+            {
+                foreach (var item in particps)
+                {
+                    
+                    var user = this.context.users.Find(item.user.id);
+                    var participant = new EventParticipant();
+                    participant.event_id = scheduled_event.id;
+                    participant.user_id = item.user.id;
+                    eventParticipants.Add(participant);
+
+                    this.context.event_participants.Add(participant);
+                    this.context.SaveChanges();
+
+
+                    var model = new EventParticipantResponseModel(participant, user);
+                    model.id = participant.id;
+                    response.participants.Add(model);
+                }
+
+            }
+
+            this.context.SaveChanges();
+
             return Ok(response);
         }
 

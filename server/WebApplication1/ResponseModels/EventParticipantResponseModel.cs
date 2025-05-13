@@ -10,7 +10,7 @@ namespace WebApplication1.ResponseModels
 
         public EventParticipantResponseModel(EventParticipant model, User user)
         {
-            this.id = model.Id;
+            this.id = model.id;
             this.confirm = model.confirm;
             this.user = new UserResponseModel(user);
         }

@@ -9,14 +9,12 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
-    //[Secured]
+    [Secured]
     [Route("api")]
     [ApiController]
     public class NotificationsController : ControllerBase
     {
         private DB context = new DB();
-
-
 
         [HttpGet("groups/{groupId}/notifications")]
         public IActionResult FindAll()
@@ -132,7 +130,7 @@ namespace WebApplication1.Controllers
                 this.context.SaveChanges();
             }
 
-            return Ok(response);
+            return CreatedAtAction(nameof(Create), response);
 
         }
     }
