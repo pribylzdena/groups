@@ -182,7 +182,7 @@ namespace WebApplication1.Controllers
 
             var response = new ScheduledEventResponseModel(scheduled_event);
 
-            var particps = new List<EventParticipantResponseModel>();
+            var particpants = new List<EventParticipantResponseModel>();
             //var eventParticipants = this.context.event_participants.Where(e => e.event_id == scheduled_event.id).ToList();
 
             foreach (var item in request.participants)
@@ -196,28 +196,25 @@ namespace WebApplication1.Controllers
                 var user = this.context.users.Find(item.user.id);
 
                 var model = new EventParticipantResponseModel(participant, user);
-                particps.Add(model);
+                particpants.Add(model);
             }
 
-            //response.participants = particps;
             var assigneesForDelete = this.context.event_participants
                    .Where(u => u.event_id == scheduled_event.id)
                    .ToList();
             this.context.event_participants.RemoveRange(assigneesForDelete);
 
             var participantsToAdd = new List<EventParticipant>();
-            var eventParticipants = new List<EventParticipant>();
 
             if (request.participants != null)
             {
-                foreach (var item in particps)
+                foreach (var item in particpants)
                 {
                     
                     var user = this.context.users.Find(item.user.id);
                     var participant = new EventParticipant();
                     participant.event_id = scheduled_event.id;
                     participant.user_id = item.user.id;
-                    eventParticipants.Add(participant);
 
                     this.context.event_participants.Add(participant);
                     this.context.SaveChanges();
