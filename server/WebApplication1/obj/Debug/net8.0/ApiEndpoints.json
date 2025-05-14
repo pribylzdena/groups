@@ -242,43 +242,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.NotificationsController",
-    "Method": "FindAll",
-    "RelativePath": "api/groups/{groupId}/notifications",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "groupId",
-        "Type": "",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.NotificationsController",
-    "Method": "Create",
-    "RelativePath": "api/groups/{groupId}/notifications",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "groupId",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "WebApplication1.RequestModels.NotificationRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "WebApplication1.Controllers.TasksController",
     "Method": "FindAll",
     "RelativePath": "api/groups/{groupId}/tasks",
@@ -358,6 +321,64 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
+    "Method": "FindAll",
+    "RelativePath": "api/notifications",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
+    "Method": "Create",
+    "RelativePath": "api/notifications",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "WebApplication1.RequestModels.NotificationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
+    "Method": "GetNotificationById",
+    "RelativePath": "api/notifications/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
+    "Method": "ReadNotification",
+    "RelativePath": "api/notifications/{id}/read",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApplication1.Controllers.TaskCommentsController",
     "Method": "FindAll",
     "RelativePath": "api/TaskComments",
@@ -402,6 +423,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.UsersController",
+    "Method": "FindAll",
+    "RelativePath": "api/users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

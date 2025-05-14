@@ -1,4 +1,3 @@
-// notification.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -6,7 +5,6 @@ import { Notification } from '@models/notification';
 import { User } from '@models/user';
 import { NotificationRecipient } from '@models/notification-recipient';
 import {environment} from '../../environments/environment.development';
-import {Task} from '@models/task';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +23,16 @@ export class NotificationService {
     return this.http.get<any[]>(`${environment.apiUrl}/api/notifications`);
   }
 
+  getNotificationFromApi(id: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/api/notifications/${id}`)
+  }
+
   createNotification(notification: Notification): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/api/notifications`, notification);
   }
 
   readNotification(notification: Notification) {
-    return this.http.put<any[]>(`${environment.apiUrl}/api/notifications/${notification.id}`, notification);
+    return this.http.post<any[]>(`${environment.apiUrl}/api/notifications/${notification.id}/read`, notification);
   }
 
   private getMockNotifications(): Notification[] {

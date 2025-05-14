@@ -1,3 +1,7 @@
+<header>
+  <app-global-navbar></app-global-navbar>
+</header>
+
 <div class="dashboard-form-container">
   <div class="container-fluid py-4">
     <div class="row justify-content-center">
@@ -5,87 +9,137 @@
         <div class="card border-0 shadow-lg">
           <div class="card-header bg-gradient border-0 d-flex justify-content-between align-items-center">
             <h4 class="m-0 text-white">New Message</h4>
-            <button type="button" class="btn-close btn-close-white" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" aria-label="Close" [routerLink]="['/notifications']"></button>
           </div>
 
           <div class="card-body p-4">
-            <form>
-              <!-- Title Field -->
+            <form [formGroup]="notificationForm" (ngSubmit)="sendNotification()">
               <div class="mb-4">
-                <input type="text" class="form-control form-control-lg border-0 title-input" placeholder="Message Title">
+                <input type="text" class="form-control form-control-lg border-0 title-input"
+                       placeholder="Message Title" formControlName="name">
+                <div *ngIf="isFieldInvalid('name')"
+                     class="text-danger small mt-1">Title is required</div>
               </div>
 
               <div class="row mb-4 g-3">
-                <!-- Subject Field -->
                 <div class="col-md-4">
                   <label class="form-label text-muted small">Subject</label>
-                  <input type="text" class="form-control custom-input" placeholder="Enter subject">
+                  <input type="text" class="form-control custom-input"
+                         placeholder="Enter subject" formControlName="subject">
+                  <div *ngIf="isFieldInvalid('subject')"
+                       class="text-danger small mt-1">Subject is required</div>
                 </div>
 
-                <!-- Type Dropdown -->
                 <div class="col-md-4">
                   <label class="form-label text-muted small">Type</label>
                   <div class="dropdown">
                     <button class="btn custom-dropdown w-100 d-flex justify-content-between align-items-center"
                             type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span>Select type</span>
+                      <span>{{ selectedType ? selectedType : 'Select type' }}</span>
                       <i class="bi bi-chevron-down"></i>
                     </button>
                     <ul class="dropdown-menu w-100 custom-dropdown-menu" aria-labelledby="typeDropdown">
-                      <li><a class="dropdown-item" href="#">Type 1</a></li>
-                      <li><a class="dropdown-item" href="#">Type 2</a></li>
-                      <li><a class="dropdown-item" href="#">Type 3</a></li>
+                      <li *ngFor="let type of notificationTypes">
+                        <a class="dropdown-item" href="#" (click)="selectNotificationType(type); $event.preventDefault()">{{ type }}</a>
+                      </li>
                     </ul>
                   </div>
+                  <div *ngIf="isFieldInvalid('type')"
+                       class="text-danger small mt-1">Type is required</div>
                 </div>
 
-                <!-- Group Dropdown -->
                 <div class="col-md-4">
                   <label class="form-label text-muted small">Group</label>
                   <div class="dropdown">
-                    <button class="btn custom-dropdown w-100 d-flex justify-content-between align-items-center"
-                            type="button" id="groupDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span>Select group</span>
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
-                    <ul class="dropdown-menu w-100 custom-dropdown-menu" aria-labelledby="groupDropdown">
-                      <li><a class="dropdown-item" href="#">Group 1</a></li>
-                      <li><a class="dropdown-item" href="#">Group 2</a></li>
-                      <li><a class="dropdown-item" href="#">Group 3</a></li>
+                    <div class="input-group">
+                      <input type="text" class="form-control custom-input"
+                             placeholder="Search for a group..."
+                             [(ngModel)]="groupSearchQuery"
+                             [ngModelOptions]="{standalone: true}"
+                             (input)="onGroupSearch()">
+                      <button class="btn custom-dropdown d-flex justify-content-between align-items-center"
+                              type="button" (click)="showGroupDropdown = !showGroupDropdown">
+                        <i class="bi bi-chevron-down"></i>
+                      </button>
+                    </div>
+                    <ul class="dropdown-menu w-100 custom-dropdown-menu" [class.show]="showGroupDropdown && filteredGroups.length > 0">
+                      <li *ngFor="let group of filteredGroups">
+                        <a class="dropdown-item" href="#" (click)="selectGroup(group); $event.preventDefault()">
+                          {{ group.name }}
+                        </a>
+                      </li>
+                      <li *ngIf="filteredGroups.length === 0 && groupSearchQuery">
+                        <span class="dropdown-item disabled">No matching groups found</span>
+                      </li>
                     </ul>
                   </div>
                 </div>
               </div>
 
-              <!-- Message Content -->
               <div class="mb-4">
                 <label class="form-label text-muted small">Message Content</label>
-                <textarea class="form-control custom-textarea" rows="10" placeholder="Enter your message here..."></textarea>
+                <textarea class="form-control custom-textarea" rows="10"
+                          placeholder="Enter your message here..."
+                          formControlName="text"></textarea>
+                <div *ngIf="isFieldInvalid('text')"
+                     class="text-danger small mt-1">Message content is required</div>
               </div>
 
-              <!-- Recipients -->
               <div class="mb-4">
                 <label class="form-label text-muted small">Recipients</label>
                 <div class="recipients-container p-3 rounded">
+                  <div class="mb-3">
+                    <div class="input-group">
+                      <input type="text" class="form-control custom-input"
+                             placeholder="Search for recipients..."
+                             [(ngModel)]="userSearchQuery"
+                             [ngModelOptions]="{standalone: true}"
+                             (input)="onUserSearch()">
+                      <button type="button" class="btn recipient-add-btn">
+                        <i class="bi bi-person-plus"></i> Add
+                      </button>
+                    </div>
+                    <ul class="dropdown-menu w-100 custom-dropdown-menu" [class.show]="showUserDropdown && filteredUsers.length > 0">
+                      <li *ngFor="let user of filteredUsers">
+                        <a class="dropdown-item" href="#" (click)="addRecipient(user); $event.preventDefault()">
+                          {{ user.name }} ({{ user.email }})
+                        </a>
+                      </li>
+                      <li *ngIf="filteredUsers.length === 0 && userSearchQuery">
+                        <span class="dropdown-item disabled">No matching users found</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="mb-3" *ngIf="targetGroup">
+                    <div class="d-flex align-items-center group-tag p-2 rounded">
+                      <span class="me-2"><i class="bi bi-people-fill"></i> Group:</span>
+                      <span class="group-name">{{ targetGroup.name }}</span>
+                      <button type="button" class="btn-close ms-auto" (click)="removeGroup()"></button>
+                    </div>
+                  </div>
+
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="recipients-list d-flex flex-wrap gap-2">
-                      <span class="recipient-tag">
-                        John Doe <i class="bi bi-x-circle"></i>
+                      <span class="recipient-tag" *ngFor="let recipient of recipients">
+                        {{ recipient.name }} <i class="bi bi-x-circle" (click)="removeRecipient(recipient)"></i>
+                      </span>
+                      <span *ngIf="recipients.length === 0 && !targetGroup" class="text-muted small">
+                        No recipients selected
                       </span>
                     </div>
-                    <button type="button" class="btn recipient-add-btn">
-                      <i class="bi bi-person-plus"></i> Add
-                    </button>
                   </div>
                 </div>
+                <div *ngIf="isFieldInvalid('recipients')"
+                     class="text-danger small mt-1">At least one recipient is required</div>
               </div>
 
-              <!-- Action Buttons -->
               <div class="d-flex justify-content-end gap-3 mt-4">
                 <button type="button" class="btn cancel-btn" [routerLink]="['/notifications']">
                   <i class="bi bi-x-circle me-2"></i> Cancel
                 </button>
-                <button type="button" class="btn primary-btn">
+                <button type="submit" class="btn primary-btn"
+                        [disabled]="notificationForm.invalid || (recipients.length === 0 && !targetGroup)">
                   <i class="bi bi-send me-2"></i> Send Message
                 </button>
               </div>

@@ -12,13 +12,13 @@ namespace WebApplication1.ResponseModels
         
         public List<RecipientResponseModel> recipients { get; set; }
 
-        public NotificationResponseModel(Notification notifications)
+        public NotificationResponseModel(Notification notification)
         {
-            this.id = notifications.id;
-            this.name = notifications.name;
-            this.text = notifications.text;
-            this.subject = notifications.subject;
-            this.type = notifications.type;
+            this.id = notification.id;
+            this.name = notification.name;
+            this.text = notification.text;
+            this.subject = notification.subject;
+            this.type = notification.type;
             this.recipients = [];
         }
     }

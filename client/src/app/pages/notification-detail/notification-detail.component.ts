@@ -3,43 +3,78 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Notification } from '@models/notification';
 import { NotificationService } from '@app/services/notification.service';
+import {GlobalNavbarComponent} from '@components/global-navbar/global-navbar.component';
 
 @Component({
   selector: 'app-notification-detail',
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink
+    RouterLink,
+    GlobalNavbarComponent
   ],
   templateUrl: './notification-detail.component.html',
   styleUrls: ['./notification-detail.component.scss']
 })
 export class NotificationDetailComponent implements OnInit {
+  private id: number | null = null;
   notification: Notification | undefined;
 
-  constructor(
-    private route: ActivatedRoute,
-    private notificationService: NotificationService
-  ) {}
+  private read = false;
+
+  private route: ActivatedRoute;
+  private notificationService: NotificationService;
+
+  constructor(route: ActivatedRoute, notificationService: NotificationService) {
+    this.route = route;
+    this.notificationService = notificationService;
+
+    this.loadData();
+  }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const id = +params['id']; // Convert string to number
-      if (id) {
-        this.loadNotification(id);
-      }
-    });
+    this.loadData();
   }
 
   loadNotification(id: number): void {
-    this.notificationService.getNotification(id).subscribe({
+    this.notificationService.getNotificationFromApi(id).subscribe({
       next: (data) => {
         this.notification = data;
-      },
+
+        if (this.notification) {
+          this.readNotification();
+        }
+
+        },
       error: (error) => {
         console.error('Error loading notification:', error);
       }
     });
+  }
+
+  readNotification() {
+    this.notificationService.readNotification(this.notification).subscribe({
+      next: (data) => {
+        console.log("successfully read notification")
+      },
+      error: (error) => {
+        console.error('Error reading notification:', error);
+      }
+    });
+  }
+
+  loadData() {
+    this.route.paramMap.subscribe((params) => {
+      this.id = Number(params.get('id'));
+
+      if (this.id) {
+        this.loadNotification(this.id);
+      }
+    });
+
+    if (!this.read && this.id) {
+      this.loadNotification(this.id);
+    }
   }
 
   getNotificationColor(): string {

@@ -2,6 +2,10 @@
   <app-global-navbar></app-global-navbar>
 </header>
 
+<div class="page-overlay" *ngIf="isLoading">
+  <div class="spinner"></div>
+</div>
+
 <div class="notification-container container mt-4">
   <h2 class="mb-4">Notifications</h2>
 
@@ -55,7 +59,6 @@
       </button>
     </div>
   </div>
-
   <div class="notification-list" *ngIf="filteredNotifications.length > 0">
     <div *ngFor="let notification of filteredNotifications"
          class="notification-card"

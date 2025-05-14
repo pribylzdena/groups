@@ -1,11 +1,18 @@
+.dashboard-form-container {
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 64px);
+}
+
 .card {
   border-radius: 0.5rem;
   overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
   background: linear-gradient(135deg, #34698d, #3498db);
   padding: 1.25rem 1.5rem;
+  border: none;
 }
 
 .form-control, .btn {
@@ -21,18 +28,37 @@
   font-size: 1.25rem;
   padding: 0.75rem 1rem;
   background-color: #f5f7fa;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .custom-input {
   padding: 0.65rem 1rem;
   background-color: #f5f7fa;
   border: 1px solid #e9ecef;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+    outline: none;
+  }
 }
 
 .custom-textarea {
   background-color: #f5f7fa;
   border: 1px solid #e9ecef;
   resize: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+    outline: none;
+  }
 }
 
 .custom-dropdown {
@@ -41,11 +67,13 @@
   color: #6c757d;
   padding: 0.65rem 1rem;
   text-align: left;
-}
+  border-radius: 6px;
+  transition: all 0.2s ease;
 
-.custom-dropdown:hover, .custom-dropdown:focus {
-  background-color: #f5f7fa;
-  border-color: #3498db;
+  &:hover, &:focus {
+    background-color: #f5f7fa;
+    border-color: #3498db;
+  }
 }
 
 .custom-dropdown-menu {
@@ -53,21 +81,22 @@
   border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
   padding: 0.5rem 0;
-}
 
-.dropdown-item {
-  padding: 0.6rem 1rem;
-  transition: all 0.3s ease;
-}
+  .dropdown-item {
+    padding: 0.6rem 1rem;
+    transition: all 0.3s ease;
 
-.dropdown-item:hover, .dropdown-item:focus {
-  background-color: rgba(52, 152, 219, 0.1);
-  color: #34698d;
+    &:hover, &:focus {
+      background-color: rgba(52, 152, 219, 0.1);
+      color: #34698d;
+    }
+  }
 }
 
 .recipients-container {
   background-color: #f5f7fa;
   border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
 }
 
 .recipient-tag {
@@ -79,10 +108,26 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+
+  i {
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #d32f2f;
+    }
+  }
 }
 
-.recipient-tag i {
-  cursor: pointer;
+.group-tag {
+  background-color: rgba(46, 125, 50, 0.1);
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  color: #2e7d32;
+  border-radius: 0.5rem;
+
+  .group-name {
+    font-weight: 500;
+  }
 }
 
 .recipient-add-btn {
@@ -93,10 +138,10 @@
   padding: 0.35rem 0.75rem;
   font-size: 0.875rem;
   transition: all 0.3s ease;
-}
 
-.recipient-add-btn:hover {
-  background-color: rgba(52, 152, 219, 0.1);
+  &:hover {
+    background-color: rgba(52, 152, 219, 0.1);
+  }
 }
 
 .cancel-btn {
@@ -104,10 +149,12 @@
   background-color: #f5f7fa;
   border: 1px solid #e9ecef;
   transition: all 0.3s ease;
-}
+  padding: 0.65rem 1rem;
+  font-weight: 500;
 
-.cancel-btn:hover {
-  background-color: #e9ecef;
+  &:hover {
+    background-color: #e9ecef;
+  }
 }
 
 .secondary-btn {
@@ -115,10 +162,10 @@
   background-color: rgba(52, 105, 141, 0.1);
   border: 1px solid #34698d;
   transition: all 0.3s ease;
-}
 
-.secondary-btn:hover {
-  background-color: rgba(52, 105, 141, 0.2);
+  &:hover {
+    background-color: rgba(52, 105, 141, 0.2);
+  }
 }
 
 .primary-btn {
@@ -126,12 +173,21 @@
   background-color: #34698d;
   border: none;
   transition: all 0.3s ease;
-}
+  padding: 0.65rem 1rem;
+  font-weight: 500;
 
-.primary-btn:hover {
-  background-color: #3498db;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(52, 105, 141, 0.2);
+  &:hover {
+    background-color: #3498db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 105, 141, 0.2);
+  }
+
+  &:disabled {
+    background-color: #a3c6db;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 .form-label {

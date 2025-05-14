@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
 import {environment} from '../../environments/environment.development';
+import { jwtDecode } from 'jwt-decode';
 
 export interface RegisterRequest {
   email: string;
@@ -18,12 +19,10 @@ export interface LoginRequest {
   providedIn: 'root'
 })
 export class AuthorizationService {
-  private http: HttpClient
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(http: HttpClient) {
-    this.http = http;
+  constructor(private http: HttpClient) {
   }
 
   register(payload: RegisterRequest): Observable<{id: number}> {
@@ -56,5 +55,23 @@ export class AuthorizationService {
 
   getToken(): string | null {
     return localStorage.getItem('auth_token');
+  }
+
+  getUserId(): number | null {
+    return this.getClaimFromToken(this.getToken(), 'id');
+  }
+
+  getClaimFromToken(token: string, claimKey: string): any {
+    const decodedToken = this.decodeToken(token);
+    return decodedToken ? decodedToken[claimKey] : null;
+  }
+
+  decodeToken(token: string): any {
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error('Chyba při dekódování JWT tokenu:', error);
+      return null;
+    }
   }
 }

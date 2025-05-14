@@ -1,4 +1,3 @@
-// notification-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from '@app/services/notification.service';
 import { Notification } from '@models/notification';
@@ -6,6 +5,9 @@ import {NgClass, NgForOf, NgIf, SlicePipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {GlobalNavbarComponent} from '@components/global-navbar/global-navbar.component';
+import {AuthorizationService} from '@app/services/authorization.service';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-notification-list',
@@ -32,16 +34,20 @@ export class NotificationListComponent implements OnInit {
   sortDirection: string = 'desc';
   notificationTypes: string[] = [];
   currentUserId: number;
+  private notificationService: NotificationService;
+  private authorizationService: AuthorizationService;
+
+  isLoading = false;
 
   // Pagination
   itemsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
 
-  constructor(
-    private notificationService: NotificationService,
-  ) {
-    this.currentUserId = 0;
+  constructor(notificationService: NotificationService, http: HttpClient) {
+    this.authorizationService = new AuthorizationService(http);
+    this.notificationService = notificationService;
+    this.currentUserId = this.authorizationService.getUserId();
   }
 
   ngOnInit(): void {
@@ -49,13 +55,15 @@ export class NotificationListComponent implements OnInit {
   }
 
   loadNotifications(): void {
-    this.notificationService.getNotifications().subscribe(data => {
-      this.notifications = data;
+    this.isLoading = true;
 
+    this.notificationService.getNotificationsFromApi().subscribe(data => {
+      this.notifications = data.map(n => new Notification(n.id, n.name, n.text, n.subject, n.type, n.recipients ?? []));
       // Extract unique notification types
       this.notificationTypes = [...new Set(data.map(item => item.type))];
-
       this.applyFilters();
+
+      this.isLoading = false;
     });
   }
 
@@ -141,34 +149,6 @@ export class NotificationListComponent implements OnInit {
   isReadByCurrentUser(notification: Notification): boolean {
     const recipient = notification.recipients.find(r => r.user.id === this.currentUserId);
     return recipient ? !!recipient.readAt : false;
-  }
-
-  getReadRecipientsCount(notification: Notification): number {
-    return notification.recipients.filter(r => !!r.readAt).length;
-  }
-
-  markAsRead(notification: Notification): void {
-    const recipientIndex = notification.recipients.findIndex(r => r.user.id === this.currentUserId);
-
-    if (recipientIndex !== -1) {
-      const isCurrentlyRead = !!notification.recipients[recipientIndex].readAt;
-
-      if (isCurrentlyRead) {
-        // Mark as unread
-        notification.recipients[recipientIndex].readAt = undefined;
-      } else {
-        // Mark as read
-        notification.recipients[recipientIndex].readAt = new Date();
-      }
-
-      this.notificationService.updateNotificationReadStatus(
-        notification.id,
-        notification.recipients[recipientIndex].id,
-        !isCurrentlyRead
-      ).subscribe(() => {
-        // Notification updated successfully
-      });
-    }
   }
 
   changePage(page: number): void {

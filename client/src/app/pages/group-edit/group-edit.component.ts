@@ -37,6 +37,8 @@ export class GroupEditComponent implements OnInit {
   group!: Group;
   allUsers: User[] = [];
   filteredUsers: User[] = [];
+  error = '';
+  successMessage = '';
 
   isLoading = false;
   isSaving = false;
@@ -74,7 +76,7 @@ export class GroupEditComponent implements OnInit {
   loadData() {
     this.isLoading = true;
 
-    this.route.paramMap.subscribe((params) => {
+    this.route.parent?.paramMap.subscribe((params) => {
       this.groupId = Number(params.get('groupId'));
 
       console.log(this.groupId);
@@ -176,11 +178,12 @@ export class GroupEditComponent implements OnInit {
 
     this.groupService.updateGroup(this.group).subscribe({
       next: (savedGroup) => {
-        this.router.navigate(['/groups/' + this.groupId + '/todo']);
+        this.successMessage = 'Uložení bylo úspěšné';
         this.isSaving = false;
       },
       error: (error) => {
         console.error('Chyba při ukládání skupiny:', error);
+        this.error = 'Nepodařilo se uložit skupinu';
         this.isSaving = false;
       }
     });
@@ -189,9 +192,5 @@ export class GroupEditComponent implements OnInit {
   onSearch(): void {
     this.filterUsers();
     this.showDropdown = true;
-  }
-
-  cancel(): void {
-    this.router.navigate(['/groups/' + this.groupId + '/todo']);
   }
 }

@@ -26,10 +26,10 @@ export const routes: Routes = [
       { path: 'schedule', component: ScheduleComponent, canActivate:[AuthGuard] },
       { path: 'notes', component: NoteListComponent, canActivate:[AuthGuard] },
       { path: 'note-detail/:id', component: NoteDetailComponent, canActivate:[AuthGuard] },
+      { path: 'edit', component: GroupEditComponent, canActivate:[AuthGuard] },
       { path: '', redirectTo: 'todo', pathMatch: 'full' },
     ]
   },
-  { path: 'group-edit/:groupId', component: GroupEditComponent, canActivate:[AuthGuard] },
   { path: 'notifications', component: NotificationListComponent, canActivate:[AuthGuard] },
   { path: 'notification-show/:id', component: NotificationDetailComponent, canActivate:[AuthGuard] },
   { path: 'notification-create', component: NotificationCreateComponent, canActivate:[AuthGuard] },

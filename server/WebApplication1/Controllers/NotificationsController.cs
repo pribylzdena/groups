@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
@@ -16,7 +17,7 @@ namespace WebApplication1.Controllers
     {
         private DB context = new DB();
 
-        [HttpGet("groups/{groupId}/notifications")]
+        [HttpGet("notifications")]
         public IActionResult FindAll()
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
@@ -61,11 +62,10 @@ namespace WebApplication1.Controllers
             }
 
             return Ok(response);
-
         }
 
-        [HttpPost("groups/{groupId}/notifications")]
-        public IActionResult Create(int groupId, [FromBody] NotificationRequest request)
+        [HttpPost("notifications")]
+        public IActionResult Create([FromBody] NotificationRequest request)
         {
             Console.WriteLine(JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
 
@@ -77,11 +77,11 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
-            if (group == null)
-            {
-                return NotFound(new { message = "Group not found" });
-            }
+            //var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
+            //if (group == null)
+            //{
+            //    return NotFound(new { message = "Group not found" });
+            //}
 
             var newNtf = new Notification
             {
@@ -89,7 +89,7 @@ namespace WebApplication1.Controllers
                 text = request.text,
                 subject = request.subject,
                 type = request.type,
-                group_id = groupId,
+                //group_id = groupId,
                 created_by = userId,
                 updated_by = userId,
                 created_at = DateTime.UtcNow,
@@ -133,7 +133,75 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(Create), response);
 
         }
-    }
 
-    
+        [HttpGet("notifications/{id}")]
+        public IActionResult GetNotificationById(int id)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var notification = this.context.notifications.FirstOrDefault(n => n.id == id);
+            if (notification == null)
+            {
+                return NotFound(new { message = "Notification not found" });
+            }
+
+            var user_nofitications = this.context.users_notifications.Where(u => u.notification_id == notification.id).ToList();
+            if (user_nofitications.Count < 1)
+            {
+                return NotFound(new { message = "Relation not found" });
+            }
+
+            if (!user_nofitications.Any(u => u.user_id == currentUser.id))
+            {
+                return Unauthorized();
+            }
+
+            var user_ids = user_nofitications.Select(u => u.user_id);
+            var ntf_users = this.context.users.Where(u => user_ids.Contains(u.id)).ToList();
+            var response = new NotificationResponseModel(notification);
+
+            foreach (var item in user_nofitications)
+            {
+                response.recipients.Add(new RecipientResponseModel(item, ntf_users.FirstOrDefault(u => u.id == item.user_id)));
+            }
+
+            return Ok(response);
+        }
+
+        [HttpPost("notifications/{id}/read")]
+        public IActionResult ReadNotification(int id)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var notification = this.context.notifications.FirstOrDefault(n => n.id == id);
+            if (notification == null)
+            {
+                return NotFound(new { message = "Notification not found" });
+            }
+
+            var user_nofitication = this.context.users_notifications.FirstOrDefault(u => u.notification_id == notification.id && 
+            u.user_id == currentUser.id);
+            if (user_nofitication == null)
+            {
+                return NotFound(new { message = "Relation not found" });
+            }
+
+            user_nofitication.read_at = DateTime.Now;
+            this.context.SaveChanges();
+
+            return Ok(notification);
+        }
+    }
 }

@@ -5,11 +5,25 @@ using WebApplication1.ResponseModels;
 
 namespace WebApplication1.Controllers
 {
+    [Secured]
     [Route("api")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private DB context = new DB();
+
+        [HttpGet("users")]
+        public IActionResult FindAll()
+        {
+            List<UserResponseModel> response = new List<UserResponseModel>();
+
+            foreach (var item in this.context.users)
+            {
+                response.Add(new UserResponseModel(item));
+            }
+
+            return Ok(response);
+        }
 
         [HttpGet("user/{id}")]
         public IActionResult FindById(int id)
