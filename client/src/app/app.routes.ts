@@ -8,7 +8,6 @@ import {NotificationDetailComponent} from './pages/notification-detail/notificat
 import {UserDetailComponent} from './pages/user-detail/user-detail.component';
 import {NoteDetailComponent} from './pages/note-detail/note-detail.component';
 import {GroupManageComponent} from './pages/group-manage/group-manage.component';
-import {UserEditComponent} from './pages/user-edit/user-edit.component';
 import {GroupComponent} from './components/group/group.component';
 import {NotificationCreateComponent} from '@app/pages/notification-create/notification-create.component';
 import { LoginComponent } from '@app/pages/login/login.component';
@@ -34,7 +33,6 @@ export const routes: Routes = [
   { path: 'notification-show/:id', component: NotificationDetailComponent, canActivate:[AuthGuard] },
   { path: 'notification-create', component: NotificationCreateComponent, canActivate:[AuthGuard] },
   { path: 'profile', component: UserDetailComponent, canActivate:[AuthGuard] },
-  { path: 'profile-edit', component: UserEditComponent, canActivate:[AuthGuard] },
   { path: 'group-manage', component: GroupManageComponent, canActivate:[AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },

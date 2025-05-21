@@ -5,6 +5,8 @@ import {NotificationListComponent} from '@app/pages/notification-list/notificati
 import {Group} from '@models/group';
 import {GroupService} from '@app/services/group.service';
 import {NgIf} from '@angular/common';
+import {User} from '@models/user';
+import {UserService} from '@app/services/user.service';
 
 @Component({
   selector: 'app-group-layout',
@@ -24,6 +26,7 @@ export class GroupComponent implements OnInit {
 
   groupId: number | null = null;
   group: Group;
+  user: User;
   isLoading: boolean = true;
 
   constructor(route: ActivatedRoute, groupService: GroupService) {
@@ -58,4 +61,6 @@ export class GroupComponent implements OnInit {
       }
     });
   }
+
+
 }

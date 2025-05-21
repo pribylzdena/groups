@@ -1,27 +1,124 @@
-<div class="profile-container">
-  <button class="back-button" [routerLink]="['/group-manage']">
-    <i class="bi bi-arrow-left"></i>
-  </button>
+<header>
+  <app-global-navbar></app-global-navbar>
+</header>
 
-  <div class="profile-card mx-auto">
-
-    <div class="card-content">
-
-      <div class="avatar-section">
-        <img [src]="user.avatar" alt="Avatar" class="avatar mt-4">
-        <a class="change-icon">Change icon</a>
-      </div>
-
-      <div class="info-section">
-        <div class="name">{{ user.name }}</div>
-        <div class="email">{{ user.email }}</div>
-        <div class="password">********</div>
-      </div>
+<div class="user-form-container">
+  <div class="form-header">
+    <div class="header-title-row">
+      <button type="button" class="btn btn-back" [routerLink]="['/group-manage']">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <h2>Uživatelský profil</h2>
     </div>
-
-    <div class="btn-container" >
-      <button class="btn" [routerLink]="['/groups', groupId, 'profile-edit']">Change details</button>
-    </div>
+    <p class="text-muted" *ngIf="!isEditing">Zobrazen profil uživatele. Pro úpravy klikněte na tlačítko "Upravit".</p>
+    <p class="text-muted" *ngIf="isEditing">Režim úpravy uživatelského profilu.</p>
   </div>
+
+
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-3 text-center mb-3 mb-md-0">
+        <div class="user-avatar mx-auto">
+          <img *ngIf="user.logoUrl" [src]="user.logoUrl" alt="Profilový obrázek">
+          <div class="avatar-placeholder" *ngIf="!user.logoUrl">
+            <i class="bi bi-person"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-9">
+        <div class="form-section">
+          <label class="form-label">ID uživatele</label>
+          <div class="readonly-view">{{ user.id }}</div>
+        </div>
+
+        <div class="form-section">
+          <label for="name" class="form-label">Jméno</label>
+
+          <div *ngIf="!isEditing" class="readonly-view">{{ user.name }}</div>
+
+          <div *ngIf="isEditing">
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+              [ngClass]="{'is-invalid': userForm.get('name')?.invalid && userForm.get('name')?.touched}"
+              placeholder="Zadejte jméno">
+
+            <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="invalid-feedback">
+              <div *ngIf="userForm.get('name')?.errors?.['required']">Jméno je povinné</div>
+              <div *ngIf="userForm.get('name')?.errors?.['minlength']">Jméno musí mít alespoň 3 znaky</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <label for="email" class="form-label">Email</label>
+
+          <div *ngIf="!isEditing" class="readonly-view">{{ user.email }}</div>
+
+          <div *ngIf="isEditing">
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              class="form-control"
+              [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+              placeholder="email@example.com">
+
+            <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="invalid-feedback">
+              <div *ngIf="userForm.get('email')?.errors?.['required']">Email je povinný</div>
+              <div *ngIf="userForm.get('email')?.errors?.['email']">Zadejte platný email</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section" *ngIf="isEditing">
+          <label for="password" class="form-label">Heslo</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [ngClass]="{'is-invalid': userForm.get('password')?.invalid && userForm.get('password')?.touched}"
+            placeholder="Nechte prázdné, pokud nechcete měnit">
+
+          <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="invalid-feedback">
+            <div *ngIf="userForm.get('password')?.errors?.['minlength']">Heslo musí mít alespoň 6 znaků</div>
+          </div>
+          <small class="text-muted">Vyplňte pouze pokud chcete změnit heslo.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons-container">
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="toggleEdit()"
+        *ngIf="!isEditing">
+        <i class="bi bi-pencil-square"></i> Upravit
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        (click)="toggleEdit()"
+        *ngIf="isEditing">
+        <i class="bi bi-x-circle"></i> Zrušit
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        *ngIf="isEditing">
+        <i class="bi bi-check-circle"></i> Uložit
+      </button>
+    </div>
+
+    <div class="alert alert-success" *ngIf="showMessage">
+      {{ submitMessage }}
+    </div>
+  </form>
 </div>
-`

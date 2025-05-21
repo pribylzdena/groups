@@ -55,13 +55,13 @@
 
         <div class="profile-dropdown" (click)="toggleDropdown()" [class.open]="isDropdownOpen">
           <div class="profile-trigger">
-            <img [src]="profileImageUrl" alt="Profile" class="profile-image">
+            <img [src]="logoUrl" alt="Profile" class="profile-image">
             <span class="profile-status" [class.online]="isUserOnline"></span>
           </div>
           <div class="dropdown-menu" *ngIf="isDropdownOpen">
             <div class="dropdown-header">
-              <strong>{{ userName }}</strong>
-              <p class="user-email">{{ userEmail }}</p>
+              <strong>{{ user.name   }}</strong>
+              <p class="user-email">{{ user.email }}</p>
             </div>
             <div class="dropdown-divider"></div>
             <a [routerLink]="['/profile']" class="dropdown-item">

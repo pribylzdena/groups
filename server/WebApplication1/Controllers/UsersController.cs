@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
 
@@ -25,17 +26,18 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
-        [HttpGet("user/{id}")]
-        public IActionResult FindById(int id)
+        [HttpGet("users/current")]
+        public IActionResult GetCurrentUser()
         {
-            Models.User? user = this.context.users.FirstOrDefault(x => x.id == id);
-
-            if (user == null)
+            int id = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User? currentUser = this.context.users.FirstOrDefault(u => u.id == id);
+            if (currentUser == null)
             {
-                return NotFound(new {message = "User not found"});
+                return NotFound(new { message = "User not found" });
             }
 
-            var response = new UserResponseModel(user);
+            var response = new UserResponseModel(currentUser);
+
             return Ok(response);
         }
 
