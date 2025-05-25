@@ -1,4 +1,5 @@
 import {NotificationRecipient} from '@models/notification-recipient';
+import {NotificationType} from '@enums/notification-type';
 
 export class Notification {
   id: number;
@@ -16,5 +17,16 @@ export class Notification {
     this.subject = subject;
     this.type = type;
     this.recipients = recipients;
+  }
+
+  format() {
+    return {
+      id: this.id,
+      name: this.name,
+      text: this.text,
+      subject: this.subject,
+      type: NotificationType.getValueByName(this.type),
+      recipients: this.recipients
+    };
   }
 }

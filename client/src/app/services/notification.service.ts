@@ -28,11 +28,15 @@ export class NotificationService {
   }
 
   createNotification(notification: Notification): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/api/notifications`, notification);
+    return this.http.post<any>(`${environment.apiUrl}/api/notifications`, notification.format());
   }
 
   readNotification(notification: Notification) {
     return this.http.post<any[]>(`${environment.apiUrl}/api/notifications/${notification.id}/read`, notification);
+  }
+
+  getUnreadNotificationCount() {
+    return this.http.get<any>(`${environment.apiUrl}/api/notifications/count`);
   }
 
   private getMockNotifications(): Notification[] {

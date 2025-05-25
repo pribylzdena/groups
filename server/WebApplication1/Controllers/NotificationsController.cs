@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
 
                 noti = allNotis.Find(item.notification_id);
                 if (noti != null) currUserNotis.Add(noti);
-            }
+                }
 
             var response = new List<NotificationResponseModel>();
 
@@ -202,6 +202,34 @@ namespace WebApplication1.Controllers
             this.context.SaveChanges();
 
             return Ok(notification);
+        }
+
+        [HttpGet("notifications/count")]
+        public IActionResult GetUnreadCount()
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var allNotis = this.context.notifications;
+            var currUserRecipients = this.context.users_notifications.Where(x => x.user_id == userId && x.read_at == null).ToList();
+            var currUserNotis = new List<Notification>();
+
+            foreach (var item in currUserRecipients)
+            {
+                Notification? noti = new Notification();
+
+                noti = allNotis.Find(item.notification_id);
+                if (noti != null) currUserNotis.Add(noti);
+            }
+
+            Console.WriteLine(currUserNotis.Count());
+
+            return Ok(currUserNotis.Count());
         }
     }
 }

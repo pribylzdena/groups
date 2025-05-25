@@ -18,6 +18,7 @@ import {Group} from '@models/group';
 import {NgForOf, NgIf} from '@angular/common';
 import { Notification } from '@models/notification';
 import {NotificationRecipient} from '@models/notification-recipient';
+import {NotificationService} from '@app/services/notification.service';
 
 @Component({
   selector: 'app-notification-create',
@@ -36,6 +37,7 @@ import {NotificationRecipient} from '@models/notification-recipient';
 export class NotificationCreateComponent implements OnInit{
   private userService: UserService;
   private groupService: GroupService;
+  private notificationService: NotificationService;
   private fb: FormBuilder;
   private router: Router;
 
@@ -54,14 +56,13 @@ export class NotificationCreateComponent implements OnInit{
   showGroupDropdown = false;
   notificationForm: FormGroup;
 
-  notificationTypes = Object.values(NotificationType.Name);
-  selectedType: string = '';
+  notificationTypes = NotificationType.getAllNames();
 
-  constructor(userService: UserService, fb: FormBuilder, groupService: GroupService, router: Router
-  ) {
+  constructor(userService: UserService, fb: FormBuilder, groupService: GroupService, router: Router, notificationService: NotificationService) {
     this.fb = fb;
     this.userService = userService;
     this.groupService = groupService;
+    this.notificationService = notificationService;
     this.router = router;
 
     this.initForm();
@@ -223,11 +224,6 @@ export class NotificationCreateComponent implements OnInit{
     this.targetGroup = undefined;
   }
 
-  selectNotificationType(type: string): void {
-    this.selectedType = type;
-    this.notificationForm.get('type')?.setValue(type);
-  }
-
   isFieldInvalid(fieldName: string): boolean {
     const field = this.notificationForm.get(fieldName);
     return field ? field.invalid && (field.dirty || field.touched) : false;
@@ -235,7 +231,6 @@ export class NotificationCreateComponent implements OnInit{
 
   sendNotification() {
     if (this.notificationForm.invalid) {
-      // Mark all form controls as touched to trigger validation messages
       Object.keys(this.notificationForm.controls).forEach(key => {
         const control = this.notificationForm.get(key);
         control?.markAsTouched();
@@ -247,7 +242,6 @@ export class NotificationCreateComponent implements OnInit{
       user => new NotificationRecipient(0, user)
     );
 
-    // Create the notification object
     const notification = new Notification(
       0,
       this.notificationForm.get('name')?.value,
@@ -257,19 +251,17 @@ export class NotificationCreateComponent implements OnInit{
       notificationRecipients
     );
 
-    // TODO: Send notification to API
     console.log('Sending notification:', notification);
 
-    // this.notificationService.createNotification(notification).subscribe({
-    //   next: (response) => {
-    //     this.router.navigate(['/notifications']);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating notification:', error);
-    //   }
-    // });
+    this.notificationService.createNotification(notification).subscribe({
+      next: (response) => {
+        this.router.navigate(['/notifications']);
+      },
+      error: (error) => {
+        console.error('Error creating notification:', error);
+      }
+    });
 
-    // For now, just navigate back to notifications
     this.router.navigate(['/notifications']);
   }
 

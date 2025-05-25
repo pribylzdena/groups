@@ -21,6 +21,10 @@ export class UserService {
     return this.http.get<any>(`${environment.apiUrl}/api/users/current`);
   }
 
+  updateUser(user: User): Observable<any> {
+    return this.http.put<any>(`${environment.apiUrl}/api/users/${user.id}`, user);
+  }
+
   getFakeUser(): User {
     return new User(1, 'system@groups.cz', 'system@groups.cz');
   }

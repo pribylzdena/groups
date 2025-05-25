@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '@app/models/user';
 import { UserService } from '@app/services/user.service';
-import {isExternalResource} from '@angular/compiler-cli/src/ngtsc/metadata';
-import {NgClass, NgIf} from '@angular/common';
-import {GlobalNavbarComponent} from '@components/global-navbar/global-navbar.component';
-import {RouterLink} from '@angular/router';
+import { NgClass, NgIf } from '@angular/common';
+import { GlobalNavbarComponent } from '@components/global-navbar/global-navbar.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user-detail',
@@ -33,11 +32,14 @@ export class UserDetailComponent implements OnInit {
   constructor(fb: FormBuilder, userService: UserService) {
     this.fb = fb;
     this.userService = userService;
+
     this.createForm();
+    this.loadUser();
   }
 
   ngOnInit(): void {
     this.loadUser();
+    this.patchForm();
   }
 
   createForm(): void {
@@ -51,8 +53,14 @@ export class UserDetailComponent implements OnInit {
   }
 
   loadUser(): void {
-    this.user = this.userService.getFakeUser();
-    this.patchForm();
+    this.userService.getUserFromApi().subscribe({
+      next: (response) => {
+         this.user = response;
+      },
+      error: (error) => {
+        console.error("Chyba při načítání uživatele")
+      }
+    });
   }
 
   patchForm(): void {
@@ -70,6 +78,7 @@ export class UserDetailComponent implements OnInit {
     if (this.isEditing) {
       this.userForm.enable();
       this.userForm.get('id')?.disable();
+      this.patchForm();
     } else {
       this.userForm.disable();
       this.patchForm();
@@ -88,17 +97,29 @@ export class UserDetailComponent implements OnInit {
         formValues.password || this.user.password
       );
 
-      console.log('Uživatel k uložení:', updatedUser);
-
-      this.showSuccessMessage();
-      this.isEditing = false;
-      this.userForm.disable();
+      this.userService.updateUser(updatedUser).subscribe({
+        next: (response) => {
+          console.log('User successfully updated:', response);
+          this.user = updatedUser;
+          this.showSuccessMessage();
+          this.isEditing = false;
+          this.userForm.disable();
+        },
+        error: (error) => {
+          console.error('Error updating user:', error);
+          this.submitMessage = 'Chyba při ukládání uživatele!';
+          this.showMessage = true;
+          setTimeout(() => {
+            this.showMessage = false;
+          }, 3000);
+        }
+      });
     } else {
       this.markFormGroupTouched(this.userForm);
     }
   }
 
-  markFormGroupTouched(formGroup: FormGroup): void {
+  private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
 
@@ -108,7 +129,7 @@ export class UserDetailComponent implements OnInit {
     });
   }
 
-  showSuccessMessage(): void {
+  private showSuccessMessage(): void {
     this.submitMessage = 'Uživatel byl úspěšně uložen!';
     this.showMessage = true;
 
@@ -116,9 +137,4 @@ export class UserDetailComponent implements OnInit {
       this.showMessage = false;
     }, 3000);
   }
-
-  get nameControl() { return this.userForm.get('name'); }
-  get emailControl() { return this.userForm.get('email'); }
-  get passwordControl() { return this.userForm.get('password'); }
-  get logoUrlControl() { return this.userForm.get('logoUrl'); }
 }

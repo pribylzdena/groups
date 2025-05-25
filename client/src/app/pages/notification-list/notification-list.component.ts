@@ -39,7 +39,6 @@ export class NotificationListComponent implements OnInit {
 
   isLoading = false;
 
-  // Pagination
   itemsPerPage: number = 10;
   currentPage: number = 1;
   totalPages: number = 1;
@@ -59,7 +58,6 @@ export class NotificationListComponent implements OnInit {
 
     this.notificationService.getNotificationsFromApi().subscribe(data => {
       this.notifications = data.map(n => new Notification(n.id, n.name, n.text, n.subject, n.type, n.recipients ?? []));
-      // Extract unique notification types
       this.notificationTypes = [...new Set(data.map(item => item.type))];
       this.applyFilters();
 
@@ -70,7 +68,6 @@ export class NotificationListComponent implements OnInit {
   applyFilters(): void {
     let result = [...this.notifications];
 
-    // Apply search
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
       result = result.filter(notification =>
@@ -80,19 +77,16 @@ export class NotificationListComponent implements OnInit {
       );
     }
 
-    // Apply read/unread filter
     if (this.currentFilter === 'unread') {
       result = result.filter(notification => !this.isReadByCurrentUser(notification));
     } else if (this.currentFilter === 'read') {
       result = result.filter(notification => this.isReadByCurrentUser(notification));
     }
 
-    // Apply type filter
     if (this.currentTypeFilter !== 'all') {
       result = result.filter(notification => notification.type === this.currentTypeFilter);
     }
 
-    // Apply sorting
     result.sort((a, b) => {
       let comparison = 0;
 
@@ -109,10 +103,8 @@ export class NotificationListComponent implements OnInit {
       return this.sortDirection === 'asc' ? comparison : -comparison;
     });
 
-    // Calculate pagination
     this.totalPages = Math.ceil(result.length / this.itemsPerPage);
 
-    // Apply pagination
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.filteredNotifications = result.slice(startIndex, endIndex);
@@ -148,6 +140,7 @@ export class NotificationListComponent implements OnInit {
 
   isReadByCurrentUser(notification: Notification): boolean {
     const recipient = notification.recipients.find(r => r.user.id === this.currentUserId);
+
     return recipient ? !!recipient.readAt : false;
   }
 
@@ -182,16 +175,13 @@ export class NotificationListComponent implements OnInit {
     const maxVisiblePages = 5;
 
     if (this.totalPages <= maxVisiblePages) {
-      // Show all pages if there are only a few
       for (let i = 1; i <= this.totalPages; i++) {
         range.push(i);
       }
     } else {
-      // Otherwise show a window around current page
       let start = Math.max(1, this.currentPage - 2);
       let end = Math.min(this.totalPages, start + maxVisiblePages - 1);
 
-      // Adjust if window is too far to the right
       if (end === this.totalPages) {
         start = Math.max(1, end - maxVisiblePages + 1);
       }

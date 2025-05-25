@@ -379,6 +379,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApplication1.Controllers.NotificationsController",
+    "Method": "GetUnreadCount",
+    "RelativePath": "api/notifications/count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApplication1.Controllers.TaskCommentsController",
     "Method": "FindAll",
     "RelativePath": "api/TaskComments",
@@ -390,30 +400,24 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.UsersController",
-    "Method": "FindById",
-    "RelativePath": "api/user/{id}",
+    "Method": "FindAll",
+    "RelativePath": "api/users",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
     "ContainingType": "WebApplication1.Controllers.UsersController",
     "Method": "Edit",
-    "RelativePath": "api/user/{id}/edit",
+    "RelativePath": "api/users/{userId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       },
@@ -427,8 +431,8 @@
   },
   {
     "ContainingType": "WebApplication1.Controllers.UsersController",
-    "Method": "FindAll",
-    "RelativePath": "api/users",
+    "Method": "GetCurrentUser",
+    "RelativePath": "api/users/current",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

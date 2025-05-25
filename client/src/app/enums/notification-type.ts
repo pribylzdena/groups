@@ -15,6 +15,10 @@ export namespace NotificationType {
     Success = 4
   }
 
+  export function getAllNames(): Name[] {
+    return Object.values(Name);
+  }
+
   export function getNameByValue(value: Value): Name {
     switch (value) {
       case Value.None: return Name.None;
@@ -26,14 +30,15 @@ export namespace NotificationType {
     }
   }
 
-  export function getValueByName(name: Name): Value {
+
+  export function getValueByName(name: string): number {
     switch (name) {
-      case Name.None: return Value.None;
-      case Name.Info: return Value.Info;
-      case Name.Warning: return Value.Warning;
-      case Name.Error: return Value.Error;
-      case Name.Success: return Value.Success;
-      default: return Value.None;
+      case 'None': return 0;
+      case 'Info': return 1;
+      case 'Warning': return 2;
+      case 'Error': return 3;
+      case 'Success': return 4;
+      default: return 0;
     }
   }
 }

@@ -32,46 +32,38 @@
 
                 <div class="col-md-4">
                   <label class="form-label text-muted small">Type</label>
-                  <div class="dropdown">
-                    <button class="btn custom-dropdown w-100 d-flex justify-content-between align-items-center"
-                            type="button" id="typeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span>{{ selectedType ? selectedType : 'Select type' }}</span>
-                      <i class="bi bi-chevron-down"></i>
-                    </button>
-                    <ul class="dropdown-menu w-100 custom-dropdown-menu" aria-labelledby="typeDropdown">
-                      <li *ngFor="let type of notificationTypes">
-                        <a class="dropdown-item" href="#" (click)="selectNotificationType(type); $event.preventDefault()">{{ type }}</a>
-                      </li>
-                    </ul>
-                  </div>
+                  <select class="form-control custom-input" formControlName="type">
+                    <option value="">Select type</option>
+                    <option *ngFor="let type of notificationTypes" [value]="type">{{ type }}</option>
+                  </select>
                   <div *ngIf="isFieldInvalid('type')"
                        class="text-danger small mt-1">Type is required</div>
                 </div>
 
                 <div class="col-md-4">
                   <label class="form-label text-muted small">Group</label>
-                  <div class="dropdown">
-                    <div class="input-group">
-                      <input type="text" class="form-control custom-input"
-                             placeholder="Search for a group..."
-                             [(ngModel)]="groupSearchQuery"
-                             [ngModelOptions]="{standalone: true}"
-                             (input)="onGroupSearch()">
-                      <button class="btn custom-dropdown d-flex justify-content-between align-items-center"
-                              type="button" (click)="showGroupDropdown = !showGroupDropdown">
-                        <i class="bi bi-chevron-down"></i>
-                      </button>
+                  <div class="position-relative">
+                    <input type="text" class="form-control custom-input"
+                           placeholder="Search for a group..."
+                           [(ngModel)]="groupSearchQuery"
+                           [ngModelOptions]="{standalone: true}"
+                           (input)="onGroupSearch()"
+                           (focus)="showGroupDropdown = true">
+
+                    <div *ngIf="showGroupDropdown && (filteredGroups.length > 0 || groupSearchQuery)"
+                         class="position-absolute w-100 bg-white border rounded shadow-sm mt-1"
+                         style="z-index: 1000; max-height: 200px; overflow-y: auto;">
+                      <div *ngFor="let group of filteredGroups"
+                           class="px-3 py-2 border-bottom cursor-pointer hover-bg-light"
+                           (click)="selectGroup(group)"
+                           style="cursor: pointer;">
+                        {{ group.name }}
+                      </div>
+                      <div *ngIf="filteredGroups.length === 0 && groupSearchQuery"
+                           class="px-3 py-2 text-muted">
+                        No matching groups found
+                      </div>
                     </div>
-                    <ul class="dropdown-menu w-100 custom-dropdown-menu" [class.show]="showGroupDropdown && filteredGroups.length > 0">
-                      <li *ngFor="let group of filteredGroups">
-                        <a class="dropdown-item" href="#" (click)="selectGroup(group); $event.preventDefault()">
-                          {{ group.name }}
-                        </a>
-                      </li>
-                      <li *ngIf="filteredGroups.length === 0 && groupSearchQuery">
-                        <span class="dropdown-item disabled">No matching groups found</span>
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>

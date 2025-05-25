@@ -40,25 +40,28 @@ namespace WebApplication1.Controllers
 
             return Ok(response);
         }
+         
 
-
-        [HttpPut("user/{id}/edit")]
-        public IActionResult Edit(int id, [FromBody]UserRequestModel request)
+        [HttpPut("users/{userId}")]
+        public IActionResult Edit(int userId, [FromBody]UserRequestModel request)
         {
-            Models.User? user = this.context.users.FirstOrDefault(x => x.id == id);
+            int id = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User? currentUser = this.context.users.FirstOrDefault(u => u.id == id);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            Models.User? user = this.context.users.FirstOrDefault(x => x.id == userId);
 
             if (user == null)
             {
                 return NotFound(new { message = "User not found" });
             }
-            if (request == null)
-            {
-                return BadRequest(new { message = "Invalid request" });
-            }
 
             user.email = request.email;
-            user.password = request.password;
-            user.logo = request.logo;
+            user.password = request.password ?? user.password;
+            user.logo = request.logoUrl;
             user.name = request.name;
             this.context.SaveChanges();
 

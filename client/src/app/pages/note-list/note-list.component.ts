@@ -14,18 +14,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   imports: [CommonModule, RouterLink, ReactiveFormsModule, FormsModule],
   templateUrl: './note-list.component.html',
   styleUrls: ['./note-list.component.scss'],
-  animations: [
-    trigger('notesList', [
-      transition('* => *', [
-        query(':enter', [
-          style({ opacity: 0, transform: 'translateY(20px)' }),
-          stagger(50, [
-            animate('0.5s ease', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true })
-      ])
-    ])
-  ]
 })
 export class NoteListComponent {
   private route: ActivatedRoute
