@@ -187,6 +187,8 @@ export class GroupEditComponent implements OnInit {
         this.isSaving = false;
       }
     });
+
+    location.reload();
   }
 
   onSearch(): void {
