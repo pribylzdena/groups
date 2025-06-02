@@ -5,6 +5,8 @@ import { Task } from '@models/task';
 import {TaskService} from '@app/services/task.service';
 import {TaskDetailSidebarComponent} from '@components/task-detail-sidebar/task-detail-sidebar.component';
 import {ActivatedRoute} from '@angular/router';
+import {User} from '@models/user';
+import {UserService} from '@app/services/user.service';
 
 @Component({
   selector: 'app-todo',
@@ -14,17 +16,21 @@ import {ActivatedRoute} from '@angular/router';
   styleUrl: './todo-list.component.scss'
 })
 export class TodoListComponent implements OnInit {
-  private route: ActivatedRoute
-  private taskService: TaskService
+  private route: ActivatedRoute;
+  private taskService: TaskService;
+  private userService: UserService;
   public tasks: Task[];
   public selectedTask: Task | null = null;
   @ViewChild(TaskDetailSidebarComponent, { static: true })
   taskSidebar?: TaskDetailSidebarComponent;
 
+  public users: User[];
+
   groupId: number | null = null;
 
-  constructor(taskService: TaskService, route: ActivatedRoute) {
+  constructor(taskService: TaskService, route: ActivatedRoute, userService: UserService) {
     this.taskService = taskService;
+    this.userService = userService;
     //this.tasks = this.taskService.getAllTasks();
     this.route = route;
   }
@@ -35,13 +41,24 @@ export class TodoListComponent implements OnInit {
     });
 
     this.loadTasks();
+    this.loadUsers();
   }
 
   loadTasks() {
     this.taskService.getTasksFromApi(this.groupId).subscribe({
       next: (response) => {
-        console.log(response);
-        this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, null, n.assignees));
+        this.tasks = response.map(n => new Task(n.id, n.name, n.status, n.deadline, n.color, n.priority, n.description, n.reminderAt, null, n.assignees, n.comments));
+      },
+      error: (error) => {
+        console.error('Chyba při načítání dat z API:', error);
+      }
+    });
+  }
+
+  loadUsers() {
+    this.userService.getUsersFromApi().subscribe({
+      next: (response) => {
+        this.users = response.map(n => new User(n.id, n.name, n.email, n.logoUrl, n.password));
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);
@@ -123,7 +140,6 @@ export class TodoListComponent implements OnInit {
 
     this.taskService.createTask(task, this.groupId).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);
@@ -141,7 +157,6 @@ export class TodoListComponent implements OnInit {
 
     this.taskService.updateTask(task, this.groupId).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

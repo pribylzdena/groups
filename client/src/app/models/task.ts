@@ -1,4 +1,5 @@
 import {User} from '@models/user';
+import {TaskComment} from '@models/task-comment';
 
 export class Task {
   public id: number;
@@ -13,6 +14,7 @@ export class Task {
 
   public parent?: Task|null;
   public assignees?: User[];
+  public comments? : TaskComment[];
   constructor(
     id: number,
     name: string,
@@ -23,7 +25,8 @@ export class Task {
     description?: string,
     reminderAt?: Date,
     parent?: Task,
-    assignees?: User[]
+    assignees?: User[],
+    comments?: TaskComment[]
   ) {
     this.id = id;
     this.name = name;
@@ -37,5 +40,6 @@ export class Task {
     this.parent = parent;
     this.reminderAt = reminderAt;
     this.assignees = assignees;
+    this.comments = comments;
   }
 }
