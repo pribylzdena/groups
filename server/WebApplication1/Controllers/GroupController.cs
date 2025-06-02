@@ -158,7 +158,7 @@ namespace WebApplication1.Controllers
             }
 
             List<GroupMember> membersForDelete = this.context.group_members
-                .Where(u => u.group_id == group.id)
+                .Where(u => u.group_id == group.id && u.user_id != currentUser.id)
                 .ToList();
 
             this.context.group_members.RemoveRange(membersForDelete);
