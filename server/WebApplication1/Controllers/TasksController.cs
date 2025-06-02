@@ -19,13 +19,13 @@ namespace WebApplication1.Controllers
     {
         private DB context = new DB();
 
-        private Models.Task? GetParent(int id)
-        {
-            Models.Task? taskEntity = this.context.tasks.Find(id);
-            Models.Task? parentTaskEntity = this.context.tasks.Find(taskEntity.parent_id);
+        //private Models.Task? GetParent(int id)
+        //{
+        //    Models.Task? taskEntity = this.context.tasks.Find(id);
+        //    Models.Task? parentTaskEntity = this.context.tasks.Find(taskEntity.parent_id);
 
-            return parentTaskEntity;
-        }
+        //    return parentTaskEntity;
+        //}
 
         [HttpGet("groups/{groupId}/tasks")]
         public IActionResult FindAll(int groupId)
@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
             List<TaskResponseModel> models = new List<TaskResponseModel>();
             foreach (var item in tasks)
             {
-                var model = new TaskResponseModel(item, GetParent(item.id));
+                var model = new TaskResponseModel(item, item.GetParent());
                 models.Add(model);
             }
 
@@ -97,7 +97,7 @@ namespace WebApplication1.Controllers
                     taskUsers.Add(user);
                 }
             }
-            var task = new TaskResponseModel(taskEntity, GetParent(taskEntity.id));
+            var task = new TaskResponseModel(taskEntity, taskEntity.GetParent());
             task.assignees = taskUsers;
 
             return Ok(task);

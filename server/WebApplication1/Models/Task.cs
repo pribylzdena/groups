@@ -1,4 +1,6 @@
-﻿namespace WebApplication1.Models
+﻿using Org.BouncyCastle.Security;
+
+namespace WebApplication1.Models
 {
     public class Task
     {
@@ -19,6 +21,16 @@
         public int? parent_id { get; set; }
         public DateTime? reminder_at { get; set; }
 
+
+        public Task? GetParent()
+        {
+            DB context = new DB();
+
+
+            Task parentTaskEntity = context.tasks.Find(this.parent_id);
+
+            return parentTaskEntity;
+        }
 
     }
 }
