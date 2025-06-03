@@ -10,6 +10,7 @@ import { User } from '@models/user';
 import { GroupService } from '@app/services/group.service';
 import { UserService } from '@app/services/user.service';
 import { NotificationService } from '@app/services/notification.service';
+import {AuthorizationService} from '@app/services/authorization.service';
 
 @Component({
   selector: 'app-group-edit',
@@ -31,6 +32,7 @@ export class GroupEditComponent implements OnInit {
   private groupService: GroupService;
   private userService: UserService;
   private notificationService: NotificationService;
+  private authService: AuthorizationService;
   groupId: number | null = null;
 
   groupForm!: FormGroup;
@@ -45,13 +47,16 @@ export class GroupEditComponent implements OnInit {
   searchQuery = '';
   showDropdown = false;
 
+  public currentGroupMember: GroupMember | undefined;
+
   constructor(
     fb: FormBuilder,
     route: ActivatedRoute,
     router: Router,
     groupService: GroupService,
     userService: UserService,
-    notificationService: NotificationService
+    notificationService: NotificationService,
+    authService: AuthorizationService
   ) {
     this.fb = fb;
     this.route = route;
@@ -59,8 +64,11 @@ export class GroupEditComponent implements OnInit {
     this.groupService = groupService;
     this.userService = userService;
     this.notificationService = notificationService;
+    this.authService = authService;
 
     this.groupForm = this.createForm();
+
+    this.loadData();
   }
 
   ngOnInit(): void {
@@ -74,12 +82,12 @@ export class GroupEditComponent implements OnInit {
   }
 
   loadData() {
+    console.log("LOAD DATA STARTED");
+
     this.isLoading = true;
 
     this.route.parent?.paramMap.subscribe((params) => {
       this.groupId = Number(params.get('groupId'));
-
-      console.log(this.groupId);
 
       if (this.groupId) {
         this.loadGroup();
@@ -104,6 +112,8 @@ export class GroupEditComponent implements OnInit {
           name: this.group.name
         });
         this.isLoading = false;
+        this.currentGroupMember = this.group.members.find(m => m.user.id === this.authService.getUserId());
+
       },
       error: (error) => {
         console.error('Chyba při načítání dat z API:', error);

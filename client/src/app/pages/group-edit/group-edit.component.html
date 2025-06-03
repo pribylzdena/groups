@@ -103,7 +103,7 @@
                     <div class="member-role">{{ member.role }}</div>
                   </div>
                 </div>
-                <button type="button" class="btn-remove" (click)="removeUserFromGroup(member)" title="Odebrat uživatele">
+                <button *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'" type="button" class="btn-remove" (click)="removeUserFromGroup(member)" title="Odebrat uživatele">
                   <i class="bi bi-x-circle"></i>
                 </button>
               </div>
