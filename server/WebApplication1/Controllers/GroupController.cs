@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -15,6 +16,8 @@ namespace WebApplication1.Controllers
     public class GroupsController : ControllerBase
     {
         private DB context = new DB();
+
+
 
         [HttpGet]
         public IActionResult FindAll()
@@ -126,6 +129,8 @@ namespace WebApplication1.Controllers
         [HttpPut("{groupId}")]
         public IActionResult Edit(int groupId, [FromBody] EditGroupRequest request)
         {
+            NotificationService service = new NotificationService();
+
             Console.WriteLine("Edit group action started");
             Console.WriteLine(JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
 
@@ -147,6 +152,8 @@ namespace WebApplication1.Controllers
 
             //var actualMembers = request.members;
 
+            
+
             List<GroupMember> membersToAdd = new List<GroupMember>();
             foreach (var item in request.members)
             {
@@ -155,6 +162,24 @@ namespace WebApplication1.Controllers
                 member.user_id = item.user.id;
                 member.role = item.role;
                 membersToAdd.Add(member);
+
+                //Send notification
+
+                var notif = service.CreateNotification(
+                    "Group",
+                    $"{item.user.name} was added to group: {group.name}",
+                    "Added to group",
+                    2
+                    );
+                this.context.notifications.Add(notif);
+                this.context.SaveChanges();
+
+                UsersNotification usersNotification = new UsersNotification();
+
+                usersNotification.user_id = userId;
+                usersNotification.notification_id = notif.id;
+                this.context.users_notifications.Add(usersNotification);
+                this.context.SaveChanges();
             }
 
             List<GroupMember> membersForDelete = this.context.group_members
@@ -165,6 +190,13 @@ namespace WebApplication1.Controllers
             this.context.group_members.AddRange(membersToAdd);
 
             this.context.SaveChanges();
+
+
+
+
+
+
+
 
             return Ok();
         }
