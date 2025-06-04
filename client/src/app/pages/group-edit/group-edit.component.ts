@@ -49,6 +49,11 @@ export class GroupEditComponent implements OnInit {
 
   public currentGroupMember: GroupMember | undefined;
 
+  public availableRoles = [
+    { value: 'member', label: 'Člen' },
+    { value: 'Admin', label: 'Admin' }
+  ];
+
   constructor(
     fb: FormBuilder,
     route: ActivatedRoute,
@@ -173,6 +178,56 @@ export class GroupEditComponent implements OnInit {
     }
   }
 
+  changeUserRole(member: GroupMember, newRole: string): void {
+    if (this.currentGroupMember?.role !== 'Admin') {
+      this.error = 'Nemáte oprávnění měnit role uživatelů';
+      return;
+    }
+
+    if (member.role === 'Admin') {
+      this.error = 'Nelze měnit roli admin účtu';
+      return;
+    }
+
+    const oldRole = member.role;
+    member.role = newRole;
+
+    this.successMessage = `Role uživatele ${member.user.name} byla změněna z "${this.getRoleDisplayName(oldRole)}" na "${this.getRoleDisplayName(newRole)}"`;
+    this.error = '';
+
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 3000);
+  }
+
+  onRoleChange(member: GroupMember): void {
+    this.successMessage = `Role uživatele ${member.user.name} byla změněna na "${this.getRoleDisplayName(member.role)}"`;
+    this.error = '';
+
+    // Auto-hide success message
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 3000);
+  }
+
+  getRoleDisplayName(role: string): string {
+    const roleMap: { [key: string]: string } = {
+      'member': 'Člen',
+      'Admin': 'Admin'
+    };
+    return roleMap[role] || role;
+
+    // TODO do enum
+  }
+
+  canChangeRoles(): boolean {
+    return this.currentGroupMember?.role === 'Admin';
+  }
+
+  canChangeUserRole(member: GroupMember): boolean {
+    return this.canChangeRoles() && member.role !== 'Admin';
+  }
+
   saveGroup(): void {
     if (this.groupForm.invalid) {
       Object.keys(this.groupForm.controls).forEach(key => {
@@ -190,6 +245,8 @@ export class GroupEditComponent implements OnInit {
       next: (savedGroup) => {
         this.successMessage = 'Uložení bylo úspěšné';
         this.isSaving = false;
+
+        // location.reload(); // Odstraněno kvůli lepšímu UX
       },
       error: (error) => {
         console.error('Chyba při ukládání skupiny:', error);
@@ -197,8 +254,6 @@ export class GroupEditComponent implements OnInit {
         this.isSaving = false;
       }
     });
-
-    location.reload();
   }
 
   onSearch(): void {

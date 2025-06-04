@@ -1,4 +1,3 @@
-// Základní barvy podle požadavku
 $primary-color: #3498db;
 $secondary-color: #34698d;
 $light-primary: lighten($primary-color, 35%);
@@ -35,7 +34,6 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Formulářové prvky
   .form-label {
     font-weight: 500;
     color: $secondary-color;
@@ -54,7 +52,6 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Vyhledávací kontejner
   .search-container {
     position: relative;
 
@@ -89,7 +86,6 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Avatar pro uživatele
   .user-avatar, .member-avatar {
     .avatar-circle {
       display: flex;
@@ -111,7 +107,7 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Seznam členů
+
   .members-list {
     margin-top: 1rem;
     padding: 1rem;
@@ -155,20 +151,53 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      flex: 1;
     }
 
     .member-details {
       display: flex;
       flex-direction: column;
+      flex: 1;
     }
 
     .member-name {
       font-weight: 500;
+      margin-bottom: 0.25rem;
     }
 
     .member-role {
       font-size: 0.8rem;
       color: $secondary-color;
+      padding: 0.2rem 0.5rem;
+      background-color: rgba($secondary-color, 0.1);
+      border-radius: 12px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .member-role-container {
+      margin-top: 0.25rem;
+    }
+
+    .role-select {
+      font-size: 0.8rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #dee2e6;
+      background-color: white;
+      width: auto;
+      min-width: 100px;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+      }
+    }
+
+    .member-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .btn-remove {
@@ -193,7 +222,34 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Tlačítka
+  .dropdown-toggle {
+    &::after {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .dropdown-menu {
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: $light-primary;
+        color: $secondary-color;
+      }
+
+      &:active {
+        background-color: $primary-color;
+        color: white;
+      }
+    }
+  }
+
   .btn {
     padding: 0.5rem 1.5rem;
     border-radius: $border-radius;
@@ -223,9 +279,13 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         color: white;
       }
     }
+
+    &.btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+    }
   }
 
-  // Spinner a načítání
   .spinner-border {
     width: 1.5rem;
     height: 1.5rem;
@@ -235,9 +295,21 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
   }
 
-  // Validační chyby
   .invalid-feedback {
     font-size: 0.85rem;
     margin-top: 0.25rem;
+  }
+
+  @media (max-width: 576px) {
+    .member-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+
+      .member-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
   }
 }

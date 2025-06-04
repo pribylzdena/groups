@@ -19,7 +19,11 @@
             id="groupName"
             formControlName="name"
             class="form-control"
-            [ngClass]="{'is-invalid': groupForm.get('name')?.invalid && groupForm.get('name')?.touched}"
+            [readonly]="currentGroupMember.role !== 'Admin'"
+            [ngClass]="{
+              'is-invalid': groupForm.get('name')?.invalid && groupForm.get('name')?.touched,
+              'bg-light text-muted': currentGroupMember.role !== 'Admin'
+            }"
             placeholder="Zadejte název skupiny"
           >
           <div class="invalid-feedback" *ngIf="groupForm.get('name')?.errors?.['required'] && groupForm.get('name')?.touched">
@@ -36,7 +40,7 @@
         <div class="mb-4">
           <label class="form-label">Členové skupiny</label>
 
-          <div class="search-container mb-3">
+          <div class="search-container mb-3" [hidden]="currentGroupMember.role !== 'Admin'">
             <div class="input-group">
               <input
                 type="text"
@@ -100,12 +104,53 @@
                   </div>
                   <div class="member-details">
                     <div class="member-name">{{ member.user.name }}</div>
-                    <div class="member-role">{{ member.role }}</div>
+                    <div class="member-role-container" *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'">
+                      <select
+                        class="form-select form-select-sm role-select"
+                        [(ngModel)]="member.role"
+                        [ngModelOptions]="{standalone: true}"
+                        (change)="onRoleChange(member)"
+                      >
+                        <option value="member">Člen</option>
+                        <option value="moderator">Moderátor</option>
+                        <option value="Admin">Admin</option>
+                      </select>
+                    </div>
+
+                    <div class="member-role" *ngIf="currentGroupMember.role !== 'Admin' || member.role === 'Admin'">
+                      {{ getRoleDisplayName(member.role) }}
+                    </div>
                   </div>
                 </div>
-                <button *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'" type="button" class="btn-remove" (click)="removeUserFromGroup(member)" title="Odebrat uživatele">
-                  <i class="bi bi-x-circle"></i>
-                </button>
+
+                <div class="member-actions">
+                  <div class="btn-group" *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      title="Změnit roli"
+                    >
+                      <i class="bi bi-person-gear"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'member'); $event.preventDefault()">Člen</a></li>
+                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'moderator'); $event.preventDefault()">Moderátor</a></li>
+                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'Admin'); $event.preventDefault()">Admin</a></li>
+                    </ul>
+                  </div>
+
+                  <button
+                    *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'"
+                    type="button"
+                    class="btn-remove"
+                    (click)="removeUserFromGroup(member)"
+                    title="Odebrat uživatele"
+                  >
+                    <i class="bi bi-x-circle"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -118,7 +163,7 @@
           {{ successMessage }}
         </div>
 
-        <div class="d-flex justify-content-end gap-2 mt-4">
+        <div class="d-flex justify-content-end gap-2 mt-4" *ngIf="currentGroupMember.role === 'Admin'">
           <button type="submit" class="btn btn-primary" [disabled]="isSaving">
             <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             Uložit změny
