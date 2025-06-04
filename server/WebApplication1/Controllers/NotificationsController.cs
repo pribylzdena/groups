@@ -77,19 +77,12 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            //var group = this.context.groups.FirstOrDefault(g => g.id == groupId);
-            //if (group == null)
-            //{
-            //    return NotFound(new { message = "Group not found" });
-            //}
-
             var newNtf = new Notification
             {
                 name = request.name,
                 text = request.text,
                 subject = request.subject,
                 type = request.type,
-                //group_id = groupId,
                 created_by = userId,
                 updated_by = userId,
                 created_at = DateTime.UtcNow,
