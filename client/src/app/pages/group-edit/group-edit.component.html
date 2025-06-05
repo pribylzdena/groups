@@ -19,10 +19,10 @@
             id="groupName"
             formControlName="name"
             class="form-control"
-            [readonly]="currentGroupMember.role !== 'Admin'"
+            [readonly]="currentGroupMember.role !== 'admin'"
             [ngClass]="{
               'is-invalid': groupForm.get('name')?.invalid && groupForm.get('name')?.touched,
-              'bg-light text-muted': currentGroupMember.role !== 'Admin'
+              'bg-light text-muted': currentGroupMember.role !== 'admin'
             }"
             placeholder="Zadejte název skupiny"
           >
@@ -40,7 +40,7 @@
         <div class="mb-4">
           <label class="form-label">Členové skupiny</label>
 
-          <div class="search-container mb-3" [hidden]="currentGroupMember.role !== 'Admin'">
+          <div class="search-container mb-3" [hidden]="currentGroupMember.role !== 'admin'">
             <div class="input-group">
               <input
                 type="text"
@@ -89,67 +89,69 @@
           </div>
 
           <div class="members-list">
-            <div class="alert alert-info" *ngIf="group.members.length === 0">
-              <i class="bi bi-info-circle me-2"></i> Tato skupina zatím nemá žádné členy.
+            <div class="empty-state" *ngIf="group.members.length === 0">
+              <i class="bi bi-people"></i>
+              <p>Tato skupina zatím nemá žádné členy</p>
             </div>
 
-            <div class="member-cards">
-              <div class="member-card" *ngFor="let member of group.members">
-                <div class="member-info">
-                  <div class="member-avatar">
-                    <div class="avatar-circle" *ngIf="!member.user.logoUrl">
-                      {{ member.user.name.charAt(0) || '?' }}
-                    </div>
-                    <img *ngIf="member.user.logoUrl" [src]="member.user.logoUrl" class="user-logo" alt="{{ member.user.name }}" />
-                  </div>
-                  <div class="member-details">
-                    <div class="member-name">{{ member.user.name }}</div>
-                    <div class="member-role-container" *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'">
-                      <select
-                        class="form-select form-select-sm role-select"
-                        [(ngModel)]="member.role"
-                        [ngModelOptions]="{standalone: true}"
-                        (change)="onRoleChange(member)"
-                      >
-                        <option value="member">Člen</option>
-                        <option value="moderator">Moderátor</option>
-                        <option value="Admin">Admin</option>
-                      </select>
-                    </div>
+            <div class="members-table" *ngIf="group.members.length > 0">
+              <div class="table-header">
+                <div class="col-user">Uživatel</div>
+                <div class="col-role">Role</div>
+                <div class="col-actions" *ngIf="currentGroupMember.role === 'admin'">Akce</div>
+              </div>
 
-                    <div class="member-role" *ngIf="currentGroupMember.role !== 'Admin' || member.role === 'Admin'">
-                      {{ getRoleDisplayName(member.role) }}
+              <div class="member-row" *ngFor="let member of group.members">
+                <div class="col-user">
+                  <div class="user-info">
+                    <div class="user-avatar">
+                      <div class="avatar-circle" *ngIf="!member.user.logoUrl">
+                        {{ member.user.name.charAt(0) || '?' }}
+                      </div>
+                      <img *ngIf="member.user.logoUrl" [src]="member.user.logoUrl" class="user-logo" alt="{{ member.user.name }}" />
+                    </div>
+                    <div class="user-details">
+                      <div class="user-name">{{ member.user.name }}</div>
+                      <div class="user-email" *ngIf="member.user.email">{{ member.user.email }}</div>
                     </div>
                   </div>
                 </div>
 
-                <div class="member-actions">
-                  <div class="btn-group" *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'">
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                      title="Změnit roli"
-                    >
-                      <i class="bi bi-person-gear"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'member'); $event.preventDefault()">Člen</a></li>
-                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'moderator'); $event.preventDefault()">Moderátor</a></li>
-                      <li><a class="dropdown-item" href="#" (click)="changeUserRole(member, 'Admin'); $event.preventDefault()">Admin</a></li>
-                    </ul>
-                  </div>
-
-                  <button
-                    *ngIf="currentGroupMember.role === 'Admin' && member.role !== 'Admin'"
-                    type="button"
-                    class="btn-remove"
-                    (click)="removeUserFromGroup(member)"
-                    title="Odebrat uživatele"
+                <div class="col-role">
+                  <select
+                    *ngIf="currentGroupMember.role === 'admin' && member.role !== 'admin'"
+                    class="role-select"
+                    [(ngModel)]="member.role"
+                    [ngModelOptions]="{standalone: true}"
+                    (change)="onRoleChange(member)"
                   >
-                    <i class="bi bi-x-circle"></i>
+                    <option value="member">Člen</option>
+                    <option value="admin">Admin</option>
+                  </select>
+
+                  <span
+                    *ngIf="currentGroupMember.role !== 'admin' || member.role === 'admin'"
+                    class="role-badge"
+                    [ngClass]="{
+                    'role-admin': member.role === 'admin',
+                    'role-member': member.role === 'member'
+                    }"
+                  >
+                    {{ getRoleDisplayName(member.role) }}
+                  </span>
+                </div>
+
+                <div class="col-actions" *ngIf="currentGroupMember.role === 'admin'">
+                  <button
+                    *ngIf="member.role !== 'admin'"
+                    type="button"
+                    class="action-btn remove-btn"
+                    (click)="removeUserFromGroup(member)"
+                    title="Odebrat ze skupiny"
+                  >
+                    <i class="bi bi-trash"></i>
                   </button>
+                  <span *ngIf="member.role === 'admin'" class="no-actions">—</span>
                 </div>
               </div>
             </div>
@@ -163,7 +165,7 @@
           {{ successMessage }}
         </div>
 
-        <div class="d-flex justify-content-end gap-2 mt-4" *ngIf="currentGroupMember.role === 'Admin'">
+        <div class="d-flex justify-content-end gap-2 mt-4" *ngIf="currentGroupMember.role === 'admin'">
           <button type="submit" class="btn btn-primary" [disabled]="isSaving">
             <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             Uložit změny

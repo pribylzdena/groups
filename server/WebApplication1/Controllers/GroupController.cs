@@ -115,7 +115,7 @@ namespace WebApplication1.Controllers
             {
                 user_id = userId,
                 group_id = newGroup.id,
-                role = "Admin",
+                role = "admin",
             };
 
             this.context.group_members.Add(member);
@@ -165,38 +165,33 @@ namespace WebApplication1.Controllers
 
                 //Send notification
 
-                var notif = service.CreateNotification(
-                    "Group",
-                    $"{item.user.name} was added to group: {group.name}",
-                    "Added to group",
-                    2
-                    );
-                this.context.notifications.Add(notif);
-                this.context.SaveChanges();
+                //var notif = service.CreateNotification(
+                //    "Group",
+                //    $"{item.user.name} was added to group: {group.name}",
+                //    "Added to group",
+                //    2
+                //    );
+                //this.context.notifications.Add(notif);
+                //this.context.SaveChanges();
 
-                UsersNotification usersNotification = new UsersNotification();
+                // neotestoval jsi to a hazi to chyby!!!
 
-                usersNotification.user_id = userId;
-                usersNotification.notification_id = notif.id;
-                this.context.users_notifications.Add(usersNotification);
-                this.context.SaveChanges();
+                //UsersNotification usersNotification = new UsersNotification();
+
+                //usersNotification.user_id = userId;
+                //usersNotification.notification_id = notif.id;
+                //this.context.users_notifications.Add(usersNotification);
+                //this.context.SaveChanges();
             }
 
             List<GroupMember> membersForDelete = this.context.group_members
-                .Where(u => u.group_id == group.id && u.user_id != currentUser.id)
+                .Where(u => u.group_id == group.id) // Tady nesmi byt ten check na currentUserId => dochazi k duplikaci aktualniho uzivatele pri ulozeni
                 .ToList();
 
             this.context.group_members.RemoveRange(membersForDelete);
             this.context.group_members.AddRange(membersToAdd);
 
             this.context.SaveChanges();
-
-
-
-
-
-
-
 
             return Ok();
         }

@@ -46,12 +46,13 @@ export class GroupEditComponent implements OnInit {
   isSaving = false;
   searchQuery = '';
   showDropdown = false;
+  openDropdownId: string | null = null;
 
   public currentGroupMember: GroupMember | undefined;
 
   public availableRoles = [
     { value: 'member', label: 'Člen' },
-    { value: 'Admin', label: 'Admin' }
+    { value: 'admin', label: 'admin' }
   ];
 
   constructor(
@@ -87,8 +88,6 @@ export class GroupEditComponent implements OnInit {
   }
 
   loadData() {
-    console.log("LOAD DATA STARTED");
-
     this.isLoading = true;
 
     this.route.parent?.paramMap.subscribe((params) => {
@@ -179,12 +178,12 @@ export class GroupEditComponent implements OnInit {
   }
 
   changeUserRole(member: GroupMember, newRole: string): void {
-    if (this.currentGroupMember?.role !== 'Admin') {
+    if (this.currentGroupMember?.role !== 'admin') {
       this.error = 'Nemáte oprávnění měnit role uživatelů';
       return;
     }
 
-    if (member.role === 'Admin') {
+    if (member.role === 'admin') {
       this.error = 'Nelze měnit roli admin účtu';
       return;
     }
@@ -213,7 +212,7 @@ export class GroupEditComponent implements OnInit {
   getRoleDisplayName(role: string): string {
     const roleMap: { [key: string]: string } = {
       'member': 'Člen',
-      'Admin': 'Admin'
+      'admin': 'Admin'
     };
     return roleMap[role] || role;
 
@@ -221,11 +220,11 @@ export class GroupEditComponent implements OnInit {
   }
 
   canChangeRoles(): boolean {
-    return this.currentGroupMember?.role === 'Admin';
+    return this.currentGroupMember?.role === 'admin';
   }
 
   canChangeUserRole(member: GroupMember): boolean {
-    return this.canChangeRoles() && member.role !== 'Admin';
+    return this.canChangeRoles() && member.role !== 'admin';
   }
 
   saveGroup(): void {
@@ -246,7 +245,7 @@ export class GroupEditComponent implements OnInit {
         this.successMessage = 'Uložení bylo úspěšné';
         this.isSaving = false;
 
-        // location.reload(); // Odstraněno kvůli lepšímu UX
+        // location.reload();
       },
       error: (error) => {
         console.error('Chyba při ukládání skupiny:', error);
