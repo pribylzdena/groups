@@ -79,7 +79,6 @@ export class NotificationCreateComponent implements OnInit{
   }
 
   loadData() {
-    console.log('Load data');
     this.loadUsers();
     this.loadGroups();
   }

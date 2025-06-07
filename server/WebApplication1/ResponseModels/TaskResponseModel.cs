@@ -16,6 +16,7 @@ namespace WebApplication1.ResponseModels
 
         public TaskResponseModel? parent { get; set; }
         public List<User>? assignees { get; set; }
+        public List<TaskCommentResponseModel>? comments { get; set; }
 
         public TaskResponseModel(Models.Task task, Models.Task? parent = null)
         {

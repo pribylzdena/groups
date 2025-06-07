@@ -7,6 +7,7 @@ import {GroupService} from '@app/services/group.service';
 import {NgIf} from '@angular/common';
 import {User} from '@models/user';
 import {UserService} from '@app/services/user.service';
+import {TaskCommentService} from '@app/services/task-comment.service';
 
 @Component({
   selector: 'app-group-layout',
@@ -23,15 +24,17 @@ import {UserService} from '@app/services/user.service';
 export class GroupComponent implements OnInit {
   private route: ActivatedRoute;
   private groupService: GroupService;
+  private commentService: TaskCommentService;
 
   groupId: number | null = null;
   group: Group;
   user: User;
   isLoading: boolean = true;
 
-  constructor(route: ActivatedRoute, groupService: GroupService) {
+  constructor(route: ActivatedRoute, groupService: GroupService, commentService: TaskCommentService) {
     this.route = route;
     this.groupService = groupService;
+    this.commentService = commentService;
     this.loadData();
   }
 

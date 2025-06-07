@@ -107,7 +107,6 @@ export class TaskService {
   }
 
   createTask(task: Task, groupId: number): Observable<any> {
-    console.log("calling: " + `${environment.apiUrl}/api/groups/${groupId}/tasks`);
     return this.http.post<any>(`${environment.apiUrl}/api/groups/${groupId}/tasks`, task);
   }
 

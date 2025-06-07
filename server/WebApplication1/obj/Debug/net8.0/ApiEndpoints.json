@@ -305,6 +305,58 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "WebApplication1.Controllers.TaskCommentsController",
+    "Method": "Create",
+    "RelativePath": "api/groups/{groupId}/tasks/{id}/comments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "WebApplication1.RequestModels.TaskCommentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "WebApplication1.Controllers.TaskCommentsController",
+    "Method": "Delete",
+    "RelativePath": "api/groups/{groupId}/tasks/{taskId}/comments/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "taskId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "WebApplication1.Controllers.GroupsController",
     "Method": "FindById",
     "RelativePath": "api/Groups/{id}",
@@ -382,16 +434,6 @@
     "ContainingType": "WebApplication1.Controllers.NotificationsController",
     "Method": "GetUnreadCount",
     "RelativePath": "api/notifications/count",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "WebApplication1.Controllers.TaskCommentsController",
-    "Method": "FindAll",
-    "RelativePath": "api/TaskComments",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

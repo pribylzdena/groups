@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query;
+using Newtonsoft.Json;
 using System.Drawing;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using WebApplication1.Models;
@@ -46,6 +48,8 @@ namespace WebApplication1.Controllers
             }
 
             var tasks = this.context.tasks.Where(x => x.group_id == groupId).ToList();
+            var allUsers = this.context.users.ToList();
+            var allComments = this.context.task_comments.Where(t => tasks.Select(task => task.id).Contains(t.task_id) && t.deleted_at == null).ToList();
             var allAssignees = this.context.tasks_assignees.Where(t => tasks.Select(task => task.id).Contains(t.task_id)).ToList();
             var userIds = allAssignees.Select(a => a.user_id).Distinct().ToList();
             var users = this.context.users.Where(u => userIds.Contains(u.id)).ToList();
@@ -53,8 +57,20 @@ namespace WebApplication1.Controllers
             List<TaskResponseModel> models = new List<TaskResponseModel>();
             foreach (var item in tasks)
             {
-                var model = new TaskResponseModel(item, item.GetParent());
-                models.Add(model);
+                List<TaskCommentResponseModel> comments = new List<TaskCommentResponseModel>();
+                foreach (var comment in allComments)
+                {
+                    var comment_response = new TaskCommentResponseModel(comment, allUsers.FirstOrDefault(u => u.id == comment.created_by));
+                    var respond_to_comment = allComments.FirstOrDefault(c => c.id == comment.respond_to);
+                    if (respond_to_comment != null)
+                    {
+                        comment_response.respondTo = new TaskCommentResponseModel(respond_to_comment, allUsers.FirstOrDefault(u => u.id == respond_to_comment.created_by));
+                    }
+
+                    comments.Add(comment_response);
+                }
+
+                models.Add(new TaskResponseModel(item, item.GetParent()) { comments = comments } );
             }
 
             foreach (var item in models)
@@ -127,7 +143,7 @@ namespace WebApplication1.Controllers
             {
                 name = request.name,
                 name_alt = Helper.GetNameAlt(request.name),
-                description = "",
+                description = request.description,
                 status = request.status,
                 deadline = request.deadline,
                 priority = request.priority,
@@ -137,12 +153,10 @@ namespace WebApplication1.Controllers
                 updated_by = currentUser.id,
                 created_at = DateTime.UtcNow,
                 updated_at = DateTime.UtcNow,
-                reminder_at = request.reminder_at,
-                
+                reminder_at = request.reminderAt,
+                parent_id = request.parent != null ? request.parent.id : null,
                 deleted_at = null,
             };
-            if (!(request.parent_id == newTask.id || request.parent_id == null))
-                newTask.parent_id = request.parent_id;
 
             this.context.tasks.Add(newTask);
             this.context.SaveChanges();
@@ -159,9 +173,6 @@ namespace WebApplication1.Controllers
                         TaskAsignee.user_id = item.id;
                         TaskAsignee.task_id = newTask.id;
                         this.context.tasks_assignees.Add(TaskAsignee);
-
-                        //
-
                         response.assignees.Add(item);
                     }
                 }
@@ -176,6 +187,8 @@ namespace WebApplication1.Controllers
         public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
@@ -192,14 +205,14 @@ namespace WebApplication1.Controllers
             var task = this.context.tasks.FirstOrDefault(n => n.id == id);
             if (task == null)
             {
-                return NotFound(new { message = "Note not found" });
+                return NotFound(new { message = "Task not found" });
             }
 
             Console.WriteLine("Edit action called with data: group_id = " + groupId + " id = " + id + " userId = " + userId);
 
             task.name = request.name;
             task.name_alt = Helper.GetNameAlt(request.name);
-            task.description = "";
+            task.description = request.description;
             task.status = request.status;
             task.deadline = request.deadline;
             task.priority = request.priority;
@@ -209,8 +222,7 @@ namespace WebApplication1.Controllers
             task.updated_by = currentUser.id;
             task.created_at = DateTime.UtcNow;
             task.updated_at = DateTime.UtcNow;
-            task.reminder_at = request.reminder_at;
-            task.parent_id = request.parent_id;
+            task.reminder_at = request.reminderAt;
             task.deleted_at = null;
             this.context.SaveChanges();
 
@@ -233,8 +245,6 @@ namespace WebApplication1.Controllers
                     member.logo = item.logo;
                     member.updated_at = DateTime.UtcNow;
                     assigneesToAdd.Add(member);
-
-                    //
 
                     var assignee = new TaskAssignee();
                     assignee.task_id = task.id;

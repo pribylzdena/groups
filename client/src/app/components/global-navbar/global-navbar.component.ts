@@ -66,7 +66,6 @@ export class GlobalNavbarComponent implements OnInit {
   }
 
   loadNotificaitonCount() {
-    console.log("load ntf");
     this.notificationService.getUnreadNotificationCount().subscribe({
       next: (response) => {
         this.notificationCount = response;
@@ -85,6 +84,5 @@ export class GlobalNavbarComponent implements OnInit {
       }, 1000
     )
 
-    console.log('logging out');
   }
 }

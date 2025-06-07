@@ -7,12 +7,14 @@ namespace WebApplication1.ResponseModels
         public int id { get; set; }
         public string value { get; set; }
         public UserResponseModel user { get; set; }
-
+        public DateTime createdAt { get; set; }
+        public TaskCommentResponseModel? respondTo { get; set;}
         public TaskCommentResponseModel(TaskComment tc, User user)
         {
             id = tc.id;
             value = tc.value;
             this.user = new UserResponseModel(user);
+            createdAt = tc.created_at;
         }
     }
 }
