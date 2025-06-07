@@ -25,5 +25,18 @@ namespace WebApplication1.Services
             this.context.SaveChanges();
             return notification;
         }
+
+
+        public UsersNotification SendNotification(int user_id, int notification_id)
+        {
+            UsersNotification usersNotification = new UsersNotification();
+
+            usersNotification.user_id = user_id;
+            usersNotification.notification_id = notification_id;
+            this.context.users_notifications.Add(usersNotification);
+            this.context.SaveChanges();
+
+            return usersNotification;
+        }
     }
 }

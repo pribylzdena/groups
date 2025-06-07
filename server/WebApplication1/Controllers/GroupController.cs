@@ -130,12 +130,10 @@ namespace WebApplication1.Controllers
         public IActionResult Edit(int groupId, [FromBody] EditGroupRequest request)
         {
             NotificationService service = new NotificationService();
-
             Console.WriteLine("Edit group action started");
             Console.WriteLine(JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
 
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
-
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -150,51 +148,87 @@ namespace WebApplication1.Controllers
 
             group.name = request.name;
 
-            //var actualMembers = request.members;
+            var currentMembers = this.context.group_members
+                .Where(gm => gm.group_id == group.id)
+                .ToList();
 
-            
+            var currentMemberIds = currentMembers.Select(m => m.user_id).Distinct().ToList();
+            var newMemberIds = request.members.Select(m => m.user.id).Distinct().ToList();
+
+            var addedMemberIds = newMemberIds.Except(currentMemberIds).ToList();
+            var removedMemberIds = currentMemberIds.Except(newMemberIds).ToList();
 
             List<GroupMember> membersToAdd = new List<GroupMember>();
-            foreach (var item in request.members)
+            foreach (var item in request.members.Where(m => addedMemberIds.Contains(m.user.id)))
             {
                 GroupMember member = new GroupMember();
                 member.group_id = group.id;
                 member.user_id = item.user.id;
                 member.role = item.role;
                 membersToAdd.Add(member);
-
-                //Send notification
-
-                //var notif = service.CreateNotification(
-                //    "Group",
-                //    $"{item.user.name} was added to group: {group.name}",
-                //    "Added to group",
-                //    2
-                //    );
-                //this.context.notifications.Add(notif);
-                //this.context.SaveChanges();
-
-                // neotestoval jsi to a hazi to chyby!!!
-
-                //UsersNotification usersNotification = new UsersNotification();
-
-                //usersNotification.user_id = userId;
-                //usersNotification.notification_id = notif.id;
-                //this.context.users_notifications.Add(usersNotification);
-                //this.context.SaveChanges();
             }
 
-            List<GroupMember> membersForDelete = this.context.group_members
-                .Where(u => u.group_id == group.id) // Tady nesmi byt ten check na currentUserId => dochazi k duplikaci aktualniho uzivatele pri ulozeni
-                .ToList();
+            var membersToRemove = currentMembers.Where(m => removedMemberIds.Contains(m.user_id)).ToList();
+            this.context.group_members.RemoveRange(membersToRemove);
 
-            this.context.group_members.RemoveRange(membersForDelete);
             this.context.group_members.AddRange(membersToAdd);
+
+            foreach (var requestMember in request.members.Where(m => currentMemberIds.Contains(m.user.id)))
+            {
+                var existingMember = currentMembers.FirstOrDefault(m => m.user_id == requestMember.user.id);
+                if (existingMember != null)
+                {
+                    existingMember.role = requestMember.role;
+                }
+            }
 
             this.context.SaveChanges();
 
+            var allCurrentMembers = this.context.group_members
+                .Where(gm => gm.group_id == group.id)
+                .Select(gm => gm.user_id)
+                .ToList();
+
+            foreach (var addedMemberId in addedMemberIds)
+            {
+                var addedUser = this.context.users.FirstOrDefault(u => u.id == addedMemberId);
+                if (addedUser != null)
+                {
+                    var notif = service.CreateNotification(
+                        "Group",
+                        $"{addedUser.name} was added to group: {group.name}",
+                        "User added to group",
+                        2
+                    );
+
+                    foreach (var memberId in allCurrentMembers)
+                    {
+                        service.SendNotification(memberId, notif.id);
+                    }
+                }
+            }
+
+            foreach (var removedMemberId in removedMemberIds)
+            {
+                var removedUser = this.context.users.FirstOrDefault(u => u.id == removedMemberId);
+                if (removedUser != null)
+                {
+                    var notif = service.CreateNotification(
+                        "Group",
+                        $"{removedUser.name} was removed from group: {group.name}",
+                        "User removed from group",
+                        2
+                    );
+
+                    foreach (var memberId in allCurrentMembers)
+                    {
+                        service.SendNotification(memberId, notif.id);
+                    }
+                }
+            }
+
             return Ok();
         }
-        
+
     }
 }
