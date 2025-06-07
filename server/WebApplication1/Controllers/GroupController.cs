@@ -60,8 +60,8 @@ namespace WebApplication1.Controllers
             return Ok(models);
         }
 
-        [HttpGet("{id}")]
-        public ObjectResult FindById(int id)
+        [HttpDelete]
+        public IActionResult RemoveUser([FromBody] UserRequestModel user, int groupId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -70,7 +70,49 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            Models.Group groupEntity = this.context.groups.Find(id);
+            Models.Group groupEntity = this.context.groups.Find(groupId);
+            if (groupEntity == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == user.id && x.group_id == groupId);
+
+            if (groupMember == null)
+            {
+                return NotFound(new { message = "User is not a member of this group" });
+            }
+
+            this.context.group_members.Remove(groupMember);
+            this.context.SaveChanges();
+
+            NotificationService service = new NotificationService();
+
+            var notification = service.CreateNotification(
+                "Group",
+                $"You have been removed from group: {groupEntity.name}",
+                "Removed from group",
+                2
+                );
+
+            service.SendNotification(user.id, notification.id);
+
+            return Ok();
+        }
+
+
+
+        [HttpGet("{id}")]
+        public ObjectResult FindById(int groupId)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            Models.Group groupEntity = this.context.groups.Find(groupId);
             if (groupEntity == null)
             {
                 return NotFound(new { message = "Group not found" });
@@ -148,20 +190,16 @@ namespace WebApplication1.Controllers
 
             group.name = request.name;
 
-            // Získáme současné členy skupiny
             var currentMembers = this.context.group_members
                 .Where(gm => gm.group_id == group.id)
                 .ToList();
 
-            // Získáme všechny současné user_id pro porovnání
             var currentMemberIds = currentMembers.Select(m => m.user_id).ToHashSet();
             var newMemberIds = request.members.Select(m => m.user.id).ToHashSet();
 
-            // Najdeme přidané a odebrané členy
             var addedMemberIds = newMemberIds.Except(currentMemberIds).ToList();
             var removedMemberIds = currentMemberIds.Except(newMemberIds).ToList();
 
-            // Připravíme nové členy pro přidání
             List<GroupMember> membersToAdd = new List<GroupMember>();
             foreach (var item in request.members.Where(m => addedMemberIds.Contains(m.user.id)))
             {
@@ -172,14 +210,11 @@ namespace WebApplication1.Controllers
                 membersToAdd.Add(member);
             }
 
-            // Odebereme staré členy
             var membersToRemove = currentMembers.Where(m => removedMemberIds.Contains(m.user_id)).ToList();
             this.context.group_members.RemoveRange(membersToRemove);
 
-            // Přidáme nové členy
             this.context.group_members.AddRange(membersToAdd);
 
-            // Aktualizujeme role existujících členů
             foreach (var requestMember in request.members.Where(m => currentMemberIds.Contains(m.user.id)))
             {
                 var existingMember = currentMembers.FirstOrDefault(m => m.user_id == requestMember.user.id);
@@ -191,13 +226,11 @@ namespace WebApplication1.Controllers
 
             this.context.SaveChanges();
 
-            // Získáme aktuální seznam všech členů skupiny pro notifikace
             var allCurrentMembers = this.context.group_members
                 .Where(gm => gm.group_id == group.id)
                 .Select(gm => gm.user_id)
                 .ToList();
 
-            // Ověříme existenci uživatelů jedním dotazem
             var existingAddedUserIds = this.context.users
                 .Where(u => addedMemberIds.Contains(u.id))
                 .Select(u => u.id)
@@ -208,7 +241,6 @@ namespace WebApplication1.Controllers
                 .Select(u => u.id)
                 .ToList();
 
-            // Pošleme notifikace pro přidané členy
             existingAddedUserIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",
@@ -219,7 +251,6 @@ namespace WebApplication1.Controllers
                 service.SendNotification(userId, notif.id);
             });
 
-            // Pošleme notifikace pro odebrané členy
             existingRemovedUserIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",
