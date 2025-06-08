@@ -80,7 +80,6 @@
     </div>
   </div>
 
-  <!-- Sidebar zůstává stejný -->
   <div class="task-sidebar-overlay" [class.active]="isSidebarOpen" (click)="toggleSidebar()"></div>
   <ng-container *ngIf="selectedTask; else noTask">
     <div class="task-sidebar" [class.active]="isSidebarOpen">
@@ -208,7 +207,7 @@
           </div>
         </div>
 
-        <div class="sidebar-section comments-section">
+        <div class="sidebar-section comments-section" *ngIf="!isCreateMode">
           <h4 class="section-title">Komentáře ({{ getCommentsCount() }})</h4>
 
           <div class="comments-list" *ngIf="selectedTask.comments && selectedTask.comments.length > 0; else noComments">

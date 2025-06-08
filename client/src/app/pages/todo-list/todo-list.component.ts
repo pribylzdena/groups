@@ -29,7 +29,7 @@ export class TodoListComponent implements OnInit {
   groupId: number | null = null;
 
   isSidebarOpen: boolean = false;
-  isCreateMode = false;
+  public isCreateMode = false;
 
   editableDatetime: string = '';
   editableReminderDatetime: string = '';

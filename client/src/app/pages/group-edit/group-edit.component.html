@@ -167,7 +167,6 @@
 
         <div class="d-flex justify-content-end gap-2 mt-4">
           <button type="button" class="btn btn-leave" [disabled]="isSaving" (click)="leaveGroup()">
-            <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             Opustit skupinu
           </button>
           <button type="submit" class="btn btn-primary" [disabled]="isSaving" *ngIf="currentGroupMember.role === 'admin'">
