@@ -99,7 +99,7 @@ namespace WebApplication1.Controllers
         }
 
 
-        [HttpDelete("{groupId}/leave")]
+        [HttpPost("{groupId}/leave")]
         public ActionResult Leave(int groupId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
@@ -123,12 +123,15 @@ namespace WebApplication1.Controllers
             }
 
             this.context.group_members.Remove(groupMember);
+            this.context.SaveChanges();
+
+            // Pozor tady je potreba provest save jinak nemas aktualni data
             int groupMemberCount = this.context.group_members.Where(g => g.group_id == groupId).Count();
             if (groupMemberCount == 0)
             {
                 groupEntity.deleted_at = DateTime.Now;
+                this.context.SaveChanges();
             }
-            this.context.SaveChanges();
 
             return Ok();
         }

@@ -245,7 +245,7 @@ export class GroupEditComponent implements OnInit {
         this.successMessage = 'Uložení bylo úspěšné';
         this.isSaving = false;
 
-        // location.reload();
+        location.reload();
       },
       error: (error) => {
         console.error('Chyba při ukládání skupiny:', error);
@@ -258,5 +258,21 @@ export class GroupEditComponent implements OnInit {
   onSearch(): void {
     this.filterUsers();
     this.showDropdown = true;
+  }
+
+  leaveGroup(): void {
+    this.groupService.leaveGroup(this.group).subscribe({
+      next: (response) => {
+        this.successMessage = 'Opuštění bylo úspěšné';
+        this.isSaving = false;
+
+        this.router.navigate(['/group-manage']);
+      },
+      error: (error) => {
+        console.error('Chyba při opouštění skupiny:', error);
+        this.error = 'Nepodařilo se opustit skupinu';
+        this.isSaving = false;
+      }
+    });
   }
 }

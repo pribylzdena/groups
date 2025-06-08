@@ -30,7 +30,7 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .card-body {
-      padding: 2rem;
+      padding: 4rem;
     }
   }
 
@@ -347,6 +347,25 @@ $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       &:disabled {
         background-color: lighten($primary-color, 20%);
         border-color: lighten($primary-color, 20%);
+      }
+    }
+
+    &.btn-leave {
+      background-color: transparent;
+      border-color: #dc3545;
+      color: #dc3545;
+      left: 4rem;
+      position: absolute;
+
+      &:hover, &:focus {
+        background-color: rgba(#dc3545, 0.1);
+        color: darken(#dc3545, 10%);
+        border-color: darken(#dc3545, 10%);
+      }
+
+      &:disabled {
+        background-color: lighten(#dc3545, 20%);
+        border-color: lighten(#dc3545, 20%);
       }
     }
 

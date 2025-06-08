@@ -60,11 +60,15 @@ export class GroupService {
   }
 
   createGroup(name: string): Observable<any> {
-    const body = { name };
+    const body = {name};
     return this.http.post<any>(`${environment.apiUrl}/api/Groups`, body);
   }
 
   updateGroup(group: Group): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/api/groups/${group.id}`, group);
+  }
+
+  leaveGroup(group: Group): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/api/groups/${group.id}/leave`, group);
   }
 }
