@@ -4,6 +4,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
@@ -91,6 +92,12 @@ namespace WebApplication1.Controllers
             this.context.notes.Add(newNote);
             this.context.SaveChanges();
 
+            NotificationService service = new NotificationService();
+
+            var notification = service.CreateNotification("Create", $"Note {newNote.name} has been created",
+                "Note create", 2);
+            service.SendNotification(userId, notification.id);
+
             var response = new NoteResponseModel(newNote);
             return CreatedAtAction(nameof(Create), response);
         }
@@ -129,6 +136,13 @@ namespace WebApplication1.Controllers
             note.updated_by = currentUser.id;
             note.updated_at = DateTime.UtcNow;
             this.context.SaveChanges();
+
+            //send notification
+
+            NotificationService service = new NotificationService();
+
+            var notification = service.CreateNotification("Edit", $"Note {note.name} has been edited", "Note edit", 2);
+            service.SendNotification(userId, notification.id);
 
             var response = new NoteResponseModel(note);
             return Ok(response);
