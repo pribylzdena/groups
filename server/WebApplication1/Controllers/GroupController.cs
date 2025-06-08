@@ -58,6 +58,49 @@ namespace WebApplication1.Controllers
             return Ok(models);
         }
 
+        [HttpGet("{groupId}/users")]
+        public IActionResult GetUsers(int groupId)
+        {
+            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            Models.Group groupEntity = this.context.groups.Find(groupId);
+            if (groupEntity == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+            var groupMembers = this.context.group_members.Where(g => g.group_id == groupId);
+
+            //var response = new List<UserResponseModel>();
+
+            //foreach ( var item in groupMembers)
+            //{
+            //    var user = this.context.users.Find(item.user_id);
+            //    response.Add(new UserResponseModel(user));
+            //}
+
+
+            //optimalizovany ai
+            var response = this.context.group_members
+                .Where(gm => gm.group_id == groupId)
+                .Join(this.context.users,
+                      gm => gm.user_id,
+                      u => u.id,
+                      (gm, u) => new UserResponseModel(u))
+                .ToList();
+
+            return Ok(response);
+
+        }
+
+
+
+
         [HttpDelete]
         public IActionResult RemoveUser([FromBody] UserRequestModel user, int groupId)
         {
@@ -115,24 +158,48 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
-            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == currentUser.id && x.group_id == groupId);
-
+            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == userId && x.group_id == groupId);
             if (groupMember == null)
             {
                 return NotFound(new { message = "User is not a member of this group" });
             }
 
-            this.context.group_members.Remove(groupMember);
-            this.context.SaveChanges();
+            var allGroupMembers = this.context.group_members.Where(g => g.group_id == groupId).ToList();
 
-            // Pozor tady je potreba provest save jinak nemas aktualni data
-            int groupMemberCount = this.context.group_members.Where(g => g.group_id == groupId).Count();
-            if (groupMemberCount == 0)
+            this.context.group_members.Remove(groupMember);
+            allGroupMembers.Remove(groupMember);
+
+            NotificationService service = new NotificationService();
+
+            var leaveNotification = service.CreateNotification("Group", $"You have left group: {groupEntity.name}",
+                "Left group", 2);
+
+            service.SendNotification(groupMember.user_id, leaveNotification.id);
+
+
+            if (allGroupMembers.Count == 0)
             {
                 groupEntity.deleted_at = DateTime.Now;
                 this.context.SaveChanges();
+
+                return Ok();
             }
 
+            if (groupMember.role == "admin")
+            {
+                var user = allGroupMembers.FirstOrDefault();
+                user.role = "admin";
+
+                var roleNotification = service.CreateNotification("Group",
+                    $"You have been promoted to admin of the group: {groupEntity.name}",
+                    "Group promotion",
+                    2);
+
+                service.SendNotification(user.user_id, roleNotification.id);
+                
+            }
+
+            this.context.SaveChanges();
             return Ok();
         }
 

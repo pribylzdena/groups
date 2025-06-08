@@ -96,7 +96,15 @@ namespace WebApplication1.Controllers
 
             var notification = service.CreateNotification("Create", $"Note {newNote.name} has been created",
                 "Note create", 2);
-            service.SendNotification(userId, notification.id);
+
+            var groupMembers = this.context.group_members.Where(g => g.group_id == groupId);
+
+            foreach (var item in groupMembers)
+            {
+                service.SendNotification(item.user_id, notification.id);
+            }
+
+            
 
             var response = new NoteResponseModel(newNote);
             return CreatedAtAction(nameof(Create), response);
@@ -142,7 +150,13 @@ namespace WebApplication1.Controllers
             NotificationService service = new NotificationService();
 
             var notification = service.CreateNotification("Edit", $"Note {note.name} has been edited", "Note edit", 2);
-            service.SendNotification(userId, notification.id);
+
+            var groupMembers = this.context.group_members.Where(g => g.group_id == groupId);
+
+            foreach (var item in groupMembers)
+            {
+                service.SendNotification(item.user_id, notification.id);
+            }
 
             var response = new NoteResponseModel(note);
             return Ok(response);
