@@ -99,6 +99,41 @@ namespace WebApplication1.Controllers
         }
 
 
+        [HttpDelete("{groupId}/leave")]
+        public ActionResult Leave(int groupId)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            Models.Group groupEntity = this.context.groups.Find(groupId);
+            if (groupEntity == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == currentUser.id && x.group_id == groupId);
+
+            if (groupMember == null)
+            {
+                return NotFound(new { message = "User is not a member of this group" });
+            }
+
+            this.context.group_members.Remove(groupMember);
+            int groupMemberCount = this.context.group_members.Where(g => g.group_id == groupId).Count();
+            if (groupMemberCount == 0)
+            {
+                groupEntity.deleted_at = DateTime.Now;
+            }
+            this.context.SaveChanges();
+
+            return Ok();
+        }
+
+
 
         [HttpGet("{id}")]
         public ObjectResult FindById(int id)
