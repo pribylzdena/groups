@@ -114,7 +114,7 @@ export class ScheduleSidebarComponent {
     });
 
     this.toggleSidebar();
-    //window.location.reload();
+    window.location.reload();
   }
 
   validateDates(): boolean {
