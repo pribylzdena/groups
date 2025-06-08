@@ -177,33 +177,10 @@ export class GroupEditComponent implements OnInit {
     }
   }
 
-  changeUserRole(member: GroupMember, newRole: string): void {
-    if (this.currentGroupMember?.role !== 'admin') {
-      this.error = 'Nemáte oprávnění měnit role uživatelů';
-      return;
-    }
-
-    if (member.role === 'admin') {
-      this.error = 'Nelze měnit roli admin účtu';
-      return;
-    }
-
-    const oldRole = member.role;
-    member.role = newRole;
-
-    this.successMessage = `Role uživatele ${member.user.name} byla změněna z "${this.getRoleDisplayName(oldRole)}" na "${this.getRoleDisplayName(newRole)}"`;
-    this.error = '';
-
-    setTimeout(() => {
-      this.successMessage = '';
-    }, 3000);
-  }
-
   onRoleChange(member: GroupMember): void {
     this.successMessage = `Role uživatele ${member.user.name} byla změněna na "${this.getRoleDisplayName(member.role)}"`;
     this.error = '';
 
-    // Auto-hide success message
     setTimeout(() => {
       this.successMessage = '';
     }, 3000);
@@ -221,10 +198,6 @@ export class GroupEditComponent implements OnInit {
 
   canChangeRoles(): boolean {
     return this.currentGroupMember?.role === 'admin';
-  }
-
-  canChangeUserRole(member: GroupMember): boolean {
-    return this.canChangeRoles() && member.role !== 'admin';
   }
 
   saveGroup(): void {

@@ -48,6 +48,100 @@
 
     <div class="error date-error" *ngIf="dateError">{{ dateError }}</div>
 
+    <div class="form-group">
+      <label class="form-label">Účastníci události</label>
+
+      <div class="search-container mb-3">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Vyhledat uživatele..."
+            [(ngModel)]="searchQuery"
+            [ngModelOptions]="{standalone: true}"
+            (input)="onSearch()"
+            (focus)="showDropdown = true"
+          >
+          <button class="btn btn-outline-secondary" type="button" (click)="onSearch()">
+            <i class="bi bi-search"></i> Hledat
+          </button>
+        </div>
+
+        <div class="search-results" *ngIf="showDropdown && filteredUsers.length > 0">
+          <ul class="list-group">
+            <li
+              *ngFor="let user of filteredUsers"
+              class="list-group-item list-group-item-action"
+              (click)="addUserToEvent(user)"
+            >
+              <div class="d-flex align-items-center">
+                <div class="user-avatar">
+                  <div class="avatar-circle" *ngIf="!user.logoUrl">
+                    {{ user.name.charAt(0) || '?' }}
+                  </div>
+                  <img *ngIf="user.logoUrl" [src]="user.logoUrl" class="user-logo" alt="{{ user.name }}" />
+                </div>
+                <div class="ms-3">
+                  <strong>{{ user.name }}</strong>
+                  <div class="text-muted small">{{ user.email }}</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="search-results" *ngIf="showDropdown && searchQuery && filteredUsers.length === 0">
+          <div class="list-group">
+            <div class="list-group-item text-center">
+              Žádní uživatelé nenalezeni
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="participants-list">
+        <div class="empty-state" *ngIf="event?.participants?.length === 0">
+          <i class="bi bi-people"></i>
+          <p>Tato událost zatím nemá žádné účastníky</p>
+        </div>
+
+        <div class="participants-table" *ngIf="event?.participants?.length > 0">
+          <div class="table-header">
+            <div class="col-user">Uživatel</div>
+            <div class="col-actions">Akce</div>
+          </div>
+
+          <div class="participant-row" *ngFor="let participant of event.participants">
+            <div class="col-user">
+              <div class="user-info">
+                <div class="user-avatar">
+                  <div class="avatar-circle" *ngIf="!participant.user.logoUrl">
+                    {{ participant.user.name.charAt(0) || '?' }}
+                  </div>
+                  <img *ngIf="participant.user.logoUrl" [src]="participant.user.logoUrl" class="user-logo" alt="{{ participant.user.name }}" />
+                </div>
+                <div class="user-details">
+                  <div class="user-name">{{ participant.user.name }}</div>
+                  <div class="user-email" *ngIf="participant.user.email">{{ participant.user.email }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-actions">
+              <button
+                type="button"
+                class="action-btn remove-btn"
+                (click)="removeUserFromEvent(participant.user)"
+                title="Odebrat z události"
+              >
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="form-actions">
       <button type="button" class="btn-cancel" (click)="toggleSidebar()">Zrušit</button>
       <button type="submit" class="btn-save" [disabled]="eventForm.invalid">Uložit</button>

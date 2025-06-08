@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.Drawing;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -119,6 +120,8 @@ namespace WebApplication1.Controllers
         [HttpPost("groups/{groupId}/events")]
         public IActionResult Create(int groupId, [FromBody] ScheduledEventRequest request)
         {
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
+
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -132,9 +135,6 @@ namespace WebApplication1.Controllers
             {
                 return NotFound(new { message = "Group not found" });
             }
-
-            Console.WriteLine(request.startsAt);
-            Console.WriteLine(request.endsAt);
 
             var newEvent = new Models.ScheduledEvent
             {
@@ -160,13 +160,8 @@ namespace WebApplication1.Controllers
 
             var response = new ScheduledEventResponseModel(newEvent);
 
-            if (request.participants == null || request.participants.Count == 0)
-            {
-                response.participants.Add(new EventParticipantResponseModel(participant, this.context.users.Find(participant.user_id)));
-                this.context.event_participants.Add(participant);
-                this.context.SaveChanges();
-                return Ok(response);
-            }
+            response.participants.Add(new EventParticipantResponseModel(participant, this.context.users.Find(participant.user_id)));
+            this.context.event_participants.Add(participant);
 
             foreach (var item in request.participants!)
             {
@@ -174,8 +169,7 @@ namespace WebApplication1.Controllers
                 newParticipant.user_id = item.user.id;
                 newParticipant.event_id = newEvent.id;
 
-                var newUser = new User();
-                newUser = this.context.users.Find(item.user.id);
+                var newUser = this.context.users.Find(item.user.id);
                 if (newUser == null) continue;
 
                 response.participants.Add(new EventParticipantResponseModel(newParticipant, newUser));
