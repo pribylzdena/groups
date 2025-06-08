@@ -32,13 +32,31 @@
   </div>
 
   <div class="task-list">
-    <div class="task-item" *ngFor="let task of tasks">
+    <div class="task-item" *ngFor="let task of getSortedTasks()"
+         [class.task-item-child]="task.parent"
+         [class.task-item-hidden]="isTaskHidden(task)">
+
       <div class="task-card" (click)="openTaskSidebar(task)" [ngClass]="getStatusClass(task)">
         <div class="status-indicator" [ngClass]="getStatusClass(task)"></div>
 
         <div class="task-header">
+          <div class="task-hierarchy-controls" *ngIf="hasChildren(task)">
+            <button class="task-expand-button"
+                    [class.task-expand-button-expanded]="isTaskExpanded(task)"
+                    (click)="toggleTaskExpansion(task, $event)">
+              <svg class="task-expand-icon" viewBox="0 0 24 24" width="16" height="16">
+                <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2"
+                          fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
           <div class="color-indicator" [ngStyle]="{'background-color': task.color}"></div>
           <h3 class="task-title">{{ task.name }}</h3>
+
+          <div class="task-hierarchy-indicator" *ngIf="task.parent">
+            <span class="task-parent-name">{{ task.parent.name }}</span>
+          </div>
         </div>
 
         <div class="task-reminder" *ngIf="task.reminderAt">
@@ -62,7 +80,7 @@
     </div>
   </div>
 
-  <!-- Sidebar -->
+  <!-- Sidebar zůstává stejný -->
   <div class="task-sidebar-overlay" [class.active]="isSidebarOpen" (click)="toggleSidebar()"></div>
   <ng-container *ngIf="selectedTask; else noTask">
     <div class="task-sidebar" [class.active]="isSidebarOpen">

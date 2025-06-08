@@ -148,20 +148,16 @@ namespace WebApplication1.Controllers
 
             group.name = request.name;
 
-            // Získáme současné členy skupiny
             var currentMembers = this.context.group_members
                 .Where(gm => gm.group_id == group.id)
                 .ToList();
 
-            // Získáme všechny současné user_id pro porovnání
             var currentMemberIds = currentMembers.Select(m => m.user_id).ToHashSet();
             var newMemberIds = request.members.Select(m => m.user.id).ToHashSet();
 
-            // Najdeme přidané a odebrané členy
             var addedMemberIds = newMemberIds.Except(currentMemberIds).ToList();
             var removedMemberIds = currentMemberIds.Except(newMemberIds).ToList();
 
-            // Připravíme nové členy pro přidání
             List<GroupMember> membersToAdd = new List<GroupMember>();
             foreach (var item in request.members.Where(m => addedMemberIds.Contains(m.user.id)))
             {
@@ -172,14 +168,11 @@ namespace WebApplication1.Controllers
                 membersToAdd.Add(member);
             }
 
-            // Odebereme staré členy
             var membersToRemove = currentMembers.Where(m => removedMemberIds.Contains(m.user_id)).ToList();
             this.context.group_members.RemoveRange(membersToRemove);
 
-            // Přidáme nové členy
             this.context.group_members.AddRange(membersToAdd);
 
-            // Aktualizujeme role existujících členů
             foreach (var requestMember in request.members.Where(m => currentMemberIds.Contains(m.user.id)))
             {
                 var existingMember = currentMembers.FirstOrDefault(m => m.user_id == requestMember.user.id);
@@ -191,13 +184,11 @@ namespace WebApplication1.Controllers
 
             this.context.SaveChanges();
 
-            // Získáme aktuální seznam všech členů skupiny pro notifikace
             var allCurrentMembers = this.context.group_members
                 .Where(gm => gm.group_id == group.id)
                 .Select(gm => gm.user_id)
                 .ToList();
 
-            // Ověříme existenci uživatelů jedním dotazem
             var existingAddedUserIds = this.context.users
                 .Where(u => addedMemberIds.Contains(u.id))
                 .Select(u => u.id)
@@ -208,7 +199,6 @@ namespace WebApplication1.Controllers
                 .Select(u => u.id)
                 .ToList();
 
-            // Pošleme notifikace pro přidané členy
             existingAddedUserIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",
@@ -219,7 +209,6 @@ namespace WebApplication1.Controllers
                 service.SendNotification(userId, notif.id);
             });
 
-            // Pošleme notifikace pro odebrané členy
             existingRemovedUserIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",

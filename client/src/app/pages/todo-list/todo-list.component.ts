@@ -43,6 +43,8 @@ export class TodoListComponent implements OnInit {
   replyingToComment: TaskComment | null = null;
   newlyAddedCommentIds: Set<number> = new Set();
 
+  expandedTasks: Set<number> = new Set();
+
   availableColors: string[] = [
     '#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6',
     '#1abc9c', '#34495e', '#e67e22', '#16a085', '#d35400'
@@ -84,9 +86,9 @@ export class TodoListComponent implements OnInit {
       next: (response) => {
         this.tasks = response.map(n => new Task(
           n.id, n.name, n.status, n.deadline, n.color, n.priority,
-          n.description, n.reminderAt, null, n.assignees, n.comments
-        ));
-        },
+          n.description, n.reminderAt, n.parent, n.assignees, n.comments
+        ))
+       },
       error: (error) => {
         console.error('Chyba při načítání úkolů z API:', error);
       }
@@ -446,6 +448,96 @@ export class TodoListComponent implements OnInit {
       case 'Střední': return 'medium';
       case 'Nízká': return 'low';
       default: return '';
+    }
+  }
+
+  hasChildren(task: Task): boolean {
+    return this.tasks.some(t => t.parent?.id === task.id);
+  }
+
+  isTaskExpanded(task: Task): boolean {
+    return this.expandedTasks.has(task.id);
+  }
+
+  toggleTaskExpansion(task: Task, event: Event): void {
+    event.stopPropagation();
+
+    if (this.expandedTasks.has(task.id)) {
+      this.expandedTasks.delete(task.id);
+    } else {
+      this.expandedTasks.add(task.id);
+    }
+  }
+
+  isTaskHidden(task: Task): boolean {
+    if (!task.parent) {
+      return false;
+    }
+
+    return !this.isTaskExpanded(task.parent);
+  }
+
+  getSortedTasks(): Task[] {
+    const rootTasks = this.tasks.filter(task => !task.parent);
+    const sortedTasks: Task[] = [];
+
+    const addTaskWithChildren = (task: Task, level: number = 0) => {
+      sortedTasks.push(task);
+
+      if (this.isTaskExpanded(task)) {
+        const children = this.tasks
+          .filter(t => t.parent?.id === task.id)
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        children.forEach(child => {
+          addTaskWithChildren(child, level + 1);
+        });
+      }
+    };
+
+    rootTasks
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .forEach(task => addTaskWithChildren(task));
+
+    return sortedTasks;
+  }
+
+  getAllChildTasks(parentTask: Task): Task[] {
+    const children: Task[] = [];
+    const directChildren = this.tasks.filter(t => t.parent?.id === parentTask.id);
+
+    directChildren.forEach(child => {
+      children.push(child);
+      children.push(...this.getAllChildTasks(child));
+    });
+
+    return children;
+  }
+
+  expandParentsForTask(task: Task): void {
+    let currentTask = task.parent;
+    while (currentTask) {
+      this.expandedTasks.add(currentTask.id);
+      currentTask = currentTask.parent;
+    }
+  }
+
+  collapseAllChildren(parentTask: Task): void {
+    const children = this.getAllChildTasks(parentTask);
+    children.forEach(child => {
+      this.expandedTasks.delete(child.id);
+    });
+  }
+
+  initializeTaskExpansion(expandAll: boolean = false): void {
+    if (expandAll) {
+      this.tasks.forEach(task => {
+        if (this.hasChildren(task)) {
+          this.expandedTasks.add(task.id);
+        }
+      });
+    } else {
+      this.expandedTasks.clear();
     }
   }
 }

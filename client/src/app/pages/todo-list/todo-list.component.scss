@@ -1124,3 +1124,80 @@
 .comment-item.new {
   animation: slideInComment 0.3s ease-out;
 }
+
+.task-item-child {
+  margin-left: 2rem;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #e0e0e0;
+  }
+
+  .task-card {
+    border-left: 3px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+}
+
+.task-item-hidden {
+  display: none;
+}
+
+.task-hierarchy-controls {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+.task-expand-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  &.task-expand-button-expanded {
+    .task-expand-icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.task-expand-icon {
+  transition: transform 0.2s ease;
+  color: #666;
+}
+
+.task-hierarchy-indicator {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: #666;
+
+  .task-parent-name {
+    font-weight: 500;
+
+    &::before {
+      content: '← ';
+      margin-right: 0.25rem;
+    }
+  }
+}
