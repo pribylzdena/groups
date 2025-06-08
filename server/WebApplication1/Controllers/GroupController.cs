@@ -60,8 +60,8 @@ namespace WebApplication1.Controllers
             return Ok(models);
         }
 
-        [HttpGet("{id}")]
-        public ObjectResult FindById(int id)
+        [HttpDelete]
+        public IActionResult RemoveUser([FromBody] UserRequestModel user, int groupId)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -70,7 +70,49 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            Models.Group groupEntity = this.context.groups.Find(id);
+            Models.Group groupEntity = this.context.groups.Find(groupId);
+            if (groupEntity == null)
+            {
+                return NotFound(new { message = "Group not found" });
+            }
+
+            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == user.id && x.group_id == groupId);
+
+            if (groupMember == null)
+            {
+                return NotFound(new { message = "User is not a member of this group" });
+            }
+
+            this.context.group_members.Remove(groupMember);
+            this.context.SaveChanges();
+
+            NotificationService service = new NotificationService();
+
+            var notification = service.CreateNotification(
+                "Group",
+                $"You have been removed from group: {groupEntity.name}",
+                "Removed from group",
+                2
+                );
+
+            service.SendNotification(user.id, notification.id);
+
+            return Ok();
+        }
+
+
+
+        [HttpGet("{id}")]
+        public ObjectResult FindById(int groupId)
+        {
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
+            User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            Models.Group groupEntity = this.context.groups.Find(groupId);
             if (groupEntity == null)
             {
                 return NotFound(new { message = "Group not found" });
