@@ -58,7 +58,7 @@ namespace WebApplication1.Controllers
             foreach (var item in tasks)
             {
                 List<TaskCommentResponseModel> comments = new List<TaskCommentResponseModel>();
-                foreach (var comment in allComments)
+                foreach (var comment in allComments.Where(t => t.task_id == item.id))
                 {
                     var comment_response = new TaskCommentResponseModel(comment, allUsers.FirstOrDefault(u => u.id == comment.created_by));
                     var respond_to_comment = allComments.FirstOrDefault(c => c.id == comment.respond_to);

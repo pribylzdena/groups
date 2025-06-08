@@ -103,7 +103,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpGet("{id}")]
-        public ObjectResult FindById(int groupId)
+        public ObjectResult FindById(int id)
         {
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -112,7 +112,7 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "User not found" });
             }
 
-            Models.Group groupEntity = this.context.groups.Find(groupId);
+            Models.Group groupEntity = this.context.groups.Find(id);
             if (groupEntity == null)
             {
                 return NotFound(new { message = "Group not found" });

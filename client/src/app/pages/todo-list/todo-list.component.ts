@@ -513,31 +513,4 @@ export class TodoListComponent implements OnInit {
 
     return children;
   }
-
-  expandParentsForTask(task: Task): void {
-    let currentTask = task.parent;
-    while (currentTask) {
-      this.expandedTasks.add(currentTask.id);
-      currentTask = currentTask.parent;
-    }
-  }
-
-  collapseAllChildren(parentTask: Task): void {
-    const children = this.getAllChildTasks(parentTask);
-    children.forEach(child => {
-      this.expandedTasks.delete(child.id);
-    });
-  }
-
-  initializeTaskExpansion(expandAll: boolean = false): void {
-    if (expandAll) {
-      this.tasks.forEach(task => {
-        if (this.hasChildren(task)) {
-          this.expandedTasks.add(task.id);
-        }
-      });
-    } else {
-      this.expandedTasks.clear();
-    }
-  }
 }
