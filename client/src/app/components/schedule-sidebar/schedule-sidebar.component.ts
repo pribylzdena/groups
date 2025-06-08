@@ -131,7 +131,7 @@ export class ScheduleSidebarComponent {
   }
 
   loadUsers(): void {
-    this.userService.getUsersFromApi().subscribe({
+    this.userService.getUsersForCurrentGroup(this.groupId).subscribe({
       next: (users) => {
         this.allUsers = users;
       },

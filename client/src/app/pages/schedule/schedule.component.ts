@@ -41,6 +41,7 @@ export class ScheduleComponent implements OnInit {
     this.groupService = groupService;
     this.eventService = eventService;
 
+    this.loadData();
     this.currentStartDate = this.getStartOfWeek(this.currentDate);
     this.generateWeekDays();
   }

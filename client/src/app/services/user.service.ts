@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.development';
 import {HttpClient} from '@angular/common/http';
 import {User} from '@models/user';
+import {Group} from '@models/group';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,10 @@ export class UserService {
 
   getUsersFromApi(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/api/users`);
+  }
+
+  getUsersForCurrentGroup(groupId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiUrl}/api/groups/${groupId}/users`);
   }
 
   getUserFromApi(): Observable<any> {

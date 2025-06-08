@@ -96,7 +96,7 @@ export class TodoListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.userService.getUsersFromApi().subscribe({
+    this.userService.getUsersForCurrentGroup(this.groupId).subscribe({
       next: (response) => {
         this.users = response.map(n => new User(n.id, n.name, n.email, n.logoUrl, n.password));
       },

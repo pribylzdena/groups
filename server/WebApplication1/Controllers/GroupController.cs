@@ -61,7 +61,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{groupId}/users")]
         public IActionResult GetUsers(int groupId)
         {
-            int userId = /*Convert.ToInt32(HttpContext.Items["CurrentUserId"])*/1;
+            int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
             User currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
             if (currentUser == null)
             {
@@ -76,16 +76,6 @@ namespace WebApplication1.Controllers
 
             var groupMembers = this.context.group_members.Where(g => g.group_id == groupId);
 
-            //var response = new List<UserResponseModel>();
-
-            //foreach ( var item in groupMembers)
-            //{
-            //    var user = this.context.users.Find(item.user_id);
-            //    response.Add(new UserResponseModel(user));
-            //}
-
-
-            //optimalizovany ai
             var response = this.context.group_members
                 .Where(gm => gm.group_id == groupId)
                 .Join(this.context.users,
@@ -158,7 +148,7 @@ namespace WebApplication1.Controllers
                 return NotFound(new { message = "Group not found" });
             }
 
-            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == userId && x.group_id == groupId);
+            var groupMember = this.context.group_members.FirstOrDefault(x => x.user_id == currentUser.id && x.group_id == groupId);
             if (groupMember == null)
             {
                 return NotFound(new { message = "User is not a member of this group" });
@@ -185,7 +175,7 @@ namespace WebApplication1.Controllers
                 return Ok();
             }
 
-            if (groupMember.role == "admin")
+            if (allGroupMembers.Where(g => g.role == "admin").Count() == 0)
             {
                 var user = allGroupMembers.FirstOrDefault();
                 user.role = "admin";
@@ -196,7 +186,6 @@ namespace WebApplication1.Controllers
                     2);
 
                 service.SendNotification(user.user_id, roleNotification.id);
-                
             }
 
             this.context.SaveChanges();
