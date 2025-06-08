@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Drawing;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
@@ -180,6 +181,20 @@ namespace WebApplication1.Controllers
             }
 
             this.context.SaveChanges();
+
+            NotificationService service = new NotificationService();
+
+            var notif = service.CreateNotification(
+            "Task",
+                $"Task '{newTask.name}' has been created",
+                "Task created",
+                2
+            );
+
+            foreach (var assignee in request.assignees)
+            {
+                service.SendNotification(assignee.id, notif.id);
+            }
 
             return CreatedAtAction(nameof(Create), response);
         }

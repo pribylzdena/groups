@@ -224,22 +224,7 @@ namespace WebApplication1.Controllers
 
             this.context.SaveChanges();
 
-            var allCurrentMembers = this.context.group_members
-                .Where(gm => gm.group_id == group.id)
-                .Select(gm => gm.user_id)
-                .ToList();
-
-            var existingAddedUserIds = this.context.users
-                .Where(u => addedMemberIds.Contains(u.id))
-                .Select(u => u.id)
-                .ToList();
-
-            var existingRemovedUserIds = this.context.users
-                .Where(u => removedMemberIds.Contains(u.id))
-                .Select(u => u.id)
-                .ToList();
-
-            existingAddedUserIds.ForEach(userId => {
+            addedMemberIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",
                     $"You were added to group: {group.name}",
@@ -249,7 +234,7 @@ namespace WebApplication1.Controllers
                 service.SendNotification(userId, notif.id);
             });
 
-            existingRemovedUserIds.ForEach(userId => {
+            removedMemberIds.ForEach(userId => {
                 var notif = service.CreateNotification(
                     "Group",
                     $"You were removed from group: {group.name}",
