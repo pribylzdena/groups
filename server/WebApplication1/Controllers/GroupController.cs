@@ -17,8 +17,6 @@ namespace WebApplication1.Controllers
     {
         private DB context = new DB();
 
-
-
         [HttpGet]
         public IActionResult FindAll()
         {

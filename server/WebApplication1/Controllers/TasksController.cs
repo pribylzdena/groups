@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using WebApplication1.Models;
 using WebApplication1.RequestModels;
 using WebApplication1.ResponseModels;
+using WebApplication1.Services;
 using static Google.Protobuf.Reflection.UninterpretedOption.Types;
 
 namespace WebApplication1.Controllers
@@ -186,8 +187,8 @@ namespace WebApplication1.Controllers
         [HttpPut("groups/{groupId}/tasks/{id}")]
         public IActionResult Edit(int groupId, int id, [FromBody] TaskRequest request)
         {
+            NotificationService service = new NotificationService();
             int userId = Convert.ToInt32(HttpContext.Items["CurrentUserId"]);
-
             Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(request, new JsonSerializerOptions { WriteIndented = true }));
 
             var currentUser = this.context.users.FirstOrDefault(u => u.id == userId);
@@ -224,15 +225,14 @@ namespace WebApplication1.Controllers
             task.updated_at = DateTime.UtcNow;
             task.reminder_at = request.reminderAt;
             task.deleted_at = null;
+
             this.context.SaveChanges();
 
             var response = new TaskResponseModel(task);
             response.assignees = request.assignees;
 
-            
             var assigneesToAdd = new List<User>();
             var taskAssignees = new List<TaskAssignee>();
-
             if (request.assignees != null)
             {
                 foreach (var item in request.assignees)
@@ -255,12 +255,25 @@ namespace WebApplication1.Controllers
                 var assigneesForDelete = this.context.tasks_assignees
                     .Where(u => u.task_id == task.id)
                     .ToList();
-
                 this.context.tasks_assignees.RemoveRange(assigneesForDelete);
                 this.context.tasks_assignees.AddRange(taskAssignees);
             }
 
             this.context.SaveChanges();
+
+
+            var notif = service.CreateNotification(
+                "Task",
+                $"Task '{task.name}' has been updated",
+                "Task updated",
+                2
+            );
+
+            foreach (var assignee in request.assignees)
+            {
+                service.SendNotification(assignee.id, notif.id);
+            }
+            
 
             return Ok(response);
         }
