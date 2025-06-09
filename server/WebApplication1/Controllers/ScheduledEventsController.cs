@@ -154,14 +154,7 @@ namespace WebApplication1.Controllers
             this.context.scheduled_events.Add(newEvent);
             this.context.SaveChanges();
 
-            var participant = new EventParticipant();
-            participant.event_id = newEvent.id;
-            participant.user_id = userId;
-
             var response = new ScheduledEventResponseModel(newEvent);
-
-            response.participants.Add(new EventParticipantResponseModel(participant, this.context.users.Find(participant.user_id)));
-            this.context.event_participants.Add(participant);
 
             foreach (var item in request.participants!)
             {

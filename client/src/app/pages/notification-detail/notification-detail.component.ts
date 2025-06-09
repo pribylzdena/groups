@@ -78,7 +78,6 @@ export class NotificationDetailComponent implements OnInit {
   }
 
   getNotificationColor(): string {
-    // Map notification types to colors
     const colorMap: {[key: string]: string} = {
       'info': '#3498db',
       'warning': '#f39c12',
